@@ -58,5 +58,19 @@ pip install jupyter nbconvert
 │   ├── vectores_slides.ipynb
 │   └── figures/
 │       └── embeddings.png
+├── CITATION.cff
+├── LICENSE
 └── README.md
 ```
+
+---
+
+## Licencia
+
+Este material se distribuye bajo la licencia
+[Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE).
+
+Sos libre de compartir, adaptar y reusar el material para cualquier
+propósito, incluso comercial, siempre que cites a los autores. Si
+querés citar este repo en un trabajo académico, usá el archivo
+[`CITATION.cff`](CITATION.cff).
