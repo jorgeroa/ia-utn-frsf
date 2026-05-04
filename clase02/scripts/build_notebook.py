@@ -597,14 +597,6 @@ USER = "El sistema debe responder en <200ms al 95% de las requests."
 > Tip: usá `json-repair` para tolerar JSON parcialmente roto."""))
 
 
-cells.append(md_slide("slide-cot-link", """\
-## Probá CoT y structured output
-
-📓 **Notebook**: [`clase02/notebooks/05_cot_structured.ipynb`](notebooks/05_cot_structured.ipynb)
-
-Resolvé un problema con y sin CoT. Después generá JSON parseable directamente desde el modelo."""))
-
-
 cells.append(md_slide("slide-prompt-variables", f"""\
 ## Prompt como código: variables y templating
 
@@ -751,7 +743,7 @@ cells.append(md_slide("slide-recap-cierre", """\
 | 5 — Prompting | System / few-shot / CoT / structured output / variables / iteración. |
 | 6 — Evals y monitoreo | Eval offline + online. Logging. Drift. Loop de mejora continua. |
 
-**Notebooks que quedaron para ejecutar:** `01_groq_intro`, `03_sampling_params`, `04_prompting_techniques`, `05_cot_structured`."""))
+**Notebooks que quedaron para ejecutar:** `01_groq_intro`, `03_sampling_params`, `04_prompting_techniques`."""))
 
 
 cells.append(md_slide("slide-preview", """\

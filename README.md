@@ -22,7 +22,6 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
   - `01_groq_intro.ipynb` — primera llamada al LLM.
   - `03_sampling_params.ipynb` — temperature, top_p, top_k.
   - `04_prompting_techniques.ipynb` — zero/one/few-shot.
-  - `05_cot_structured.ipynb` — Chain of Thought + structured output.
 - `clase02/scripts/` — generadores: `build_notebook.py` (slides) y `build_colabs.py` (notebooks).
 
 ### Próximas clases
