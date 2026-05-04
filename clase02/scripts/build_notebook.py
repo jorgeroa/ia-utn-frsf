@@ -385,6 +385,8 @@ cells.append(md_slide("slide-b4-section", """\
 cells.append(md_slide("slide-scaling-laws", f"""\
 ## La era Chinchilla: "más N, más D, mejor modelo"
 
+*Chinchilla = paper de DeepMind (2022) que mostró que la receta óptima es ~20 tokens por parámetro.*
+
 {fig("scaling_laws.svg", "Curvas de loss vs tamaño del modelo, una por cada nivel de compute. Todas bajan, sin techo aparente. Pero la slide marca esto como histórico (~2022)", w="80%")}
 
 > 📖 *Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models (Chinchilla).*"""))
@@ -393,7 +395,11 @@ cells.append(md_slide("slide-scaling-laws", f"""\
 cells.append(md_slide("slide-data-wall", f"""\
 ## Pero algo cambió: el data wall y los nuevos ejes
 
-{fig("data_wall.svg", "Izquierda: la oferta de texto público se aplana mientras la demanda de los LLMs sube; cruce ~2026-2028. Derecha: tres ejes nuevos donde escalar (post-training, test-time compute, synthetic data)", w="86%")}"""))
+{fig("data_wall.svg", "Izquierda: la oferta de texto público se aplana mientras la demanda de los LLMs sube; cruce ~2026-2028. Derecha: tres ejes nuevos donde escalar (post-training, test-time compute, synthetic data)", w="86%")}
+
+> 📖 *Villalobos, P., et al. (2024). Will we run out of data? Limits of LLM scaling based on human-generated data. https://arxiv.org/abs/2211.04325*
+>
+> 📖 *OpenAI (2024). Learning to Reason with LLMs. https://openai.com/index/learning-to-reason-with-llms/*"""))
 
 
 cells.append(md_slide("slide-post-training", f"""\
