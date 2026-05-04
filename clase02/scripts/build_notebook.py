@@ -239,6 +239,16 @@ cells.append(md_slide("slide-encoder-decoder", f"""\
 > En este curso usamos modelos **decoder-only**. Son los que generan respuestas token a token."""))
 
 
+cells.append(md_slide("slide-token-mira", f"""\
+## ¿Qué significa que un token "mira" a otro?
+
+{fig("token_mira.svg", "El vector de 'banco' se actualiza absorbiendo información de 'quebró', desambiguando su sentido")}
+
+Cada token entra al Transformer como un **vector** de números. "Mirar" es una metáfora: el vector del token se **actualiza absorbiendo información** de los otros tokens, ponderada por un **peso de atención**.
+
+Los pesos los calcula el mecanismo **Query / Key / Value** — próximo slide."""))
+
+
 cells.append(md_slide("slide-attention-polysemy", f"""\
 ## Attention resuelve la polisemia por contexto
 
