@@ -7683,18 +7683,7 @@ Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="%C2%BFQu%C3%A9-significa-que-un-token-%22mira%22-a-otro?">¿Qué significa que un token "mira" a otro?<a class="anchor-link" href="#%C2%BFQu%C3%A9-significa-que-un-token-%22mira%22-a-otro?">¶</a></h2><p><img alt="El vector de 'banco' se actualiza absorbiendo información de 'quebró', desambiguando su sentido" class="slide-figure" src="figures/token_mira.svg" style="width: 88%;"/></p>
 <p>Cada token entra al Transformer como un <strong>vector</strong> de números. "Mirar" es una metáfora: el vector del token se <strong>actualiza absorbiendo información</strong> de los otros tokens, ponderada por un <strong>peso de atención</strong>.</p>
-<p>Los pesos los calcula el mecanismo <strong>Query / Key / Value</strong> — próximo slide.</p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-attention-polysemy">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Attention-resuelve-la-polisemia-por-contexto">Attention resuelve la polisemia por contexto<a class="anchor-link" href="#Attention-resuelve-la-polisemia-por-contexto">¶</a></h2><p><img alt="La palabra 'banco' adopta significados distintos según con qué otras palabras se conecte por atención" class="slide-figure" src="figures/attention_polysemy.svg" style="width: 88%;"/></p>
-<p>La misma palabra puede significar cosas distintas. La atención <strong>decide</strong> a quién prestarle atención y eso desambigua el sentido.</p>
+<p>Esto es lo que <strong>resuelve la polisemia</strong>: la misma palabra (<em>banco</em>, <em>gato</em>, <em>llama</em>) toma significados distintos según con qué tokens se conecte. Los pesos los calcula el mecanismo <strong>Query / Key / Value</strong>.</p>
 </div>
 </div>
 </div>
@@ -7707,38 +7696,6 @@ Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
 <h2 id="Query,-Key,-Value-%E2%80%94-la-met%C3%A1fora-del-buscador">Query, Key, Value — la metáfora del buscador<a class="anchor-link" href="#Query,-Key,-Value-%E2%80%94-la-met%C3%A1fora-del-buscador">¶</a></h2><p><img alt="Tres cajas Q/K/V con la metáfora 'qué busco / qué tengo / qué devuelvo'" class="slide-figure" src="figures/qkv.svg" style="width: 88%;"/></p>
 <p>Para cada token, el modelo genera tres vectores. <strong>Match(Q, K) → pesos · V</strong> te da una nueva representación que absorbe contexto.</p>
 <p>Es un buscador interno, hecho por la red, que se entrena solo.</p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-qkv-in-transformer">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%C2%BFD%C3%B3nde-vive-Q-/-K-/-V-dentro-del-Transformer?">¿Dónde vive Q / K / V dentro del Transformer?<a class="anchor-link" href="#%C2%BFD%C3%B3nde-vive-Q-/-K-/-V-dentro-del-Transformer?">¶</a></h2><p><img alt="Los tres bloques de atención: encoder self-attention, decoder masked self-attention, decoder cross-attention. Q/K/V aparece en los tres; cambia de dónde sale cada vector" class="slide-figure" src="figures/qkv_in_transformer.svg" style="width: 80%;"/></p>
-<p>El mecanismo Q/K/V es <strong>siempre el mismo</strong>. Lo que cambia es de dónde sale cada vector:</p>
-<ul>
-<li><strong>Encoder self-attention</strong> y <strong>decoder masked self-attention</strong> → Q, K, V salen del mismo input.</li>
-<li><strong>Cross-attention</strong> (solo en encoder-decoder) → Q viene del decoder, <strong>K y V vienen del encoder</strong>: el decoder "le pregunta" al encoder qué entendió.</li>
-</ul>
-<blockquote>
-<p>Q/K/V es el <strong>cómo</strong> funciona la atención. Encoder / decoder / cross son el <strong>dónde</strong> se aplica.</p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-bertviz-link">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Ver-attention-en-acci%C3%B3n">Ver attention en acción<a class="anchor-link" href="#Ver-attention-en-acci%C3%B3n">¶</a></h2><p>📓 <strong>Notebook opcional</strong>: <a href="notebooks/02_attention_bertviz.ipynb"><code>clase02/notebooks/02_attention_bertviz.ipynb</code></a></p>
-<p>Usa BertViz para visualizar los pesos de atención de un modelo BERT real. Ideal para explorar después de clase.</p>
-<blockquote>
-<p>No lo ejecutamos en vivo (depende de bajar 680 MB del modelo). Está disponible para quien quiera meter mano.</p>
-</blockquote>
 </div>
 </div>
 </div>
@@ -7822,6 +7779,7 @@ Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="RLHF:-el-camino-largo">RLHF: el camino largo<a class="anchor-link" href="#RLHF:-el-camino-largo">¶</a></h2><p><img alt="Tres pasos: 1) recolectar comparaciones, 2) entrenar un reward model que las imita, 3) usar PPO para que el LLM maximice ese reward" class="slide-figure" src="figures/rlhf_pipeline.svg" style="width: 86%;"/></p>
+<p><strong>Política</strong> = el modelo cuando lo pensamos como un decisor (dada una situación, qué token genera). <strong>PPO</strong> actualiza la política con un freno: si los nuevos pesos cambian la distribución de tokens demasiado respecto del SFT, lo penaliza. Sin ese freno, el modelo se desvía y deja de generar texto coherente.</p>
 <blockquote>
 <p>📖 <em>Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback (InstructGPT).</em></p>
 </blockquote>
@@ -8414,7 +8372,7 @@ Ahora tengo 20. ¿Cuántos años tiene mi pareja?
 </tr>
 </tbody>
 </table>
-<p><strong>Notebooks que quedaron para ejecutar:</strong> <code>01_groq_intro</code>, <code>02_attention_bertviz</code>, <code>03_sampling_params</code>, <code>04_prompting_techniques</code>, <code>05_cot_structured</code>.</p>
+<p><strong>Notebooks que quedaron para ejecutar:</strong> <code>01_groq_intro</code>, <code>03_sampling_params</code>, <code>04_prompting_techniques</code>, <code>05_cot_structured</code>.</p>
 </div>
 </div>
 </div>

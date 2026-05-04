@@ -58,19 +58,26 @@
 
     <g transform="translate(20,50)">
       <text class="role" y="0">&lt;USER&gt;</text>
-      <text class="text-content" y="22">¿Podés escribir una breve introducción sobre la relevancia</text>
-      <text class="text-content" y="38">del término "monopsonio" en economía? Usá ejemplos del</text>
-      <text class="text-content" y="54">mercado laboral y citá investigación relevante.</text>
+      <text class="text-content" y="20">¿Podés escribirme una función en Python que reciba</text>
+      <text class="text-content" y="36">una lista de IPs y devuelva las que pertenecen a la</text>
+      <text class="text-content" y="52">subred 192.168.1.0/24? Manejá las IPs inválidas.</text>
 
-      <text class="role" y="100">&lt;ASSISTANT&gt;</text>
-      <text class="text-content" y="122">"Monopsonio" se refiere a una estructura de mercado donde</text>
-      <text class="text-content" y="138">existe un único comprador para un bien o servicio. En</text>
-      <text class="text-content" y="154">economía, este término es especialmente relevante en el</text>
-      <text class="text-content" y="170">mercado laboral, donde un empleador monopsónico tiene poder</text>
-      <text class="text-content" y="186">significativo sobre los salarios y condiciones de trabajo</text>
-      <text class="text-content" y="202">de sus empleados…</text>
+      <text class="role" y="84">&lt;ASSISTANT&gt;</text>
+      <text class="text-content" y="104">Usando el módulo ipaddress de la biblioteca estándar:</text>
 
-      <text class="text-xs" y="240" fill="#666">Esa respuesta "ideal" la escribió una persona, siguiendo guías de calidad.</text>
+      <g font-family="'JetBrains Mono', monospace" font-size="10.5" fill="#222222">
+        <text y="124">import ipaddress</text>
+        <text y="142"> </text>
+        <text y="142">def filtrar_subred(ips, cidr="192.168.1.0/24"):</text>
+        <text y="158">    red = ipaddress.ip_network(cidr)</text>
+        <text y="174">    resultado = []</text>
+        <text y="190">    for ip in ips:</text>
+        <text y="206">        try:</text>
+        <text y="222">            if ipaddress.ip_address(ip) in red:</text>
+        <text y="238">                resultado.append(ip)</text>
+        <text y="254">        except ValueError:</text>
+        <text y="270">            continue   <tspan fill="#888"># ignoramos IPs malformadas</tspan></text>
+      </g>
     </g>
   </g>
 

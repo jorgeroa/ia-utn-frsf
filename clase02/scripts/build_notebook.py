@@ -246,15 +246,7 @@ cells.append(md_slide("slide-token-mira", f"""\
 
 Cada token entra al Transformer como un **vector** de números. "Mirar" es una metáfora: el vector del token se **actualiza absorbiendo información** de los otros tokens, ponderada por un **peso de atención**.
 
-Los pesos los calcula el mecanismo **Query / Key / Value** — próximo slide."""))
-
-
-cells.append(md_slide("slide-attention-polysemy", f"""\
-## Attention resuelve la polisemia por contexto
-
-{fig("attention_polysemy.svg", "La palabra 'banco' adopta significados distintos según con qué otras palabras se conecte por atención")}
-
-La misma palabra puede significar cosas distintas. La atención **decide** a quién prestarle atención y eso desambigua el sentido."""))
+Esto es lo que **resuelve la polisemia**: la misma palabra (*banco*, *gato*, *llama*) toma significados distintos según con qué tokens se conecte. Los pesos los calcula el mecanismo **Query / Key / Value**."""))
 
 
 cells.append(md_slide("slide-qkv", f"""\
@@ -265,29 +257,6 @@ cells.append(md_slide("slide-qkv", f"""\
 Para cada token, el modelo genera tres vectores. **Match(Q, K) → pesos · V** te da una nueva representación que absorbe contexto.
 
 Es un buscador interno, hecho por la red, que se entrena solo."""))
-
-
-cells.append(md_slide("slide-qkv-in-transformer", f"""\
-## ¿Dónde vive Q / K / V dentro del Transformer?
-
-{fig("qkv_in_transformer.svg", "Los tres bloques de atención: encoder self-attention, decoder masked self-attention, decoder cross-attention. Q/K/V aparece en los tres; cambia de dónde sale cada vector", w="80%")}
-
-El mecanismo Q/K/V es **siempre el mismo**. Lo que cambia es de dónde sale cada vector:
-
-- **Encoder self-attention** y **decoder masked self-attention** → Q, K, V salen del mismo input.
-- **Cross-attention** (solo en encoder-decoder) → Q viene del decoder, **K y V vienen del encoder**: el decoder "le pregunta" al encoder qué entendió.
-
-> Q/K/V es el **cómo** funciona la atención. Encoder / decoder / cross son el **dónde** se aplica."""))
-
-
-cells.append(md_slide("slide-bertviz-link", """\
-## Ver attention en acción
-
-📓 **Notebook opcional**: [`clase02/notebooks/02_attention_bertviz.ipynb`](notebooks/02_attention_bertviz.ipynb)
-
-Usa BertViz para visualizar los pesos de atención de un modelo BERT real. Ideal para explorar después de clase.
-
-> No lo ejecutamos en vivo (depende de bajar 680 MB del modelo). Está disponible para quien quiera meter mano."""))
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -357,6 +326,8 @@ cells.append(md_slide("slide-rlhf", f"""\
 ## RLHF: el camino largo
 
 {fig("rlhf_pipeline.svg", "Tres pasos: 1) recolectar comparaciones, 2) entrenar un reward model que las imita, 3) usar PPO para que el LLM maximice ese reward", w="86%")}
+
+**Política** = el modelo cuando lo pensamos como un decisor (dada una situación, qué token genera). **PPO** actualiza la política con un freno: si los nuevos pesos cambian la distribución de tokens demasiado respecto del SFT, lo penaliza. Sin ese freno, el modelo se desvía y deja de generar texto coherente.
 
 > 📖 *Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback (InstructGPT).*"""))
 
@@ -758,7 +729,7 @@ cells.append(md_slide("slide-recap-cierre", """\
 | 5 — Prompting | System / few-shot / CoT / structured output / variables / iteración. |
 | 6 — Evals y monitoreo | Eval offline + online. Logging. Drift. Loop de mejora continua. |
 
-**Notebooks que quedaron para ejecutar:** `01_groq_intro`, `02_attention_bertviz`, `03_sampling_params`, `04_prompting_techniques`, `05_cot_structured`."""))
+**Notebooks que quedaron para ejecutar:** `01_groq_intro`, `03_sampling_params`, `04_prompting_techniques`, `05_cot_structured`."""))
 
 
 cells.append(md_slide("slide-preview", """\
