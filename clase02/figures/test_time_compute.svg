@@ -52,7 +52,7 @@
 
       <!-- thinking block -->
       <g transform="translate(0,40)">
-        <rect x="0" y="0" width="380" height="148" rx="6" fill="#FFF7E6" stroke="#E0A45C" stroke-width="1"/>
+        <rect x="0" y="0" width="380" height="170" rx="6" fill="#FFF7E6" stroke="#E0A45C" stroke-width="1"/>
         <text class="role-think" x="10" y="16">&lt;thinking&gt;</text>
         <g transform="translate(10,30)" class="text-mono" fill="#9E6516">
           <text y="0">Voy a chequear cada número impar...</text>
@@ -65,13 +65,13 @@
           <text y="98">  167, 173, 179, 181, 191, 193, 197, 199.</text>
           <text y="114">Cuento: 21. Verifico... sí, son 21.</text>
         </g>
-        <text class="role-think" x="10" y="142">&lt;/thinking&gt;</text>
+        <text class="role-think" x="10" y="164">&lt;/thinking&gt;</text>
       </g>
 
-      <text class="role" y="206">ASSISTANT</text>
-      <text class="text-content" y="226" fill="#1D9E75" font-weight="600">21 primos.</text>
+      <text class="role" y="226">ASSISTANT</text>
+      <text class="text-content" y="246" fill="#1D9E75" font-weight="600">21 primos.</text>
 
-      <text class="text-xs" y="252" fill="#666">Inferencia: ~30s · Tokens: ~3.000</text>
+      <text class="text-xs" y="272" fill="#666">Inferencia: ~30s · Tokens: ~3.000</text>
     </g>
   </g>
 

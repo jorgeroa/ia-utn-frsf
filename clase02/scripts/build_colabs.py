@@ -114,6 +114,7 @@ Mandamos un único mensaje del usuario y leemos la respuesta."""),
 resp = client.chat.completions.create(
     model=MODEL,
     messages=[{"role": "user", "content": "Explicame en 2 oraciones qué es un LLM."}],
+    # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
 )
 
 print(resp.choices[0].message.content)"""),
@@ -131,6 +132,7 @@ for temp in [0.1, 1.0]:
         model=MODEL,
         messages=[{"role": "user", "content": PROMPT}],
         temperature=temp,
+        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
     )
     print(f"--- temperature = {temp} ---")
     print(resp.choices[0].message.content)
@@ -151,6 +153,7 @@ resp = client.chat.completions.create(
         {"role": "user", "content": "¿Cómo declaro un array en Python?"},
     ],
     temperature=0.6,
+    # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
 )
 
 print(resp.choices[0].message.content)"""),
@@ -201,6 +204,7 @@ def generar(prompt, **kwargs):
         model=MODEL,
         messages=[{"role": "user", "content": prompt}],
         **kwargs,
+        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
     )
     return resp.choices[0].message.content"""),
 
@@ -298,7 +302,12 @@ client = Groq()
 MODEL = "qwen/qwen3-32b"
 
 def clasificar(messages, temperature=0.1):
-    resp = client.chat.completions.create(model=MODEL, messages=messages, temperature=temperature)
+    resp = client.chat.completions.create(
+        model=MODEL,
+        messages=messages,
+        temperature=temperature,
+        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
+    )
     return resp.choices[0].message.content.strip()"""),
 
     md("""\
@@ -404,7 +413,12 @@ client = Groq()
 MODEL = "qwen/qwen3-32b"
 
 def chat(messages, **kwargs):
-    resp = client.chat.completions.create(model=MODEL, messages=messages, **kwargs)
+    resp = client.chat.completions.create(
+        model=MODEL,
+        messages=messages,
+        **kwargs,
+        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
+    )
     return resp.choices[0].message.content"""),
 
     md("""\

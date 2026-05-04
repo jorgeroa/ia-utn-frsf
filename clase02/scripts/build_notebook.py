@@ -439,15 +439,15 @@ cells.append(md_slide("slide-ecosystem", """\
 | **Open weight** (densos) | Llama 4 Scout (Meta), Qwen3 / Qwen3.5 (Alibaba), Mistral Small 4 |
 | **Open weight** (MoE) | **Kimi K2.5** (Moonshot, 1T total / 32B activos), DeepSeek-R1 |
 | **Razonadores** (open) | DeepSeek-R1, Qwen QwQ, Kimi K2.5 |
-| **Para correr local** | Gemma 4, Qwen3-4B, Llama 3.2-3B (vía Ollama) |
-
-**MoE (Mixture of Experts)**: solo se activan algunos "expertos" por request. Modelo grande, costo de modelo chico."""))
+| **Para correr local** | Gemma 4, Qwen3-4B, Llama 3.2-3B (vía Ollama) |"""))
 
 
 cells.append(md_slide("slide-huggingface", f"""\
 ## ¿Dónde viven los modelos open weight?
 
-{fig("huggingface.svg", "Los tres pilares de HuggingFace: el Hub (repositorio de modelos y datasets), las librerías Python (transformers, datasets, trl, peft), y Spaces / Inference Endpoints", w="88%")}"""))
+{fig("huggingface.svg", "Los tres pilares de HuggingFace: el Hub (repositorio de modelos y datasets), las librerías Python (transformers, datasets, trl, peft), y Spaces / Inference Endpoints", w="88%")}
+
+> 🔗 https://huggingface.co/"""))
 
 
 cells.append(md_slide("slide-course-stack", """\

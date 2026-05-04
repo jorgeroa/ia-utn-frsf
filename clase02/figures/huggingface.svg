@@ -54,9 +54,6 @@
       <text class="text-mono" y="124" font-weight="700">trl, peft, accelerate</text>
       <text class="text-xs" y="140">fine-tuning, LoRA, training</text>
       <text class="text-xs" y="154">distribuido.</text>
-
-      <text class="text-xs" y="186" fill="#666">Lo usamos cuando bajamos</text>
-      <text class="text-xs" y="200" fill="#666">BERT en el notebook 02.</text>
     </g>
   </g>
 

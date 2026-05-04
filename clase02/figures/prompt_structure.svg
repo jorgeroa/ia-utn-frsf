@@ -46,23 +46,26 @@
   </g>
 
   <!-- side annotations -->
-  <g transform="translate(40,114)">
-    <text x="0" y="0" class="text-xs" font-weight="600" fill="#7F77DD">define rol, tono, restricciones</text>
-    <text x="0" y="16" class="text-xs">Es la "pre-instrucción" de la conversación.</text>
+  <g transform="translate(20,108)">
+    <text x="0" y="0" class="text-xs" font-weight="600" fill="#7F77DD">define rol, tono</text>
+    <text x="0" y="14" class="text-xs" font-weight="600" fill="#7F77DD">y restricciones</text>
+    <text x="0" y="32" class="text-xs">Es la "pre-instrucción"</text>
+    <text x="0" y="46" class="text-xs">de la conversación.</text>
   </g>
 
-  <g transform="translate(40,150)">
-    <line x1="0" y1="0" x2="130" y2="0" class="stroke-thin"/>
-    <polygon points="130,0 122,-4 122,4" fill="#222"/>
+  <g transform="translate(20,160)">
+    <line x1="0" y1="0" x2="150" y2="0" class="stroke-thin"/>
+    <polygon points="150,0 142,-4 142,4" fill="#222"/>
   </g>
 
-  <g transform="translate(40,228)">
+  <g transform="translate(20,228)">
     <text x="0" y="0" class="text-xs" font-weight="600">la respuesta nace</text>
-    <text x="0" y="16" class="text-xs">condicionada por system + user.</text>
+    <text x="0" y="14" class="text-xs" font-weight="600">condicionada por</text>
+    <text x="0" y="32" class="text-xs">system + user.</text>
   </g>
-  <g transform="translate(40,250)">
-    <line x1="0" y1="0" x2="130" y2="0" class="stroke-thin"/>
-    <polygon points="130,0 122,-4 122,4" fill="#222"/>
+  <g transform="translate(20,260)">
+    <line x1="0" y1="0" x2="150" y2="0" class="stroke-thin"/>
+    <polygon points="150,0 142,-4 142,4" fill="#222"/>
   </g>
 
   <text x="480" y="438" text-anchor="middle" class="text-xs" fill="#666">Tres roles. Toda la "ingeniería de prompts" es jugar con estos tres campos.</text>
