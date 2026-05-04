@@ -388,12 +388,146 @@ for r in RESEÑAS:
     print(f"  {out:<10} <- {r}")"""),
 
     md("""\
+## Parte 2 — Cuando zero-shot ya no alcanza
+
+El sentimiento de reseñas es una tarea **fácil**: el modelo conoce las clases (positivo / negativo / neutral) sin que se las definas. Por eso zero-shot ya anda muy bien.
+
+Probemos algo más realista: **triaje de tickets de soporte con un esquema propio**, donde:
+
+- Las etiquetas son **idiosincrásicas** del producto (no las podés googlear).
+- Hay **clases ambiguas** (un mismo ticket podría caer en dos).
+- Necesitás un **formato de salida estricto** para alimentar un sistema downstream."""),
+
+    md("""\
+## La tarea
+
+Un ticket entra y queremos clasificarlo en una de **6 etiquetas internas**:
+
+| Etiqueta | Significa |
+|---|---|
+| `BUG_BLOQUEANTE` | El usuario no puede operar (login caído, pago no procesa, error 500). |
+| `BUG_VISUAL` | Algo se ve mal pero la funcionalidad anda (CSS roto, ícono cortado). |
+| `FEATURE_REQUEST` | Pide algo que no existe todavía. |
+| `DUDA_DOCS` | Duda que se resuelve leyendo la doc del producto. |
+| `DUDA_BILLING` | Duda sobre planes, facturación, precios, suscripción. |
+| `OUT_OF_SCOPE` | No es nuestro problema (consulta sobre otro producto, spam, queja sin acción posible). |"""),
+
+    code("""\
+TICKETS = [
+    "Hace 2 horas que no puedo loguearme, me tira 'session expired' en loop.",
+    "El logo de la barra se ve cortado a la mitad en Safari mobile.",
+    "¿Tienen plan anual con descuento o solo mensual?",
+    "Necesitaría poder exportar el reporte a Excel, no solo a PDF.",
+    "No entiendo cómo configurar el webhook, leí la doc pero quedé igual.",
+    "¿Hola? Me podés pasar el teléfono de Movistar?",
+    "El pago me lo cobró dos veces, urgente.",
+    "Sería genial poder customizar los colores del dashboard.",
+]"""),
+
+    md("""\
+## Zero-shot
+
+Le decimos al modelo qué tiene que hacer **en palabras**, sin ejemplos."""),
+
+    code("""\
+SYSTEM_ZS = '''Sos un sistema de triaje de tickets de soporte.
+Clasificá cada ticket en exactamente una de estas etiquetas:
+BUG_BLOQUEANTE, BUG_VISUAL, FEATURE_REQUEST, DUDA_DOCS, DUDA_BILLING, OUT_OF_SCOPE.
+
+Respondé SOLO con la etiqueta, sin explicación.'''
+
+print("ZERO-SHOT")
+print("-" * 70)
+zero_shot_results = []
+for t in TICKETS:
+    out = clasificar([
+        {"role": "system", "content": SYSTEM_ZS},
+        {"role": "user", "content": t},
+    ])
+    zero_shot_results.append(out)
+    print(f"  {out:<25} <- {t[:60]}")"""),
+
+    md("""\
+**¿Qué pasa típicamente?**
+
+- El modelo a veces inventa etiquetas (`BUG_CRITICO`, `bug_visual`, `Bug Bloqueante`) o las escribe distinto.
+- Agrega texto extra ("Etiqueta: BUG_BLOQUEANTE", "Esta sería FEATURE_REQUEST porque...").
+- En los casos ambiguos (consulta sobre billing vs duda general; bug visual vs feature request) elige distinto cada vez.
+
+Eso pasa porque el modelo **no conoce tu esquema** — está adivinando."""),
+
+    md("""\
+## Few-shot
+
+Le mostramos 5 ejemplos resueltos. Elegidos para cubrir los casos donde zero-shot suele fallar."""),
+
+    code("""\
+EJEMPLOS_FS = '''
+Ticket: No me carga el dashboard, queda cargando infinito.
+Etiqueta: BUG_BLOQUEANTE
+
+Ticket: El botón "Guardar" aparece cortado en pantalla chica.
+Etiqueta: BUG_VISUAL
+
+Ticket: ¿Cuánto sale el plan empresa?
+Etiqueta: DUDA_BILLING
+
+Ticket: Necesito una forma de duplicar los proyectos.
+Etiqueta: FEATURE_REQUEST
+
+Ticket: Disculpá, era para otra empresa.
+Etiqueta: OUT_OF_SCOPE
+
+'''
+
+SYSTEM_FS = '''Sos un sistema de triaje de tickets de soporte.
+Clasificá cada ticket en exactamente una de estas etiquetas:
+BUG_BLOQUEANTE, BUG_VISUAL, FEATURE_REQUEST, DUDA_DOCS, DUDA_BILLING, OUT_OF_SCOPE.
+
+Respondé SOLO con la etiqueta, sin explicación.'''
+
+print("FEW-SHOT")
+print("-" * 70)
+few_shot_results = []
+for t in TICKETS:
+    user = EJEMPLOS_FS + f"Ticket: {t}\\nEtiqueta:"
+    out = clasificar([
+        {"role": "system", "content": SYSTEM_FS},
+        {"role": "user", "content": user},
+    ])
+    few_shot_results.append(out)
+    print(f"  {out:<25} <- {t[:60]}")"""),
+
+    md("""\
+## Comparación lado a lado"""),
+
+    code("""\
+print(f"{'TICKET':<60} {'ZERO-SHOT':<22} {'FEW-SHOT':<22}")
+print("-" * 104)
+for t, z, f in zip(TICKETS, zero_shot_results, few_shot_results):
+    short = (t[:55] + '...') if len(t) > 58 else t
+    flag = "  ⚠" if z.strip() != f.strip() else ""
+    print(f"{short:<60} {z:<22} {f:<22}{flag}")"""),
+
+    md("""\
+## El takeaway
+
+El few-shot **no le enseña a clasificar** al modelo (Llama 3.3 ya entiende perfecto cada ticket). Lo que hace es:
+
+1. **Fijar el formato exacto** — solo la etiqueta, sin texto extra, en MAYÚSCULAS exactas.
+2. **Resolver ambigüedad de las clases** — qué cae en `DUDA_BILLING` vs `DUDA_DOCS`, qué es `BUG_VISUAL` vs `FEATURE_REQUEST`.
+3. **Anclar el vocabulario** — el modelo no inventa `BUG_CRITICO` ni `bug_visual`.
+
+Ese es el patrón general: **few-shot es para fijar formato y resolver tu esquema propio**, no para enseñarle al modelo lo que ya sabe."""),
+
+    md("""\
 ## Para experimentar
 
 - Cambiá los ejemplos del few-shot por casos más cercanos a tu dominio. Probablemente mejore más.
 - Probá con 1 solo ejemplo (one-shot) y compará con few-shot.
 - Pedí al modelo que devuelva además una **explicación** de por qué clasificó así. Esto es CoT, lo vemos en el próximo notebook.
-- Probá con `temperature=0.7` en zero-shot — ¿se vuelve más inconsistente?"""),
+- Probá con `temperature=0.7` en zero-shot — ¿se vuelve más inconsistente?
+- Cambiá `MODEL` a `MODELS["llama_fast"]` (Llama 3.1 8B) y mirá cómo cae la calidad — los modelos chicos sufren más sin few-shot."""),
 ])
 
 
