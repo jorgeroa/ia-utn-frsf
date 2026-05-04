@@ -14,9 +14,19 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
 - `clase01/vectores_slides.ipynb` — slides de la clase en formato Jupyter (reveal.js).
 - `clase01/figures/` — recursos gráficos.
 
+### Clase 2 — LLMs
+
+- `clase02/clase2_slides.ipynb` — slides de la clase en formato Jupyter (reveal.js).
+- `clase02/figures/` — figuras SVG.
+- `clase02/notebooks/` — notebooks de práctica para Colab (Groq):
+  - `01_groq_intro.ipynb` — primera llamada al LLM.
+  - `03_sampling_params.ipynb` — temperature, top_p, top_k.
+  - `04_prompting_techniques.ipynb` — zero/one/few-shot.
+  - `05_cot_structured.ipynb` — Chain of Thought + structured output.
+- `clase02/scripts/` — generadores: `build_notebook.py` (slides) y `build_colabs.py` (notebooks).
+
 ### Próximas clases
 
-- Clase 2 — LLMs
 - Clase 3 — RAG
 - Clase 4 — Agentes
 
@@ -24,22 +34,30 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
 
 ## Generar las slides
 
-La notebook está pensada para presentarse como reveal.js. Para
-exportarla a HTML:
+Las notebooks están pensadas para presentarse como reveal.js. Para exportar a HTML:
 
 ```bash
-cd clase01
-jupyter nbconvert --to slides vectores_slides.ipynb
+cd claseXX
+jupyter nbconvert --to slides <archivo>.ipynb
 ```
 
-Eso genera `vectores_slides.slides.html`, que se abre en cualquier
-navegador y se navega con flechas (← → para slides; ↓ ↑ para
-subslides opcionales con material de profundización).
+Esto genera `<archivo>.slides.html`, que se abre en cualquier navegador y se navega con flechas (← → para slides; ↓ ↑ para subslides opcionales).
 
-Para servirlas en localhost en lugar de descargar el archivo:
+Para servirlas en localhost:
 
 ```bash
-jupyter nbconvert --to slides vectores_slides.ipynb --post serve
+jupyter nbconvert --to slides <archivo>.ipynb --post serve
+```
+
+### Clase 2 — pipeline de generación
+
+La notebook de slides y las notebooks de Colab se regeneran desde scripts:
+
+```bash
+cd clase02
+python scripts/build_notebook.py    # regenera clase2_slides.ipynb
+python scripts/build_colabs.py      # regenera las notebooks de Colab
+jupyter nbconvert clase2_slides.ipynb --to slides --no-input
 ```
 
 ### Dependencias mínimas
@@ -57,7 +75,12 @@ pip install jupyter nbconvert
 ├── clase01/
 │   ├── vectores_slides.ipynb
 │   └── figures/
-│       └── embeddings.png
+├── clase02/
+│   ├── clase2_slides.ipynb
+│   ├── clase2_slides.slides.html
+│   ├── figures/
+│   ├── notebooks/
+│   └── scripts/
 ├── CITATION.cff
 ├── LICENSE
 └── README.md
