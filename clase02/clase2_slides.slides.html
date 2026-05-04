@@ -8008,16 +8008,16 @@ Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Para-este-curso">Para este curso<a class="anchor-link" href="#Para-este-curso">¶</a></h2><p>Usamos <strong>Qwen3 vía Groq</strong> como modelo principal:</p>
+<h2 id="Para-este-curso">Para este curso<a class="anchor-link" href="#Para-este-curso">¶</a></h2><p>Usamos <strong>Groq</strong> como provider principal de inferencia:</p>
 <ul>
 <li><strong>Gratis</strong> con cuotas generosas para desarrollo.</li>
 <li><strong>Muy rápido</strong> (Groq corre inferencia en hardware especializado).</li>
-<li><strong>Open weight</strong> — podés bajarlo de HuggingFace y correrlo local también.</li>
+<li>En las notebooks podés cambiar la constante <code>MODEL</code> por cualquier modelo disponible en Groq (Llama, Qwen3, DeepSeek-R1, Gemma, etc.).</li>
 </ul>
 <div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>groq
 <span class="nb">export</span><span class="w"> </span><span class="nv">GROQ_API_KEY</span><span class="o">=</span><span class="s2">"..."</span>
 </pre></div>
-<p>Alternativa local opcional: <strong>Ollama</strong> con <code>qwen3:8b</code> o <code>qwen3:4b</code>.</p>
+<p>Alternativa local opcional: <strong>Ollama</strong>.</p>
 </div>
 </div>
 </div>

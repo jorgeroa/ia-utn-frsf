@@ -453,18 +453,18 @@ cells.append(md_slide("slide-huggingface", f"""\
 cells.append(md_slide("slide-course-stack", """\
 ## Para este curso
 
-Usamos **Qwen3 vía Groq** como modelo principal:
+Usamos **Groq** como provider principal de inferencia:
 
 - **Gratis** con cuotas generosas para desarrollo.
 - **Muy rápido** (Groq corre inferencia en hardware especializado).
-- **Open weight** — podés bajarlo de HuggingFace y correrlo local también.
+- En las notebooks podés cambiar la constante `MODEL` por cualquier modelo disponible en Groq (Llama, Qwen3, DeepSeek-R1, Gemma, etc.).
 
 ```bash
 pip install groq
 export GROQ_API_KEY="..."
 ```
 
-Alternativa local opcional: **Ollama** con `qwen3:8b` o `qwen3:4b`."""))
+Alternativa local opcional: **Ollama**."""))
 
 
 # ─────────────────────────────────────────────────────────────────────────────

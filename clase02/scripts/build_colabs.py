@@ -101,7 +101,14 @@ except ImportError:
     assert os.environ.get("GROQ_API_KEY"), "Exportá GROQ_API_KEY antes de correr."
 
 client = Groq()
-MODEL = "qwen/qwen3-32b"  # rápido y capaz. Alternativas: llama-3.3-70b-versatile
+MODELS = {
+    "llama_fast":   "llama-3.1-8b-instant",
+    "llama_strong": "llama-3.3-70b-versatile",
+    "qwen_reason":  "qwen/qwen3-32b",
+    "deepseek":     "deepseek-r1-distill-llama-70b",
+    "gemma":        "gemma2-9b-it",
+}
+MODEL = MODELS["llama_strong"]  # cambiá la clave para probar otros modelos
 
 print("Cliente listo, modelo:", MODEL)"""),
 
@@ -114,7 +121,6 @@ Mandamos un único mensaje del usuario y leemos la respuesta."""),
 resp = client.chat.completions.create(
     model=MODEL,
     messages=[{"role": "user", "content": "Explicame en 2 oraciones qué es un LLM."}],
-    # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
 )
 
 print(resp.choices[0].message.content)"""),
@@ -132,7 +138,6 @@ for temp in [0.1, 1.0]:
         model=MODEL,
         messages=[{"role": "user", "content": PROMPT}],
         temperature=temp,
-        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
     )
     print(f"--- temperature = {temp} ---")
     print(resp.choices[0].message.content)
@@ -153,7 +158,6 @@ resp = client.chat.completions.create(
         {"role": "user", "content": "¿Cómo declaro un array en Python?"},
     ],
     temperature=0.6,
-    # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
 )
 
 print(resp.choices[0].message.content)"""),
@@ -197,14 +201,20 @@ except ImportError:
     assert os.environ.get("GROQ_API_KEY"), "Exportá GROQ_API_KEY."
 
 client = Groq()
-MODEL = "qwen/qwen3-32b"
+MODELS = {
+    "llama_fast":   "llama-3.1-8b-instant",
+    "llama_strong": "llama-3.3-70b-versatile",
+    "qwen_reason":  "qwen/qwen3-32b",
+    "deepseek":     "deepseek-r1-distill-llama-70b",
+    "gemma":        "gemma2-9b-it",
+}
+MODEL = MODELS["llama_strong"]  # cambiá la clave para probar otros modelos
 
 def generar(prompt, **kwargs):
     resp = client.chat.completions.create(
         model=MODEL,
         messages=[{"role": "user", "content": prompt}],
         **kwargs,
-        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
     )
     return resp.choices[0].message.content"""),
 
@@ -299,14 +309,20 @@ except ImportError:
     assert os.environ.get("GROQ_API_KEY"), "Exportá GROQ_API_KEY."
 
 client = Groq()
-MODEL = "qwen/qwen3-32b"
+MODELS = {
+    "llama_fast":   "llama-3.1-8b-instant",
+    "llama_strong": "llama-3.3-70b-versatile",
+    "qwen_reason":  "qwen/qwen3-32b",
+    "deepseek":     "deepseek-r1-distill-llama-70b",
+    "gemma":        "gemma2-9b-it",
+}
+MODEL = MODELS["llama_strong"]  # cambiá la clave para probar otros modelos
 
 def clasificar(messages, temperature=0.1):
     resp = client.chat.completions.create(
         model=MODEL,
         messages=messages,
         temperature=temperature,
-        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
     )
     return resp.choices[0].message.content.strip()"""),
 
@@ -410,14 +426,20 @@ except ImportError:
     assert os.environ.get("GROQ_API_KEY"), "Exportá GROQ_API_KEY."
 
 client = Groq()
-MODEL = "qwen/qwen3-32b"
+MODELS = {
+    "llama_fast":   "llama-3.1-8b-instant",
+    "llama_strong": "llama-3.3-70b-versatile",
+    "qwen_reason":  "qwen/qwen3-32b",
+    "deepseek":     "deepseek-r1-distill-llama-70b",
+    "gemma":        "gemma2-9b-it",
+}
+MODEL = MODELS["llama_strong"]  # cambiá la clave para probar otros modelos
 
 def chat(messages, **kwargs):
     resp = client.chat.completions.create(
         model=MODEL,
         messages=messages,
         **kwargs,
-        # reasoning_effort="none",  # descomentar para que Qwen3 no devuelva <think>...</think>
     )
     return resp.choices[0].message.content"""),
 
@@ -529,7 +551,7 @@ for req in REQUERIMIENTOS:
 
 - **Tolerá errores de parseo**: usá `json-repair` o un retry con un mensaje "el JSON anterior estaba mal".
 - **Validá con un schema** (pydantic, jsonschema). El modelo se equivoca: si el schema no se cumple, descartá la respuesta.
-- **`response_format={"type": "json_object"}`**: muchos modelos (incluido Qwen vía Groq) tienen un modo JSON forzado. Probalo.
+- **`response_format={"type": "json_object"}`**: muchos modelos en Groq tienen un modo JSON forzado. Probalo.
 - **Para tareas de razonamiento + JSON**: pedí primero el razonamiento (en un campo `reasoning`) y después la respuesta. Mejora calidad."""),
 ])
 
