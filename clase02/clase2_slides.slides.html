@@ -5,7 +5,7 @@
 <meta content="chrome=1" http-equiv="X-UA-Compatible"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
-<title>Clase 2 — LLMs: Arquitectura, Ecosistema y Prompting slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script type="module">
+<title>clase2_slides slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script><script type="module">
   import mermaid from 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.0/mermaid.esm.min.mjs';
   mermaid.initialize({ startOnLoad: true });
 </script>
@@ -7439,11 +7439,10 @@ main {
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="LLMs-%E2%80%94-Arquitectura,-Ecosistema-y-Prompting">LLMs — Arquitectura, Ecosistema y Prompting<a class="anchor-link" href="#LLMs-%E2%80%94-Arquitectura,-Ecosistema-y-Prompting">¶</a></h1><h3 id="UTN-FRSF-%C2%B7-Ingenier%C3%ADa-en-Sistemas-de-Informaci%C3%B3n-%C2%B7-Inteligencia-Artificial">UTN-FRSF · Ingeniería en Sistemas de Información · Inteligencia Artificial<a class="anchor-link" href="#UTN-FRSF-%C2%B7-Ingenier%C3%ADa-en-Sistemas-de-Informaci%C3%B3n-%C2%B7-Inteligencia-Artificial">¶</a></h3><p><strong>Dr. Jorge Roa · Dra. María de los Milagros Gutiérrez</strong></p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="LLMs-%E2%80%94-Arquitectura,-Ciclo-de-Vida-y-Prompting">LLMs — Arquitectura, Ciclo de Vida y Prompting<a class="anchor-link" href="#LLMs-%E2%80%94-Arquitectura,-Ciclo-de-Vida-y-Prompting">¶</a></h1><h3 id="UTN-FRSF-%C2%B7-Ingenier%C3%ADa-en-Sistemas-de-Informaci%C3%B3n-%C2%B7-Inteligencia-Artificial">UTN-FRSF · Ingeniería en Sistemas de Información · Inteligencia Artificial<a class="anchor-link" href="#UTN-FRSF-%C2%B7-Ingenier%C3%ADa-en-Sistemas-de-Informaci%C3%B3n-%C2%B7-Inteligencia-Artificial">¶</a></h3><p><strong>Dr. Jorge Roa · Dra. María de los Milagros Gutiérrez</strong></p>
 <hr/>
-<p><em>¿Cómo funciona un LLM y cómo se le habla bien?</em></p>
+<p><em>De qué está hecho un LLM, cómo aprende, cómo se le habla.</em></p>
 </div>
 </div>
 </div>
@@ -7452,86 +7451,80 @@ main {
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Recap-Clase-1-%E2%86%92-conexi%C3%B3n-con-hoy">Recap Clase 1 → conexión con hoy<a class="anchor-link" href="#Recap-Clase-1-%E2%86%92-conexi%C3%B3n-con-hoy">¶</a></h2><p>En Clase 1 construimos los cimientos:</p>
-<pre><code>  Texto     ──▶  Tokenización  ──▶  Embeddings  ──▶  ???  ──▶  Output
-  (crudo)         (subpalabras)      (vectores)      (hoy)
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Recap-Clase-1-%E2%86%92-de-qu%C3%A9-partimos">Recap Clase 1 → de qué partimos<a class="anchor-link" href="#Recap-Clase-1-%E2%86%92-de-qu%C3%A9-partimos">¶</a></h2><pre><code>  Texto      ──▶  Tokenización  ──▶  Embeddings  ──▶  LLM  ──▶  Output
+  (crudo)          (subpalabras)      (vectores)        ↑hoy
 </code></pre>
-<p>Hoy abrimos la caja del medio:</p>
 <table>
 <thead>
 <tr>
-<th>Lo que ya sabemos</th>
-<th>Lo que vemos hoy</th>
+<th>Lo que ya tenemos de Clase 1</th>
+<th>Lo que abrimos hoy</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Tokenizers: BPE, WordPiece, SentencePiece</td>
-<td>Esos mismos en GPT-4o, Llama, BERT</td>
+<td>Tokenizers (BPE, WordPiece)</td>
+<td>Esos mismos en GPT, Llama, Qwen</td>
 </tr>
 <tr>
-<td>Embeddings: vectores de 384 dimensiones</td>
+<td>Embeddings de 384 dimensiones</td>
 <td>Cómo el Transformer los procesa</td>
 </tr>
 <tr>
-<td>BoW / TF-IDF: representación ingenua</td>
-<td>Por qué attention lo supera</td>
+<td>BoW / TF-IDF como baseline</td>
+<td>Por qué attention los supera</td>
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-modo">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Hoy-hablamos-con-un-LLM-por-c%C3%B3digo,-no-por-UI">Hoy hablamos con un LLM <strong>por código</strong>, no por UI<a class="anchor-link" href="#Hoy-hablamos-con-un-LLM-por-c%C3%B3digo,-no-por-UI">¶</a></h2><ul>
+<li>ChatGPT, Claude, Gemini son apps. Lo que está abajo es un modelo.</li>
+<li>En este curso vamos a tratarlo como una <strong>API</strong> que se invoca desde Python.</li>
+<li>Eso permite: scripting, integración, control fino, prompts reproducibles.</li>
+</ul>
 <blockquote>
-<p>Los embeddings del corpus de Clase 1 los volvemos a usar en Clase 3 (RAG).</p>
+<p>Cuando deployás IA en una empresa, casi nunca usás la UI. Usás el modelo desde código.</p>
 </blockquote>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-setup-header">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-demo-groq">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E2%9A%99%EF%B8%8F-Setup">⚙️ Setup<a class="anchor-link" href="#%E2%9A%99%EF%B8%8F-Setup">¶</a></h2><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>transformers<span class="w"> </span>tiktoken<span class="w"> </span>torch<span class="w"> </span>bertviz
-pip<span class="w"> </span>install<span class="w"> </span>groq<span class="w"> </span>ollama<span class="w"> </span>openai<span class="w">   </span><span class="c1"># para B5 — prompting</span>
-</pre></div>
-<p><strong>Modelos que usamos hoy:</strong></p>
-<ul>
-<li><code>tiktoken</code> — tokenizer GPT-4o, local sin API key</li>
-<li><code>bert-base-multilingual-cased</code> — via HuggingFace, ~680MB</li>
-<li><code>Qwen/Qwen2.5-0.5B</code> — tokenizer Qwen (opcional), ~1MB solo tokenizer</li>
-<li><code>BertViz</code> — visualización de attention weights</li>
-<li>Groq API o Ollama — para ejercicios de prompting</li>
-</ul>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Demo:-hola-Groq-desde-un-notebook">Demo: hola Groq desde un notebook<a class="anchor-link" href="#Demo:-hola-Groq-desde-un-notebook">¶</a></h2><p>Vamos a abrir un Colab y conectarnos a Groq con tres consultas progresivas:</p>
+<ol>
+<li><strong>Hola simple</strong> — confirmar que la conexión funciona.</li>
+<li><strong>Mismo prompt con <code>temperature=0</code> y <code>temperature=1</code></strong> — ver qué cambia.</li>
+<li><strong>System prompt "respondé como un pirata"</strong> — introducir roles.</li>
+</ol>
+<p>📓 <strong>Notebook</strong>: <a href="notebooks/01_groq_intro.ipynb"><code>clase02/notebooks/01_groq_intro.ipynb</code></a>
+Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
+<blockquote>
+<p>No vamos a leer el código en clase, lo ejecutamos.</p>
+</blockquote>
 </div>
 </div>
 </div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-setup">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-roadmap">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">'ignore'</span><span class="p">)</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">tiktoken</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-
-<span class="c1"># Frase de prueba — la usamos en toda la clase</span>
-<span class="n">FRASE_ES</span> <span class="o">=</span> <span class="s2">"La inteligencia artificial está transformando la ingeniería de software."</span>
-<span class="n">FRASE_EN</span> <span class="o">=</span> <span class="s2">"Artificial intelligence is transforming software engineering."</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'✓ Setup OK'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  Frase ES: "</span><span class="si">{</span><span class="n">FRASE_ES</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  Frase EN: "</span><span class="si">{</span><span class="n">FRASE_EN</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Recorrido-de-la-clase">Recorrido de la clase<a class="anchor-link" href="#Recorrido-de-la-clase">¶</a></h2><p><img alt="Roadmap de los 7 bloques de la clase, con dos cortes intermedios" class="slide-figure" src="figures/roadmap.svg" style="width: 92%;"/></p>
+<p>Vamos primero a entender <strong>qué es</strong> un LLM (bloques 1–4), después a <strong>usarlo bien</strong> (bloque 5), y finalmente a <strong>operarlo en producción</strong> (bloque 6). Cerramos conectando con Clase 3.</p>
 </div>
 </div>
 </div>
@@ -7540,211 +7533,97 @@ pip<span class="w"> </span>install<span class="w"> </span>groq<span class="w"> <
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-1">Bloque 1<a class="anchor-link" href="#Bloque-1">¶</a></h1><h2 id="Tokenizers-en-modelos-reales">Tokenizers en modelos reales<a class="anchor-link" href="#Tokenizers-en-modelos-reales">¶</a></h2><hr/>
-<p><em>Ya saben qué son BPE y WordPiece. Ahora los vemos en los modelos que van a usar en el curso.</em></p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Bloque-1">Bloque 1<a class="anchor-link" href="#Bloque-1">¶</a></h1><h2 id="%C2%BFQu%C3%A9-es-un-LLM?">¿Qué es un LLM?<a class="anchor-link" href="#%C2%BFQu%C3%A9-es-un-LLM?">¶</a></h2><hr/>
+<p><em>Karpathy, "Intro to LLMs" — la intuición más limpia que existe.</em></p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-tokenizers-recap">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-two-files">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Los-mismos-algoritmos,-distintos-modelos">Los mismos algoritmos, distintos modelos<a class="anchor-link" href="#Los-mismos-algoritmos,-distintos-modelos">¶</a></h2><table>
-<thead>
-<tr>
-<th>Modelo</th>
-<th>Algoritmo</th>
-<th>Vocab</th>
-<th>Librería</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>GPT-4o</strong></td>
-<td>BPE <code>o200k_base</code></td>
-<td>~200K</td>
-<td><code>tiktoken</code> — local</td>
-</tr>
-<tr>
-<td><strong>Llama 3.1</strong></td>
-<td>BPE <code>cl100k_base</code></td>
-<td>~128K</td>
-<td><code>tiktoken</code> — local</td>
-</tr>
-<tr>
-<td><strong>BERT multilingual</strong></td>
-<td>WordPiece</td>
-<td>~120K</td>
-<td><code>transformers</code> — local</td>
-</tr>
-<tr>
-<td><strong>Qwen2.5 / Qwen3</strong></td>
-<td>BPE (tiktoken-based)</td>
-<td>~150K</td>
-<td><code>tiktoken</code> / <code>transformers</code></td>
-</tr>
-</tbody>
-</table>
-<p>El algoritmo es el mismo de Clase 1 — la diferencia está en los vocabularios entrenados con billones de tokens.</p>
-<blockquote>
-<p><strong>Recordar:</strong> el tokenizer corre 100% local, sin costo, sin API key.</p>
-</blockquote>
-<blockquote>
-<p>📖 <em>Sennrich, R., et al. (2016). Subword Units. ACL 2016. <a href="https://arxiv.org/abs/1508.07909">https://arxiv.org/abs/1508.07909</a></em><br/>
-📖 <em>Devlin, J., et al. (2018). BERT. NAACL 2019. <a href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a></em></p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-tokenizers-comparacion">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Comparación de tokenizers sobre la misma frase</span>
-<span class="c1"># tiktoken tiene encodings para GPT-4o y Llama 3 sin necesidad de API key</span>
-
-<span class="n">enc_gpt4o</span>  <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s1">'o200k_base'</span><span class="p">)</span>   <span class="c1"># GPT-4o</span>
-<span class="n">enc_llama3</span> <span class="o">=</span> <span class="n">tiktoken</span><span class="o">.</span><span class="n">get_encoding</span><span class="p">(</span><span class="s1">'cl100k_base'</span><span class="p">)</span>  <span class="c1"># Llama 3 / GPT-4</span>
-
-<span class="n">tok_bert</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">'bert-base-multilingual-cased'</span><span class="p">)</span>
-
-<span class="n">resultados</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">frase</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">FRASE_ES</span><span class="p">,</span> <span class="s1">'ES'</span><span class="p">),</span> <span class="p">(</span><span class="n">FRASE_EN</span><span class="p">,</span> <span class="s1">'EN'</span><span class="p">)]:</span>
-    <span class="n">t_gpt4o</span>  <span class="o">=</span> <span class="n">enc_gpt4o</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">frase</span><span class="p">)</span>
-    <span class="n">t_llama3</span> <span class="o">=</span> <span class="n">enc_llama3</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">frase</span><span class="p">)</span>
-    <span class="n">t_bert</span>   <span class="o">=</span> <span class="n">tok_bert</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">frase</span><span class="p">)</span>
-    <span class="n">resultados</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
-        <span class="s1">'Frase'</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span>
-        <span class="s1">'GPT-4o (BPE o200k)'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_gpt4o</span><span class="p">),</span>
-        <span class="s1">'Llama 3 (BPE cl100k)'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_llama3</span><span class="p">),</span>
-        <span class="s1">'BERT (WordPiece)'</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">t_bert</span><span class="p">),</span>
-    <span class="p">})</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">resultados</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">'Frase'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Cantidad de tokens por modelo y frase:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-tokenizers-detalle">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Ver cómo parte cada tokenizer las mismas palabras</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'═'</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'GPT-4o (BPE o200k_base):'</span><span class="p">)</span>
-<span class="n">tokens_gpt</span> <span class="o">=</span> <span class="n">enc_gpt4o</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">FRASE_ES</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">([</span><span class="n">enc_gpt4o</span><span class="o">.</span><span class="n">decode</span><span class="p">([</span><span class="n">t</span><span class="p">])</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens_gpt</span><span class="p">])</span>
-
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'BERT multilingual (WordPiece):'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tok_bert</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">FRASE_ES</span><span class="p">))</span>
-
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Observar las diferencias:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'  GPT-4o: parte por subpalabras según frecuencia en corpus GPT'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'  BERT:   usa ## para marcar continuación de palabra'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'  Ambos usan el mismo concepto de Clase 1, con vocabularios distintos'</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-tokenizers-qwen">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># OPCIONAL: Qwen tokenizer (requiere HuggingFace)</span>
-<span class="c1"># Qwen2.5 y Qwen3 usan un tokenizer BPE propio derivado de tiktoken</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">tok_qwen</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">'Qwen/Qwen2.5-0.5B'</span><span class="p">,</span> <span class="n">trust_remote_code</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">tokens_qwen</span> <span class="o">=</span> <span class="n">tok_qwen</span><span class="o">.</span><span class="n">tokenize</span><span class="p">(</span><span class="n">FRASE_ES</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Qwen2.5 (BPE, vocab ~150k):'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">tokens_qwen</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  → </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens_qwen</span><span class="p">)</span><span class="si">}</span><span class="s1"> tokens para la frase en español'</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Qwen no disponible localmente: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Podés acceder vía: pip install transformers &amp;&amp; huggingface-cli login'</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Un-LLM,-en-disco,-son-dos-archivos">Un LLM, en disco, son dos archivos<a class="anchor-link" href="#Un-LLM,-en-disco,-son-dos-archivos">¶</a></h2><p><img alt="Un LLM = parameters (140GB) + run.c (~500 líneas), corriendo offline en una MacBook" class="slide-figure" src="figures/two_files.svg" style="width: 88%;"/></p>
+<p>Para correr un modelo open weight como <strong>Llama 2 70B</strong> alcanza con un blob de <strong>parámetros</strong> (~140 GB) y un programa que sabe <strong>multiplicar matrices</strong>. Toda la inteligencia vive en los 140 GB.</p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-costo-tokens">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-inference">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Tokens-y-costo-%E2%80%94-lo-que-nadie-te-dice">Tokens y costo — lo que nadie te dice<a class="anchor-link" href="#Tokens-y-costo-%E2%80%94-lo-que-nadie-te-dice">¶</a></h2><p>Los modelos via API cobran por token. Precios aproximados a abril 2026:</p>
-<table>
-<thead>
-<tr>
-<th>Modelo</th>
-<th>Input (por 1M tokens)</th>
-<th>Output (por 1M tokens)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>GPT-5.4</td>
-<td>~$15</td>
-<td>~$60</td>
-</tr>
-<tr>
-<td>Claude Opus 4.6</td>
-<td>~$15</td>
-<td>~$75</td>
-</tr>
-<tr>
-<td>Claude Sonnet 4.6</td>
-<td>~$3</td>
-<td>~$15</td>
-</tr>
-<tr>
-<td>Gemini 3.1 Pro</td>
-<td>~$3.5</td>
-<td>~$10</td>
-</tr>
-<tr>
-<td><strong>Qwen3 8B (Groq)</strong></td>
-<td><strong>~$0.10</strong></td>
-<td><strong>~$0.10</strong></td>
-</tr>
-<tr>
-<td><strong>Ollama local</strong></td>
-<td><strong>$0</strong></td>
-<td><strong>$0</strong></td>
-</tr>
-</tbody>
-</table>
-<p>💡 <strong>Consecuencia práctica:</strong></p>
-<ul>
-<li>Escribir en español puede costar 30-50% más que en inglés (más tokens)</li>
-<li>Para desarrollo y testing → Ollama local o Groq free tier</li>
-<li>Para producción → elegir según el trade-off calidad/costo del caso de uso</li>
-</ul>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Inferencia:-100%25-local,-sin-internet">Inferencia: 100% local, sin internet<a class="anchor-link" href="#Inferencia:-100%25-local,-sin-internet">¶</a></h2><p><img alt="Una MacBook ejecutando un LLM offline, sin WiFi y sin API key" class="slide-figure" src="figures/inference_macbook.svg" style="width: 88%;"/></p>
+<p>Una vez que tenés los pesos, el modelo es tuyo. No hay servicio externo en el medio. Esto es lo que cambia con los modelos open weight.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-training-compression">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Entrenar-=-comprimir-un-trozo-de-internet">Entrenar = comprimir un trozo de internet<a class="anchor-link" href="#Entrenar-=-comprimir-un-trozo-de-internet">¶</a></h2><p><img alt="10 TB de texto → cluster de 6.000 GPUs durante 12 días → 140 GB de pesos" class="slide-figure" src="figures/training_compression.svg" style="width: 88%;"/></p>
+<p>Los 140 GB no salen de la nada: son una <strong>compresión con pérdida</strong> de billones de tokens del scraping de internet. Ratio aproximado: <strong>70:1</strong>.</p>
+<blockquote>
+<p>📖 <em>Touvron, H., et al. (2023). Llama 2: Open Foundation and Fine-Tuned Chat Models.</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-next-word">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="La-red-predice-la-pr%C3%B3xima-palabra">La red predice la próxima palabra<a class="anchor-link" href="#La-red-predice-la-pr%C3%B3xima-palabra">¶</a></h2><p><img alt="Una red neuronal recibe el contexto 'cat sat on a' y predice 'mat' con 97% de probabilidad" class="slide-figure" src="figures/next_word_prediction.svg" style="width: 88%;"/></p>
+<p>El objetivo de entrenamiento es <strong>brutalmente simple</strong>: dado un contexto, ¿qué token sigue?</p>
+<p>Pero ese objetivo, repetido sobre billones de tokens, <strong>fuerza</strong> a la red a aprender un montón de cosas sobre el mundo.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-world-knowledge">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Predecir-tokens-fuerza-a-aprender-el-mundo">Predecir tokens fuerza a aprender el mundo<a class="anchor-link" href="#Predecir-tokens-fuerza-a-aprender-el-mundo">¶</a></h2><p><img alt="Un artículo de Wikipedia con hechos clave subrayados: fechas, lugares, personas, relaciones" class="slide-figure" src="figures/world_knowledge.svg" style="width: 76%;"/></p>
+<p>Para predecir cada palabra subrayada, la red tiene que <strong>saber</strong> un hecho del mundo: fechas, lugares, relaciones de parentesco, causalidad histórica, gramática, formato Wikipedia.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-dreams">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="La-red-alucina-documentos">La red alucina documentos<a class="anchor-link" href="#La-red-alucina-documentos">¶</a></h2><p><img alt="Tres documentos inventados por la red: código Java, ficha de Amazon, artículo de Wikipedia" class="slide-figure" src="figures/network_dreams.svg" style="width: 88%;"/></p>
+<p>Si dejás al modelo generar libre, <strong>inventa</strong> documentos plausibles: código que compila, fichas de productos con ISBN coherentes, artículos de Wikipedia bien estructurados.</p>
+<p><strong>Ninguno existe.</strong> Esto es la <strong>alucinación</strong>: por arquitectura, el modelo siempre genera el documento más plausible que puede, exista o no en la realidad.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-inscrutable">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%C2%BFC%C3%B3mo-funciona-por-dentro?-Casi-nadie-lo-sabe">¿Cómo funciona por dentro? Casi nadie lo sabe<a class="anchor-link" href="#%C2%BFC%C3%B3mo-funciona-por-dentro?-Casi-nadie-lo-sabe">¶</a></h2><p><img alt="Diagrama Transformer simplificado a la izquierda; ejemplo del 'reversal curse' Tom Cruise/Mary Lee Pfeiffer a la derecha" class="slide-figure" src="figures/inscrutable.svg" style="width: 88%;"/></p>
+<p>Sabemos <strong>ajustar</strong> los parámetros para que prediga mejor. No sabemos cómo <strong>colaboran</strong> los miles de millones de parámetros para hacerlo.</p>
+<blockquote>
+<p>Tratá a los LLMs como <strong>artefactos en gran medida inescrutables</strong>. Evaluá en consecuencia.</p>
+</blockquote>
+<blockquote>
+<p>📖 <em>Berglund, L., et al. (2023). The Reversal Curse: LLMs trained on "A is B" fail to learn "B is A".</em></p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -7753,29 +7632,19 @@ pip<span class="w"> </span>install<span class="w"> </span>groq<span class="w"> <
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-2">Bloque 2<a class="anchor-link" href="#Bloque-2">¶</a></h1><h2 id="Arquitectura-Transformer">Arquitectura Transformer<a class="anchor-link" href="#Arquitectura-Transformer">¶</a></h2><hr/>
-<p><em>Antes: RNN/LSTM procesaban de izquierda a derecha, secuencialmente.<br/>
-Problema: al llegar a la palabra 50, ya "olvidabas" la palabra 1.</em></p>
-<p><em>Transformer lo resuelve: procesa todo en paralelo.</em></p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Bloque-2">Bloque 2<a class="anchor-link" href="#Bloque-2">¶</a></h1><h2 id="Transformer-a-grandes-rasgos">Transformer a grandes rasgos<a class="anchor-link" href="#Transformer-a-grandes-rasgos">¶</a></h2><hr/>
+<p><em>Lo que hay adentro de la red, sin entrar en la matemática.</em></p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-attention-intuicion">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-rnn-vs-transformer">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Attention-%E2%80%94-la-intuici%C3%B3n-central">Attention — la intuición central<a class="anchor-link" href="#Attention-%E2%80%94-la-intuici%C3%B3n-central">¶</a></h2><h3 id="%22el-banco-quebr%C3%B3-porque-estaba-podrido%22"><em>"el banco quebró porque estaba podrido"</em><a class="anchor-link" href="#%22el-banco-quebr%C3%B3-porque-estaba-podrido%22">¶</a></h3><p>Para entender qué significa <strong>"banco"</strong> en esta oración, el modelo mira <strong>todas</strong> las otras palabras y decide cuáles son relevantes:</p>
-<pre><code>  banco  ←─────────────────────── podrido  (muy relevante: madera → mueble)
-  banco  ←───────────── quebró            (relevante: puede ser financiero)
-  banco  ←──── el                         (poco relevante)
-</code></pre>
-<p>La palabra <strong>"podrido"</strong> tiene alto peso de atención → <code>banco = mueble</code>, no institución.</p>
-<p>Esto resuelve la <strong>polisemia</strong> que BoW y Word2Vec no podían manejar.</p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="De-RNN-secuencial-a-Transformer-en-paralelo">De RNN secuencial a Transformer en paralelo<a class="anchor-link" href="#De-RNN-secuencial-a-Transformer-en-paralelo">¶</a></h2><p><img alt="Comparativa: RNN procesa una palabra a la vez en secuencia; Transformer mira todas a la vez con atención global" class="slide-figure" src="figures/rnn_vs_transformer.svg" style="width: 88%;"/></p>
 <blockquote>
 <p>📖 <em>Vaswani, A., et al. (2017). Attention Is All You Need. NeurIPS 2017. <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></em></p>
 </blockquote>
@@ -7783,32 +7652,16 @@ Problema: al llegar a la palabra 50, ya "olvidabas" la palabra 1.</em></p>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-qkv">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-transformer-arch">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Attention-%E2%80%94-Q,-K,-V-sin-matem%C3%A1tica-pesada">Attention — Q, K, V sin matemática pesada<a class="anchor-link" href="#Attention-%E2%80%94-Q,-K,-V-sin-matem%C3%A1tica-pesada">¶</a></h2><pre><code>  Para cada token, el modelo genera tres vectores:
-
-  Q (Query)  = "¿qué estoy buscando?"
-  K (Key)    = "¿qué información tengo?"
-  V (Value)  = "¿qué voy a devolver si me buscan?"
-
-  ┌──────────┐     ┌──────────┐     ┌──────────┐
-  │  Query   │     │   Keys   │     │  Values  │
-  │ "banco"  │ ──▶ │ todas las│ ──▶ │ combino  │
-  │ ¿qué soy?│     │ palabras │     │ según    │
-  └──────────┘     └──────────┘     │ similitud│
-                                     └──────────┘
-                                          │
-                                          ▼
-                                   representación
-                                   enriquecida de
-                                   "banco" según
-                                   el contexto
-</code></pre>
-<p>El modelo hace esto para <strong>todos los tokens a la vez</strong> (en paralelo) y con <strong>múltiples cabezas de atención</strong> simultáneas.</p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="La-arquitectura-Transformer-original">La arquitectura Transformer original<a class="anchor-link" href="#La-arquitectura-Transformer-original">¶</a></h2><p><img alt="Arquitectura completa del Transformer: encoder a la izquierda, decoder a la derecha, conectados por cross-attention" class="slide-figure" src="figures/transformer_architecture.svg" style="width: 80%;"/></p>
+<p>Vaswani et al. (2017) la propusieron para <strong>traducción</strong>. La idea: el encoder "lee y entiende" la entrada, el decoder genera la salida token a token, y el cross-attention los conecta.</p>
+<blockquote>
+<p>A partir de acá la familia se dividió en tres ramas — las vemos en el próximo slide.</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -7817,311 +7670,65 @@ Problema: al llegar a la palabra 50, ya "olvidabas" la palabra 1.</em></p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Encoder-vs-Decoder-vs-Encoder-Decoder">Encoder vs Decoder vs Encoder-Decoder<a class="anchor-link" href="#Encoder-vs-Decoder-vs-Encoder-Decoder">¶</a></h2><table>
-<thead>
-<tr>
-<th>Arquitectura</th>
-<th>Para qué sirve</th>
-<th>Ejemplos</th>
-<th>¿Mira el futuro?</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Solo Encoder</strong></td>
-<td>Entender texto (clasificación, embeddings)</td>
-<td>BERT, RoBERTa</td>
-<td>✓ Bidireccional</td>
-</tr>
-<tr>
-<td><strong>Solo Decoder</strong></td>
-<td>Generar texto (siguiente token)</td>
-<td>GPT, Llama, Qwen, Claude</td>
-<td>✗ Solo el pasado</td>
-</tr>
-<tr>
-<td><strong>Encoder-Decoder</strong></td>
-<td>Transformar texto (traducción, resumen)</td>
-<td>T5, BART, mT5</td>
-<td>Mixto</td>
-</tr>
-</tbody>
-</table>
-<pre><code>  BERT (Encoder):                    GPT (Decoder):
-  "el banco [MASK] dinero"           "el banco"
-        ↕↕↕↕↕↕↕↕                          ↓
-  ve TODO el contexto                 "quebró"  (solo ve lo anterior)
-  → predice [MASK] = "tiene"               ↓
-                                      "porque"
-                                            ↓
-                                       "estaba"
-</code></pre>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Encoder-vs-Decoder-%E2%80%94-las-dos-mitades-por-separado">Encoder vs Decoder — las dos mitades por separado<a class="anchor-link" href="#Encoder-vs-Decoder-%E2%80%94-las-dos-mitades-por-separado">¶</a></h2><p><img alt="Encoder con atención bidireccional (BERT) vs Decoder con atención causal (GPT, Llama, Claude)" class="slide-figure" src="figures/encoder_decoder.svg" style="width: 88%;"/></p>
 <blockquote>
-<p>En este curso usamos modelos <strong>Decoder</strong> (GPT, Llama, Qwen) — generan texto.</p>
+<p>En este curso usamos modelos <strong>decoder-only</strong>. Son los que generan respuestas token a token.</p>
 </blockquote>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-escala">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-attention-polysemy">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Escala-%E2%80%94-por-qu%C3%A9-importa">Escala — por qué importa<a class="anchor-link" href="#Escala-%E2%80%94-por-qu%C3%A9-importa">¶</a></h2><pre><code>  Parámetro = un número que el modelo aprendió durante el entrenamiento
-
-  GPT-2    (2019):   1.5 B parámetros   → escribe texto coherente
-  GPT-3    (2020):   175 B parámetros   → razona, traduce, programa
-  Llama 3  (2024):   8B / 70B / 405B    → comparable a GPT-4
-  Qwen3    (2025):   0.6B → 235B        → familia completa
-  Kimi K2.5(2026):   1T total / 32B activos (MoE)
-</code></pre>
-<p><strong>¿Por qué MoE (Mixture of Experts)?</strong></p>
-<pre><code>  Modelo denso:   activa TODOS los parámetros para cada token  → costoso
-  Modelo MoE:     activa solo los "expertos" relevantes         → eficiente
-
-  Kimi K2.5: 1T parámetros totales, pero solo 32B activos por request
-  Resultado: calidad de modelo grande, costo de modelo pequeño
-</code></pre>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Attention-resuelve-la-polisemia-por-contexto">Attention resuelve la polisemia por contexto<a class="anchor-link" href="#Attention-resuelve-la-polisemia-por-contexto">¶</a></h2><p><img alt="La palabra 'banco' adopta significados distintos según con qué otras palabras se conecte por atención" class="slide-figure" src="figures/attention_polysemy.svg" style="width: 88%;"/></p>
+<p>La misma palabra puede significar cosas distintas. La atención <strong>decide</strong> a quién prestarle atención y eso desambigua el sentido.</p>
 </div>
 </div>
 </div>
-</div></section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-moe-detail">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-qkv">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%BD-Bonus:-%C2%BFC%C3%B3mo-funciona-MoE-internamente?">🔽 Bonus: ¿Cómo funciona MoE internamente?<a class="anchor-link" href="#%F0%9F%94%BD-Bonus:-%C2%BFC%C3%B3mo-funciona-MoE-internamente?">¶</a></h2><pre><code>  Modelo DENSO (ej: Llama 3 8B):
-  ─────────────────────────────────────────────
-  Input Token  →  [TODAS las 8B neuronas activas]  →  Output
-                  (siempre, sin excepción)
-  Costo: proporcional al tamaño total del modelo
-
-
-  Modelo MoE (ej: Kimi K2.5, 1T params / 32B activos):
-  ─────────────────────────────────────────────────────
-                    ┌─────────────┐
-  Input Token  →   │   ROUTER    │   (aprende a decidir)
-                    └──────┬──────┘
-                           │
-          ┌────────────────┼──────────────────┐
-          ▼                ▼                  ▼
-    [Experto 1]      [Experto 4]        [Experto 11]    ← solo 3 de 384 expertos
-    (código)         (matemática)       (razonamiento)
-          │                │                  │
-          └────────────────┴──────────────────┘
-                           │
-                        Output
-
-  Costo: proporcional a los expertos ACTIVOS (32B), no al total (1T)
-</code></pre>
-<p><strong>Por qué importa para nosotros:</strong></p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Query,-Key,-Value-%E2%80%94-la-met%C3%A1fora-del-buscador">Query, Key, Value — la metáfora del buscador<a class="anchor-link" href="#Query,-Key,-Value-%E2%80%94-la-met%C3%A1fora-del-buscador">¶</a></h2><p><img alt="Tres cajas Q/K/V con la metáfora 'qué busco / qué tengo / qué devuelvo'" class="slide-figure" src="figures/qkv.svg" style="width: 88%;"/></p>
+<p>Para cada token, el modelo genera tres vectores. <strong>Match(Q, K) → pesos · V</strong> te da una nueva representación que absorbe contexto.</p>
+<p>Es un buscador interno, hecho por la red, que se entrena solo.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-qkv-in-transformer">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%C2%BFD%C3%B3nde-vive-Q-/-K-/-V-dentro-del-Transformer?">¿Dónde vive Q / K / V dentro del Transformer?<a class="anchor-link" href="#%C2%BFD%C3%B3nde-vive-Q-/-K-/-V-dentro-del-Transformer?">¶</a></h2><p><img alt="Los tres bloques de atención: encoder self-attention, decoder masked self-attention, decoder cross-attention. Q/K/V aparece en los tres; cambia de dónde sale cada vector" class="slide-figure" src="figures/qkv_in_transformer.svg" style="width: 80%;"/></p>
+<p>El mecanismo Q/K/V es <strong>siempre el mismo</strong>. Lo que cambia es de dónde sale cada vector:</p>
 <ul>
-<li>Podemos acceder a calidad de modelo grande pagando inferencia de modelo pequeño</li>
-<li>Groq, OpenRouter y otros proveedores pueden servir modelos MoE de forma muy económica</li>
-<li>Kimi K2.5 via API: ~$0.60/M input tokens (comparable a Llama 7B denso)</li>
+<li><strong>Encoder self-attention</strong> y <strong>decoder masked self-attention</strong> → Q, K, V salen del mismo input.</li>
+<li><strong>Cross-attention</strong> (solo en encoder-decoder) → Q viene del decoder, <strong>K y V vienen del encoder</strong>: el decoder "le pregunta" al encoder qué entendió.</li>
 </ul>
 <blockquote>
-<p>📖 <em>Shazeer, N., et al. (2017). Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer. ICLR 2017. <a href="https://arxiv.org/abs/1701.06538">https://arxiv.org/abs/1701.06538</a></em></p>
+<p>Q/K/V es el <strong>cómo</strong> funciona la atención. Encoder / decoder / cross son el <strong>dónde</strong> se aplica.</p>
 </blockquote>
 </div>
 </div>
 </div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-bertviz">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-bertviz-link">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Visualización de attention weights con BertViz</span>
-<span class="c1"># Permite ver qué palabras "se miran" entre sí durante el attention</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">bertviz</span><span class="w"> </span><span class="kn">import</span> <span class="n">head_view</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertModel</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
-    <span class="n">model_name</span> <span class="o">=</span> <span class="s1">'bert-base-multilingual-cased'</span>
-    <span class="n">tokenizer_bert</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
-    <span class="n">model_bert</span> <span class="o">=</span> <span class="n">BertModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">output_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">model_bert</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-    <span class="n">oracion</span> <span class="o">=</span> <span class="s2">"el banco quebró porque estaba podrido"</span>
-    <span class="n">inputs</span> <span class="o">=</span> <span class="n">tokenizer_bert</span><span class="o">.</span><span class="n">encode_plus</span><span class="p">(</span><span class="n">oracion</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">'pt'</span><span class="p">,</span> <span class="n">add_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model_bert</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
-
-    <span class="n">attention</span>      <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">attentions</span>
-    <span class="n">tokens_display</span> <span class="o">=</span> <span class="n">tokenizer_bert</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s1">'input_ids'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Tokens: </span><span class="si">{</span><span class="n">tokens_display</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Capas de attention: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">attention</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Cabezas por capa:   </span><span class="si">{</span><span class="n">attention</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Ejecutar en Jupyter para ver la visualización interactiva:'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'  head_view(attention, tokens_display)'</span><span class="p">)</span>
-
-    <span class="c1"># En Jupyter: descomentar la línea siguiente</span>
-    <span class="c1"># head_view(attention, tokens_display)</span>
-
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'bertviz no instalado. Instalar con: pip install bertviz'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Luego ejecutar en Jupyter para ver la visualización interactiva.'</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-attention-manual">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Si no podés instalar BertViz: visualización manual de attention weights</span>
-<span class="c1"># Muestra qué tokens se "prestan atención" entre sí</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertModel</span>
-
-    <span class="n">tokenizer_bert</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">'bert-base-multilingual-cased'</span><span class="p">)</span>
-    <span class="n">model_bert</span> <span class="o">=</span> <span class="n">BertModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">'bert-base-multilingual-cased'</span><span class="p">,</span> <span class="n">output_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">model_bert</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-    <span class="n">oracion</span> <span class="o">=</span> <span class="s2">"el banco quebró porque estaba podrido"</span>
-    <span class="n">inputs</span>  <span class="o">=</span> <span class="n">tokenizer_bert</span><span class="o">.</span><span class="n">encode_plus</span><span class="p">(</span><span class="n">oracion</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">'pt'</span><span class="p">)</span>
-    <span class="n">tokens</span>  <span class="o">=</span> <span class="n">tokenizer_bert</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s1">'input_ids'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model_bert</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
-
-    <span class="c1"># Capa 0, cabeza 0 — attention desde el token "banco"</span>
-    <span class="n">attn</span>       <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">attentions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>  <span class="c1"># (seq, seq)</span>
-    <span class="n">idx_banco</span>  <span class="o">=</span> <span class="n">tokens</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">'banco'</span><span class="p">)</span> <span class="k">if</span> <span class="s1">'banco'</span> <span class="ow">in</span> <span class="n">tokens</span> <span class="k">else</span> <span class="mi">2</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Attention desde "</span><span class="si">{</span><span class="n">tokens</span><span class="p">[</span><span class="n">idx_banco</span><span class="p">]</span><span class="si">}</span><span class="s1">" hacia cada token:'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'-'</span> <span class="o">*</span> <span class="mi">45</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">tok</span><span class="p">,</span> <span class="n">score</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">attn</span><span class="p">[</span><span class="n">idx_banco</span><span class="p">]):</span>
-        <span class="n">barra</span> <span class="o">=</span> <span class="s1">'█'</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="n">score</span> <span class="o">*</span> <span class="mi">40</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">tok</span><span class="si">:</span><span class="s1">&lt;15</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">score</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">  </span><span class="si">{</span><span class="n">barra</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'→ Los tokens con barra más larga son los que más influyen en la representación de "banco"'</span><span class="p">)</span>
-
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Transformers no disponible: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Instalar con: pip install transformers torch'</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-attention-heatmap">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># 🔽 Bonus: Heatmap de attention — visualización sin BertViz</span>
-<span class="c1"># Muestra TODAS las cabezas de atención de una capa en una grilla</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BertTokenizer</span><span class="p">,</span> <span class="n">BertModel</span>
-
-    <span class="n">tokenizer_bert</span> <span class="o">=</span> <span class="n">BertTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">'bert-base-multilingual-cased'</span><span class="p">)</span>
-    <span class="n">model_bert</span> <span class="o">=</span> <span class="n">BertModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s1">'bert-base-multilingual-cased'</span><span class="p">,</span> <span class="n">output_attentions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">model_bert</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
-
-    <span class="n">oracion</span> <span class="o">=</span> <span class="s2">"el banco quebró porque estaba podrido"</span>
-    <span class="n">inputs</span>  <span class="o">=</span> <span class="n">tokenizer_bert</span><span class="o">.</span><span class="n">encode_plus</span><span class="p">(</span><span class="n">oracion</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">'pt'</span><span class="p">)</span>
-    <span class="n">tokens</span>  <span class="o">=</span> <span class="n">tokenizer_bert</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s1">'input_ids'</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
-        <span class="n">outputs</span> <span class="o">=</span> <span class="n">model_bert</span><span class="p">(</span><span class="o">**</span><span class="n">inputs</span><span class="p">)</span>
-
-    <span class="c1"># Capa 0: 12 cabezas de atención</span>
-    <span class="n">attn_layer0</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">attentions</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>  <span class="c1"># (12 heads, seq, seq)</span>
-    <span class="n">n_heads</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">attn_layer0</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Attention weights — BERT Capa 0 (primeras </span><span class="si">{</span><span class="n">n_heads</span><span class="si">}</span><span class="s1"> cabezas)</span>
-<span class="s2">"</span><span class="si">{oracion}</span><span class="s2">"</span><span class="s1">',</span>
-                 <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">h</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">h</span> <span class="o">&gt;=</span> <span class="n">n_heads</span><span class="p">:</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">'off'</span><span class="p">);</span> <span class="k">continue</span>
-        <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">attn_layer0</span><span class="p">[</span><span class="n">h</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">'Blues'</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">attn_layer0</span><span class="p">[</span><span class="n">h</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Cabeza </span><span class="si">{</span><span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)))</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">'right'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)))</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
-
-    <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'attention_heatmap.png'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">130</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'→ Cada celda (i,j) = cuánto el token i presta atención al token j'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'→ Diferentes cabezas capturan diferentes tipos de relaciones'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'   (sintácticas, semánticas, co-referencia, etc.)'</span><span class="p">)</span>
-
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Requiere: pip install transformers torch matplotlib'</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
-</div></section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-attention-formula">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%94%BD-Bonus:-La-f%C3%B3rmula-completa-de-Scaled-Dot-Product-Attention">🔽 Bonus: La fórmula completa de Scaled Dot-Product Attention<a class="anchor-link" href="#%F0%9F%94%BD-Bonus:-La-f%C3%B3rmula-completa-de-Scaled-Dot-Product-Attention">¶</a></h2><p>$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{Q \cdot K^T}{\sqrt{d_k}}\right) \cdot V$$</p>
-<h3 id="Desglose-paso-a-paso:">Desglose paso a paso:<a class="anchor-link" href="#Desglose-paso-a-paso:">¶</a></h3><p><strong>1. <code>Q · Kᵀ</code> — similitud entre query y todas las keys</strong></p>
-<pre><code>  Para cada token i, calculo qué tan similar es su Query
-  con la Key de cada otro token j.
-  Resultado: matriz (seq_len × seq_len) de scores
-</code></pre>
-<p><strong>2. <code>/ √d_k</code> — escalado</strong></p>
-<pre><code>  Dividir por √d_k (raíz de la dimensión de los vectores)
-  evita que los dot products sean muy grandes cuando d_k es alto.
-  Sin esto, softmax se satura → gradientes muy pequeños → aprendizaje lento.
-</code></pre>
-<p><strong>3. <code>softmax(...)</code> — normalización</strong></p>
-<pre><code>  Convierte los scores en probabilidades (suman 1).
-  Token "podrido" → score alto respecto a "banco" → peso alto.
-  Token "el"      → score bajo respecto a "banco" → peso bajo.
-</code></pre>
-<p><strong>4. <code>· V</code> — combinación ponderada</strong></p>
-<pre><code>  El output para "banco" es una suma ponderada de los Values de todos los tokens.
-  → La representación de "banco" absorbe información de "podrido".
-  → Polisemia resuelta por contexto.
-</code></pre>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Ver-attention-en-acci%C3%B3n">Ver attention en acción<a class="anchor-link" href="#Ver-attention-en-acci%C3%B3n">¶</a></h2><p>📓 <strong>Notebook opcional</strong>: <a href="notebooks/02_attention_bertviz.ipynb"><code>clase02/notebooks/02_attention_bertviz.ipynb</code></a></p>
+<p>Usa BertViz para visualizar los pesos de atención de un modelo BERT real. Ideal para explorar después de clase.</p>
 <blockquote>
-<p>📖 <em>Vaswani, A., et al. (2017). Attention Is All You Need. NeurIPS 2017. <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></em><br/>
-📖 <em>Jurafsky, D. &amp; Martin, J. H. (2024). SLP3, Cap. 9. <a href="https://web.stanford.edu/~jurafsky/slp3/9.pdf">https://web.stanford.edu/~jurafsky/slp3/9.pdf</a></em></p>
+<p>No lo ejecutamos en vivo (depende de bajar 680 MB del modelo). Está disponible para quien quiera meter mano.</p>
 </blockquote>
 </div>
 </div>
@@ -8131,50 +7738,96 @@ Problema: al llegar a la palabra 50, ya "olvidabas" la palabra 1.</em></p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-3">Bloque 3<a class="anchor-link" href="#Bloque-3">¶</a></h1><h2 id="Ciclo-de-vida-del-modelo">Ciclo de vida del modelo<a class="anchor-link" href="#Ciclo-de-vida-del-modelo">¶</a></h2><hr/>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Bloque-3">Bloque 3<a class="anchor-link" href="#Bloque-3">¶</a></h1><h2 id="De-base-model-a-ChatGPT">De base model a ChatGPT<a class="anchor-link" href="#De-base-model-a-ChatGPT">¶</a></h2><hr/>
 <p><em>¿Cómo pasa un modelo de "completar texto" a "seguir instrucciones"?</em></p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-ciclo-vida">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-lifecycle-overview">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Los-tres-estadios-de-entrenamiento">Los tres estadios de entrenamiento<a class="anchor-link" href="#Los-tres-estadios-de-entrenamiento">¶</a></h2><pre><code>  1. PRE-TRAINING
-  ───────────────
-  Datos:    Billones de tokens de internet, libros, código
-  Objetivo: Predecir el siguiente token
-  Resultado: El modelo "sabe el idioma" pero no sabe qué hacer con él
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="El-ciclo-de-vida-de-un-LLM,-de-un-vistazo">El ciclo de vida de un LLM, de un vistazo<a class="anchor-link" href="#El-ciclo-de-vida-de-un-LLM,-de-un-vistazo">¶</a></h2><p><img alt="Tres etapas en línea: Pretraining produce un base model, SFT lo convierte en assistant, RLHF/DPO lo alinea con preferencias humanas" class="slide-figure" src="figures/lifecycle_overview.svg" style="width: 92%;"/></p>
+<p>Vamos a recorrer cada etapa con ejemplos. La idea es que entiendan <strong>qué cambia</strong> entre una y otra: los datos, el objetivo, el costo, y qué modelo sale al final.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-base-model">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Stage-1-%E2%80%94-Qu%C3%A9-te-queda-despu%C3%A9s-del-pretraining">Stage 1 — Qué te queda después del pretraining<a class="anchor-link" href="#Stage-1-%E2%80%94-Qu%C3%A9-te-queda-despu%C3%A9s-del-pretraining">¶</a></h2><p><img alt="Dos columnas: lo que un base model sí sabe (completar, imitar estilo, hechos del mundo) y lo que NO sabe (seguir instrucciones, detenerse, decir 'no sé', mantener un rol)" class="slide-figure" src="figures/base_model_capabilities.svg" style="width: 68%;"/></p>
+<pre><code>  Prompt:  "La capital de Francia es"
 
-  Ejemplo:  "La capital de Francia es" → completa con "París, y también..."
-
-
-  2. SFT — Supervised Fine-Tuning
-  ────────────────────────────────
-  Datos:    Miles de pares (pregunta → respuesta ideal) curados por humanos
-  Objetivo: Aprender a seguir instrucciones
-  Resultado: El modelo responde preguntas en lugar de completar texto
-
-  Ejemplo:  "¿Cuál es la capital de Francia?" → "París."
-
-
-  3. RLHF / DPO — Alineación con preferencias humanas
-  ─────────────────────────────────────────────────────
-  Datos:    Humanos ranquean respuestas alternativas (A mejor que B)
-  Objetivo: Aprender qué respuestas prefieren los humanos
-  Resultado: El modelo responde de forma más útil, segura y honesta
-
-  RLHF: usa un modelo de recompensa + RL
-  DPO:  más simple, optimiza directamente sobre los pares preferidos
+  base model →  "París, y también Roma es la capital de Italia,
+                 mientras que Berlín lo es de Alemania. Las capitales
+                 europeas suelen ser ciudades..."
 </code></pre>
+<p>Sabe la respuesta (París), pero <strong>no se detiene</strong>: sigue completando como si fuera un artículo de internet.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-training-assistant">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Entrenar-al-assistant:-cambiar-el-dataset">Entrenar al assistant: cambiar el dataset<a class="anchor-link" href="#Entrenar-al-assistant:-cambiar-el-dataset">¶</a></h2><p><img alt="Dataset de ~100K conversaciones USER/ASSISTANT escritas por humanos, usado para SFT" class="slide-figure" src="figures/training_assistant.svg" style="width: 88%;"/></p>
+<p>Misma arquitectura, mismo objetivo (predecir el próximo token). Pero los datos cambian: ahora son <strong>conversaciones de alta calidad</strong> escritas por personas siguiendo guías estrictas.</p>
+<p>A esto se le llama <strong>SFT</strong> (Supervised Fine-Tuning).</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-after-finetuning">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Antes-vs-despu%C3%A9s-del-fine-tuning">Antes vs después del fine-tuning<a class="anchor-link" href="#Antes-vs-despu%C3%A9s-del-fine-tuning">¶</a></h2><p><img alt="Comparativa: el base model genera más preguntas; el assistant detecta el bug y responde útil" class="slide-figure" src="figures/after_finetuning.svg" style="width: 88%;"/></p>
+<p>El base model y el assistant son la <strong>misma red neuronal</strong>. Cambia solo en qué se la entrenó al final.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-comparisons">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Recolectar-preferencias-humanas">Recolectar preferencias humanas<a class="anchor-link" href="#Recolectar-preferencias-humanas">¶</a></h2><p><img alt="Tres commits candidatos para el mismo diff; el humano elige el mejor" class="slide-figure" src="figures/comparisons_paperclips.svg" style="width: 78%;"/></p>
+<p>Para que el modelo se alinee con lo que <strong>prefieren</strong> las personas, primero hay que medir esa preferencia. La forma más escalable: pedirle al humano que <strong>elija</strong> entre respuestas, en vez de pedirle que <strong>escriba</strong> la perfecta.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-rlhf">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="RLHF:-el-camino-largo">RLHF: el camino largo<a class="anchor-link" href="#RLHF:-el-camino-largo">¶</a></h2><p><img alt="Tres pasos: 1) recolectar comparaciones, 2) entrenar un reward model que las imita, 3) usar PPO para que el LLM maximice ese reward" class="slide-figure" src="figures/rlhf_pipeline.svg" style="width: 86%;"/></p>
 <blockquote>
-<p>📖 <em>Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. NeurIPS 2022. <a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></em><br/>
-📖 <em>Rafailov, R., et al. (2023). Direct Preference Optimization. NeurIPS 2023. <a href="https://arxiv.org/abs/2305.18290">https://arxiv.org/abs/2305.18290</a></em></p>
+<p>📖 <em>Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback (InstructGPT).</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-dpo">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="DPO:-el-atajo">DPO: el atajo<a class="anchor-link" href="#DPO:-el-atajo">¶</a></h2><p><img alt="DPO se saltea el reward model y el loop de PPO. Usa las comparaciones para optimizar el LLM directamente con una función de pérdida que sube la probabilidad del ganador y baja la del perdedor" class="slide-figure" src="figures/dpo_pipeline.svg" style="width: 86%;"/></p>
+<blockquote>
+<p>📖 <em>Rafailov, R., et al. (2023). Direct Preference Optimization: Your Language Model is Secretly a Reward Model.</em></p>
 </blockquote>
 </div>
 </div>
@@ -8184,67 +7837,41 @@ Problema: al llegar a la palabra 50, ya "olvidabas" la palabra 1.</em></p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Base-model-vs-Instruct-model">Base model vs Instruct model<a class="anchor-link" href="#Base-model-vs-Instruct-model">¶</a></h2><p>La consecuencia práctica del ciclo de vida:</p>
-<pre><code>  MISMO PROMPT: "La capital de Francia es"
-
-  Base model (solo pre-training):
-  ──────────────────────────────
-  "París, y también es conocida como la Ciudad de la Luz.
-   La capital de Alemania es Berlín, y la de Italia es Roma..."
-  → Sigue completando texto, no se detiene
-
-  Instruct model (pre-training + SFT + RLHF):
-  ────────────────────────────────────────────
-  "París."
-  → Entiende que es una pregunta implícita y responde concisamente
-</code></pre>
-<p><strong>Nomenclatura:</strong></p>
-<ul>
-<li><code>Qwen3-8B</code> → base model</li>
-<li><code>Qwen3-8B-Instruct</code> → instruct model ← el que usamos</li>
-<li><code>Llama-3.1-8B</code> → base</li>
-<li><code>Llama-3.1-8B-Instruct</code> → instruct ← el que usamos</li>
-</ul>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-base-vs-instruct">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Demo: diferencia entre base model e instruct model via Ollama</span>
-<span class="c1"># Requiere: ollama pull qwen3:8b</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">ollama</span>
-
-    <span class="n">prompt</span> <span class="o">=</span> <span class="s2">"La capital de Francia es"</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Probando con qwen3:8b (instruct)...'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Prompt: "</span><span class="si">{</span><span class="n">prompt</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">()</span>
-
-    <span class="n">resp</span> <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
-        <span class="n">model</span><span class="o">=</span><span class="s1">'qwen3:8b'</span><span class="p">,</span>
-        <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
-        <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">'num_predict'</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s1">'temperature'</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">}</span>
-    <span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Respuesta (modelo instruct):'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">resp</span><span class="p">[</span><span class="s2">"response"</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'→ Un base model completaría el texto. El instruct entiende que es una pregunta.'</span><span class="p">)</span>
-
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Ollama no disponible: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Instalar con: https://ollama.com  →  ollama pull qwen3:8b'</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Base-vs-Instruct-en-la-pr%C3%A1ctica">Base vs Instruct en la práctica<a class="anchor-link" href="#Base-vs-Instruct-en-la-pr%C3%A1ctica">¶</a></h2><table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Variante</th>
+<th>Uso típico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Qwen3-8B</code></td>
+<td>base</td>
+<td>fine-tuning propio, research</td>
+</tr>
+<tr>
+<td><code>Qwen3-8B-Instruct</code></td>
+<td>instruct</td>
+<td><strong>el que usamos en este curso</strong></td>
+</tr>
+<tr>
+<td><code>Llama-3.1-8B</code></td>
+<td>base</td>
+<td>continued pretraining</td>
+</tr>
+<tr>
+<td><code>Llama-3.1-8B-Instruct</code></td>
+<td>instruct</td>
+<td>chatbots, asistentes</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Cuando bajes un modelo de HuggingFace, fijate siempre el sufijo. Si te da respuestas raras o no responde, probablemente bajaste el base model.</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -8253,250 +7880,148 @@ Problema: al llegar a la palabra 50, ya "olvidabas" la palabra 1.</em></p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-4">Bloque 4<a class="anchor-link" href="#Bloque-4">¶</a></h1><h2 id="Ecosistema-actual-%E2%80%94-abril-2026">Ecosistema actual — abril 2026<a class="anchor-link" href="#Ecosistema-actual-%E2%80%94-abril-2026">¶</a></h2><hr/>
-<p><em>¿Qué modelos existen hoy y cómo elegir?</em></p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Bloque-4">Bloque 4<a class="anchor-link" href="#Bloque-4">¶</a></h1><h2 id="Scaling-y-estado-del-arte-(2026)">Scaling y estado del arte (2026)<a class="anchor-link" href="#Scaling-y-estado-del-arte-(2026)">¶</a></h2><hr/>
+<p><em>Por qué los modelos siguen creciendo, qué cambió en los últimos años, y qué hay en el mercado.</em></p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-closed-source">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-scaling-laws">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Modelos-closed-source-%E2%80%94-los-top-del-momento">Modelos closed source — los top del momento<a class="anchor-link" href="#Modelos-closed-source-%E2%80%94-los-top-del-momento">¶</a></h2><table>
-<thead>
-<tr>
-<th>Modelo</th>
-<th>Organización</th>
-<th>Fortaleza principal</th>
-<th>Contexto</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>GPT-5.4</strong></td>
-<td>OpenAI</td>
-<td>General, reasoning, multimodal</td>
-<td>200K tokens</td>
-</tr>
-<tr>
-<td><strong>Claude Opus 4.6</strong></td>
-<td>Anthropic</td>
-<td>Coding, escritura, reasoning</td>
-<td>200K tokens</td>
-</tr>
-<tr>
-<td><strong>Claude Sonnet 4.6</strong></td>
-<td>Anthropic</td>
-<td>Balance calidad/costo</td>
-<td>200K tokens</td>
-</tr>
-<tr>
-<td><strong>Gemini 3.1 Pro</strong></td>
-<td>Google</td>
-<td>Multimodal, contexto gigante</td>
-<td>1M tokens</td>
-</tr>
-<tr>
-<td><strong>Grok 4</strong></td>
-<td>xAI</td>
-<td>Acceso a datos en tiempo real</td>
-<td>1M tokens</td>
-</tr>
-</tbody>
-</table>
-<p><strong>Cómo elegir:</strong> no existe un modelo "mejor" en todo.</p>
-<ul>
-<li>Coding → Claude Opus 4.6</li>
-<li>Contexto muy largo → Gemini 3.1 Pro</li>
-<li>Balance costo/calidad → Claude Sonnet 4.6 o GPT-5.4</li>
-<li>Gratis para desarrollo → Groq API (Llama/Qwen) o Ollama local</li>
-</ul>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-open-source">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Modelos-open-weight-%E2%80%94-lo-m%C3%A1s-relevante-hoy">Modelos open weight — lo más relevante hoy<a class="anchor-link" href="#Modelos-open-weight-%E2%80%94-lo-m%C3%A1s-relevante-hoy">¶</a></h2><table>
-<thead>
-<tr>
-<th>Modelo</th>
-<th>Org</th>
-<th>Params activos</th>
-<th>Local</th>
-<th>Destaca en</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Llama 4 Scout</strong></td>
-<td>Meta</td>
-<td>17B (MoE 109B)</td>
-<td>parcial</td>
-<td>Contexto 10M tokens</td>
-</tr>
-<tr>
-<td><strong>Qwen3 / Qwen3.5</strong></td>
-<td>Alibaba</td>
-<td>4B–72B</td>
-<td>✓ Ollama</td>
-<td>Multilingüe, liviano</td>
-</tr>
-<tr>
-<td><strong>Kimi K2.5</strong></td>
-<td>Moonshot</td>
-<td>32B (MoE 1T)</td>
-<td>✗ muy grande</td>
-<td>Agentes, coding</td>
-</tr>
-<tr>
-<td><strong>Mistral Small 4</strong></td>
-<td>Mistral</td>
-<td>22B</td>
-<td>✓ Ollama</td>
-<td>Eficiente</td>
-</tr>
-<tr>
-<td><strong>Gemma 4</strong></td>
-<td>Google</td>
-<td>4B–27B</td>
-<td>✓ Ollama</td>
-<td>On-device</td>
-</tr>
-<tr>
-<td><strong>DeepSeek-R1</strong></td>
-<td>DeepSeek</td>
-<td>varios</td>
-<td>parcial</td>
-<td>Razonamiento</td>
-</tr>
-</tbody>
-</table>
-<p><strong>En este curso:</strong> <code>qwen3:8b</code> o <code>qwen3:4b</code> via Ollama — gratuito, local, Apache 2.0.</p>
-</div>
-</div>
-</div>
-</div></section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-kimi">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Kimi-K2.5-%E2%80%94-el-modelo-de-la-semana">Kimi K2.5 — el modelo de la semana<a class="anchor-link" href="#Kimi-K2.5-%E2%80%94-el-modelo-de-la-semana">¶</a></h2><p>Lanzado en enero 2026 por <strong>Moonshot AI</strong> (China). Open weight.</p>
-<pre><code>  Arquitectura:  MoE — 1 trillón de parámetros totales
-                        32B parámetros activos por request
-  Entrenamiento: 15 trillones de tokens visuales + texto
-  Modos:         Instant · Thinking · Agent · Agent Swarm
-
-  Agent Swarm:
-  ┌─────────────────────────────────────────────────────┐
-  │  Orquestador (Kimi K2.5)                            │
-  │       │                                             │
-  │  ┌────┴────────────────────────────────────────┐   │
-  │  │                                             │   │
-  │  ▼         ▼         ▼         ▼         ▼     │   │
-  │ Agent1   Agent2   Agent3   Agent4   Agent5 ... │   │
-  │ (hasta 100 agentes ejecutando en paralelo)     │   │
-  └────────────────────────────────────────────────┘   │
-  └─────────────────────────────────────────────────────┘
-</code></pre>
-<p>Por qué lo mencionamos: <strong>es el tipo de capacidad agentica que vemos en Clase 4</strong>,<br/>
-ahora disponible en un modelo open weight.</p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-benchmarks">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Benchmarks-%E2%80%94-qu%C3%A9-miden-y-qu%C3%A9-NO-miden">Benchmarks — qué miden y qué NO miden<a class="anchor-link" href="#Benchmarks-%E2%80%94-qu%C3%A9-miden-y-qu%C3%A9-NO-miden">¶</a></h2><p><strong>Lo que sí miden:</strong></p>
-<ul>
-<li>MMLU: conocimiento general (exámenes universitarios)</li>
-<li>HumanEval / SWE-Bench: generación de código</li>
-<li>MATH: razonamiento matemático</li>
-<li>HLE (Humanity's Last Exam): preguntas muy difíciles de ciencia</li>
-</ul>
-<p><strong>Lo que NO miden:</strong></p>
-<pre><code>  ✗ Utilidad real en tu caso de uso específico
-  ✗ Consistencia en conversaciones largas
-  ✗ Manejo de idiomas distintos al inglés
-  ✗ Comportamiento con datos privados de tu empresa
-  ✗ Costo de operación en producción
-  ✗ Latencia en producción con carga real
-</code></pre>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="La-era-Chinchilla:-%22m%C3%A1s-N,-m%C3%A1s-D,-mejor-modelo%22">La era Chinchilla: "más N, más D, mejor modelo"<a class="anchor-link" href="#La-era-Chinchilla:-%22m%C3%A1s-N,-m%C3%A1s-D,-mejor-modelo%22">¶</a></h2><p><img alt="Curvas de loss vs tamaño del modelo, una por cada nivel de compute. Todas bajan, sin techo aparente. Pero la slide marca esto como histórico (~2022)" class="slide-figure" src="figures/scaling_laws.svg" style="width: 80%;"/></p>
 <blockquote>
-<p><strong>Regla práctica:</strong> los benchmarks son para descartar modelos malos, no para elegir el mejor.<br/>
-El mejor modelo es el que funciona en tu caso de uso con tu presupuesto.</p>
+<p>📖 <em>Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models (Chinchilla).</em></p>
 </blockquote>
 </div>
 </div>
 </div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-ecosistema-viz">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-data-wall">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.patches</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpatches</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="c1"># Mapa cualitativo: calidad vs costo</span>
-<span class="n">modelos</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="c1"># (costo relativo, calidad relativa, open_weight, label)</span>
-    <span class="s1">'GPT-5.4'</span><span class="p">:</span>          <span class="p">(</span><span class="mf">9.5</span><span class="p">,</span> <span class="mf">9.5</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s1">'Claude Opus 4.6'</span><span class="p">:</span>  <span class="p">(</span><span class="mf">9.0</span><span class="p">,</span> <span class="mf">9.2</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s1">'Gemini 3.1 Pro'</span><span class="p">:</span>   <span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">9.0</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s1">'Claude Sonnet 4.6'</span><span class="p">:(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">8.5</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
-    <span class="s1">'Kimi K2.5'</span><span class="p">:</span>        <span class="p">(</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">8.8</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s1">'Llama 4 Scout'</span><span class="p">:</span>    <span class="p">(</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">8.2</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s1">'Qwen3 8B'</span><span class="p">:</span>         <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s1">'Mistral Small 4'</span><span class="p">:</span>  <span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">7.8</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s1">'Gemma 4 9B'</span><span class="p">:</span>       <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">7.2</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-    <span class="s1">'Ollama local'</span><span class="p">:</span>     <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">7.0</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
-<span class="p">}</span>
-
-<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-
-<span class="k">for</span> <span class="n">nombre</span><span class="p">,</span> <span class="p">(</span><span class="n">costo</span><span class="p">,</span> <span class="n">calidad</span><span class="p">,</span> <span class="n">open_w</span><span class="p">)</span> <span class="ow">in</span> <span class="n">modelos</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-    <span class="n">color</span>  <span class="o">=</span> <span class="s1">'#1D9E75'</span> <span class="k">if</span> <span class="n">open_w</span> <span class="k">else</span> <span class="s1">'#7F77DD'</span>
-    <span class="n">marker</span> <span class="o">=</span> <span class="s1">'o'</span> <span class="k">if</span> <span class="n">open_w</span> <span class="k">else</span> <span class="s1">'s'</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">costo</span><span class="p">,</span> <span class="n">calidad</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="n">marker</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">nombre</span><span class="p">,</span> <span class="p">(</span><span class="n">costo</span><span class="p">,</span> <span class="n">calidad</span><span class="p">),</span> <span class="n">textcoords</span><span class="o">=</span><span class="s1">'offset points'</span><span class="p">,</span>
-                <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">8.5</span><span class="p">)</span>
-
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">'Costo relativo (0=gratis, 10=muy caro)'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">'Calidad relativa'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Ecosistema LLM — Abril 2026 (referencial)'</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.25</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mi">11</span><span class="p">);</span> <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">6.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">'top'</span><span class="p">,</span><span class="s1">'right'</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">legend</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'#1D9E75'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Open weight'</span><span class="p">),</span>
-    <span class="n">mpatches</span><span class="o">.</span><span class="n">Patch</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">'#7F77DD'</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">'Closed source'</span><span class="p">),</span>
-<span class="p">]</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend</span><span class="p">,</span> <span class="n">loc</span><span class="o">=</span><span class="s1">'lower right'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">'ecosistema_llm_2026.png'</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s1">'tight'</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Pero-algo-cambi%C3%B3:-el-data-wall-y-los-nuevos-ejes">Pero algo cambió: el data wall y los nuevos ejes<a class="anchor-link" href="#Pero-algo-cambi%C3%B3:-el-data-wall-y-los-nuevos-ejes">¶</a></h2><p><img alt="Izquierda: la oferta de texto público se aplana mientras la demanda de los LLMs sube; cruce ~2026-2028. Derecha: tres ejes nuevos donde escalar (post-training, test-time compute, synthetic data)" class="slide-figure" src="figures/data_wall.svg" style="width: 86%;"/></p>
 </div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-post-training">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Eje-1-%E2%80%94-Post-training-scaling">Eje 1 — Post-training scaling<a class="anchor-link" href="#Eje-1-%E2%80%94-Post-training-scaling">¶</a></h2><p><img alt="Progresión SFT → RLHF/DPO → RLVR/GRPO, con un callout sobre DeepSeek-R1 como ejemplo concreto del cambio" class="slide-figure" src="figures/post_training_scaling.svg" style="width: 80%;"/></p>
+<p><strong>Las siglas:</strong></p>
+<ul>
+<li><strong>SFT</strong> — Supervised Fine-Tuning. <strong>RLHF</strong> — RL from Human Feedback. <strong>DPO</strong> — Direct Preference Optimization. <strong>RLVR</strong> — RL with Verifiable Rewards. <strong>GRPO</strong> — Group Relative Policy Optimization (variante eficiente de PPO usada por DeepSeek-R1).</li>
+</ul>
+<blockquote>
+<p>📖 <em>DeepSeek-AI (2025). DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning.</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-test-time">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Eje-2-%E2%80%94-Test-time-compute">Eje 2 — Test-time compute<a class="anchor-link" href="#Eje-2-%E2%80%94-Test-time-compute">¶</a></h2><p><img alt="Modelo clásico que responde directo (rápido, errores) vs modelo de razonamiento que muestra un bloque de thinking antes de responder (más lento, más correcto)" class="slide-figure" src="figures/test_time_compute.svg" style="width: 86%;"/></p>
+<blockquote>
+<p>📖 <em>Snell, C., et al. (2024). Scaling LLM Test-Time Compute Optimally Can Be More Effective than Scaling Model Parameters.</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-sparks-agi">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="El-salto-razonador-vs-cl%C3%A1sico-(2026)">El salto razonador vs clásico (2026)<a class="anchor-link" href="#El-salto-razonador-vs-cl%C3%A1sico-(2026)">¶</a></h2><p><img alt="Cuatro benchmarks (AIME, GPQA, SWE-Bench, Codeforces). En cada uno, el modelo razonador supera al clásico por 30-80 puntos porcentuales" class="slide-figure" src="figures/sparks_agi.svg" style="width: 86%;"/></p>
+<blockquote>
+<p>Misma generación, mismo año. La diferencia es cómo se entrenó <strong>después</strong> del pretraining.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-ecosystem">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Ecosistema-2026-%E2%80%94-un-mapa-r%C3%A1pido">Ecosistema 2026 — un mapa rápido<a class="anchor-link" href="#Ecosistema-2026-%E2%80%94-un-mapa-r%C3%A1pido">¶</a></h2><table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Modelos relevantes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Closed source</strong> (top calidad)</td>
+<td>GPT-5.4 (OpenAI), Claude Opus 4.6 (Anthropic), Gemini 3.1 Pro (Google), Grok 4 (xAI)</td>
+</tr>
+<tr>
+<td><strong>Closed source</strong> (balance)</td>
+<td>Claude Sonnet 4.6, GPT-5.4-mini</td>
+</tr>
+<tr>
+<td><strong>Open weight</strong> (densos)</td>
+<td>Llama 4 Scout (Meta), Qwen3 / Qwen3.5 (Alibaba), Mistral Small 4</td>
+</tr>
+<tr>
+<td><strong>Open weight</strong> (MoE)</td>
+<td><strong>Kimi K2.5</strong> (Moonshot, 1T total / 32B activos), DeepSeek-R1</td>
+</tr>
+<tr>
+<td><strong>Razonadores</strong> (open)</td>
+<td>DeepSeek-R1, Qwen QwQ, Kimi K2.5</td>
+</tr>
+<tr>
+<td><strong>Para correr local</strong></td>
+<td>Gemma 4, Qwen3-4B, Llama 3.2-3B (vía Ollama)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>MoE (Mixture of Experts)</strong>: solo se activan algunos "expertos" por request. Modelo grande, costo de modelo chico.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-huggingface">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%C2%BFD%C3%B3nde-viven-los-modelos-open-weight?">¿Dónde viven los modelos open weight?<a class="anchor-link" href="#%C2%BFD%C3%B3nde-viven-los-modelos-open-weight?">¶</a></h2><p><img alt="Los tres pilares de HuggingFace: el Hub (repositorio de modelos y datasets), las librerías Python (transformers, datasets, trl, peft), y Spaces / Inference Endpoints" class="slide-figure" src="figures/huggingface.svg" style="width: 88%;"/></p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-course-stack">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Para-este-curso">Para este curso<a class="anchor-link" href="#Para-este-curso">¶</a></h2><p>Usamos <strong>Qwen3 vía Groq</strong> como modelo principal:</p>
+<ul>
+<li><strong>Gratis</strong> con cuotas generosas para desarrollo.</li>
+<li><strong>Muy rápido</strong> (Groq corre inferencia en hardware especializado).</li>
+<li><strong>Open weight</strong> — podés bajarlo de HuggingFace y correrlo local también.</li>
+</ul>
+<div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>groq
+<span class="nb">export</span><span class="w"> </span><span class="nv">GROQ_API_KEY</span><span class="o">=</span><span class="s2">"..."</span>
+</pre></div>
+<p>Alternativa local opcional: <strong>Ollama</strong> con <code>qwen3:8b</code> o <code>qwen3:4b</code>.</p>
 </div>
 </div>
 </div>
@@ -8505,292 +8030,305 @@ El mejor modelo es el que funciona en tu caso de uso con tu presupuesto.</p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Bloque-5">Bloque 5<a class="anchor-link" href="#Bloque-5">¶</a></h1><h2 id="Prompting-como-ingenier%C3%ADa">Prompting como ingeniería<a class="anchor-link" href="#Prompting-como-ingenier%C3%ADa">¶</a></h2><hr/>
-<p><em>El prompt es la única interfaz que tenés con el modelo. Usarla bien hace toda la diferencia.</em></p>
+<p><em>El prompt es la única interfaz. Usarla bien hace toda la diferencia.</em></p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-system-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-prompt-structure">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="System-prompt-%E2%80%94-la-capa-de-configuraci%C3%B3n">System prompt — la capa de configuración<a class="anchor-link" href="#System-prompt-%E2%80%94-la-capa-de-configuraci%C3%B3n">¶</a></h2><pre><code>  Estructura de una llamada a un LLM:
-
-  ┌─────────────────────────────────────────────────────┐
-  │  SYSTEM (invisible para el usuario)                 │
-  │  "Sos un asistente experto en derecho argentino.    │
-  │   Respondés en español formal. Siempre citás        │
-  │   el artículo del código civil correspondiente."    │
-  ├─────────────────────────────────────────────────────┤
-  │  USER                                               │
-  │  "¿Qué pasa si no pago el alquiler?"                │
-  ├─────────────────────────────────────────────────────┤
-  │  ASSISTANT                                          │
-  │  "Según el Código Civil y Comercial, Art. 1222..."  │
-  └─────────────────────────────────────────────────────┘
-</code></pre>
-<p>El system prompt define:</p>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Estructura-de-una-llamada-a-un-LLM">Estructura de una llamada a un LLM<a class="anchor-link" href="#Estructura-de-una-llamada-a-un-LLM">¶</a></h2><p><img alt="Tres bloques: SYSTEM (define rol/restricciones), USER (la pregunta), ASSISTANT (la respuesta)" class="slide-figure" src="figures/prompt_structure.svg" style="width: 88%;"/></p>
+<p>Toda la "ingeniería de prompts" es jugar con estos tres campos.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-sampling-params">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Output-params:-temperature,-top-K,-top-P">Output params: temperature, top-K, top-P<a class="anchor-link" href="#Output-params:-temperature,-top-K,-top-P">¶</a></h2><p><img alt="Tres distribuciones de probabilidad mostrando cómo cambian con temperature baja/alta y con top-K/top-P" class="slide-figure" src="figures/sampling_params.svg" style="width: 88%;"/></p>
 <ul>
-<li><strong>Rol:</strong> quién es el modelo en este contexto</li>
-<li><strong>Restricciones:</strong> qué puede y qué no puede hacer</li>
-<li><strong>Formato:</strong> cómo debe responder</li>
-<li><strong>Contexto:</strong> información que necesita para operar</li>
+<li><strong>Temperature</strong>: alta = creativo / diverso. Baja = predecible / factual.</li>
+<li><strong>Top-K</strong>: corta a los K tokens más probables.</li>
+<li><strong>Top-P</strong>: corta cuando la suma de probabilidades alcanza P.</li>
+</ul>
+<blockquote>
+<p>Bug clásico: con <code>temperature=0</code> o <code>top-K=1</code>, el modelo entra en <strong>repetition loop</strong>.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-sampling-link">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Prob%C3%A1-los-par%C3%A1metros-vos-mismo">Probá los parámetros vos mismo<a class="anchor-link" href="#Prob%C3%A1-los-par%C3%A1metros-vos-mismo">¶</a></h2><p>📓 <strong>Notebook</strong>: <a href="notebooks/03_sampling_params.ipynb"><code>clase02/notebooks/03_sampling_params.ipynb</code></a></p>
+<p>Generá el mismo poema con <code>temperature=0.1</code> y <code>temperature=0.9</code>. Compará.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-system-role-context">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="System-/-Role-/-Contextual-prompting">System / Role / Contextual prompting<a class="anchor-link" href="#System-/-Role-/-Contextual-prompting">¶</a></h2><p><strong>System prompt</strong> — define el rol y las restricciones del modelo.</p>
+<pre><code>Sos un ingeniero de software experto en Python.
+Respondés conciso, técnico, solo en español.
+</code></pre>
+<p><strong>Role prompting</strong> — asignás explícitamente un rol dentro del prompt.</p>
+<pre><code>Actuá como un profesor universitario que enseña con ejemplos prácticos.
+Explicame qué es un decorador en Python.
+</code></pre>
+<p><strong>Contextual prompting</strong> — proveés información que el modelo necesita para resolver.</p>
+<pre><code>Ley de Ohm: V = I × R
+Pregunta: si I=2A y R=3Ω, ¿cuál es V?
+</code></pre>
+<blockquote>
+<p>Los tres se pueden combinar.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-shot-spectrum">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Zero-/-one-/-few-shot">Zero / one / few-shot<a class="anchor-link" href="#Zero-/-one-/-few-shot">¶</a></h2><p><img alt="Tres tarjetas comparando zero-shot (sin ejemplos), one-shot (un ejemplo), few-shot (varios ejemplos)" class="slide-figure" src="figures/shot_spectrum.svg" style="width: 88%;"/></p>
+<blockquote>
+<p>📖 <em>Brown, T., et al. (2020). Language Models are Few-Shot Learners (GPT-3).</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-prompting-link">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Prob%C3%A1-zero-shot-vs-few-shot">Probá zero-shot vs few-shot<a class="anchor-link" href="#Prob%C3%A1-zero-shot-vs-few-shot">¶</a></h2><p>📓 <strong>Notebook</strong>: <a href="notebooks/04_prompting_techniques.ipynb"><code>clase02/notebooks/04_prompting_techniques.ipynb</code></a></p>
+<p>Clasificá reseñas con un prompt zero-shot. Después con few-shot. Compará la calidad.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-cot">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Chain-of-Thought-%E2%80%94-%22pensemos-paso-a-paso%22">Chain of Thought — "pensemos paso a paso"<a class="anchor-link" href="#Chain-of-Thought-%E2%80%94-%22pensemos-paso-a-paso%22">¶</a></h2><pre><code>PROBLEMA:
+Cuando tenía 3 años, mi pareja tenía 3 veces mi edad.
+Ahora tengo 20. ¿Cuántos años tiene mi pareja?
+
+❌ Sin CoT (responde de una): "26"  (a veces se equivoca)
+
+✓ Con CoT ("pensá paso a paso"):
+  1. A los 3 años, mi pareja tenía 9.
+  2. Diferencia de edad: 6 años.
+  3. Hoy tengo 20 → mi pareja tiene 26.
+
+  Respuesta: 26.
+</code></pre>
+<p><strong>Conexión con Karpathy</strong>: el modelo necesita <strong>tokens para pensar</strong>. Si lo forzás a una respuesta corta, le sacás esa capacidad.</p>
+<blockquote>
+<p>📖 <em>Wei, J., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in LLMs.</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-structured-output">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Structured-output-%E2%80%94-JSON-para-integrar-con-c%C3%B3digo">Structured output — JSON para integrar con código<a class="anchor-link" href="#Structured-output-%E2%80%94-JSON-para-integrar-con-c%C3%B3digo">¶</a></h2><div class="highlight"><pre><span></span><span class="n">SYSTEM</span> <span class="o">=</span> <span class="s1">'''</span>
+<span class="s1">Analizás requerimientos. Respondés SOLO JSON con esta estructura:</span>
+<span class="s1">{</span>
+<span class="s1">  "tipo": "funcional" | "no_funcional" | "restriccion",</span>
+<span class="s1">  "prioridad": "alta" | "media" | "baja",</span>
+<span class="s1">  "componente": string,</span>
+<span class="s1">  "resumen": string (max 15 palabras)</span>
+<span class="s1">}</span>
+<span class="s1">No incluyas nada más que el JSON.</span>
+<span class="s1">'''</span>
+
+<span class="n">USER</span> <span class="o">=</span> <span class="s2">"El sistema debe responder en &lt;200ms al 95</span><span class="si">% d</span><span class="s2">e las requests."</span>
+</pre></div>
+<div class="highlight"><pre><span></span><span class="p">{</span><span class="nt">"tipo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"no_funcional"</span><span class="p">,</span><span class="w"> </span><span class="nt">"prioridad"</span><span class="p">:</span><span class="w"> </span><span class="s2">"alta"</span><span class="p">,</span>
+<span class="w"> </span><span class="nt">"componente"</span><span class="p">:</span><span class="w"> </span><span class="s2">"API"</span><span class="p">,</span><span class="w"> </span><span class="nt">"resumen"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Latencia p95 menor a 200ms bajo carga normal"</span><span class="p">}</span>
+</pre></div>
+<blockquote>
+<p>Tip: usá <code>json-repair</code> para tolerar JSON parcialmente roto.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-cot-link">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Prob%C3%A1-CoT-y-structured-output">Probá CoT y structured output<a class="anchor-link" href="#Prob%C3%A1-CoT-y-structured-output">¶</a></h2><p>📓 <strong>Notebook</strong>: <a href="notebooks/05_cot_structured.ipynb"><code>clase02/notebooks/05_cot_structured.ipynb</code></a></p>
+<p>Resolvé un problema con y sin CoT. Después generá JSON parseable directamente desde el modelo.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-prompt-variables">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Prompt-como-c%C3%B3digo:-variables-y-templating">Prompt como código: variables y templating<a class="anchor-link" href="#Prompt-como-c%C3%B3digo:-variables-y-templating">¶</a></h2><p><img alt="Comparativa: a la izquierda, el prompt hardcodeado dentro de una función; a la derecha, un template separado con variables {{ review }} que el código solo renderea con Jinja" class="slide-figure" src="figures/prompt_variables.svg" style="width: 86%;"/></p>
+<blockquote>
+<p>📖 <em>LangChain <code>PromptTemplate</code>, Jinja2, Mirascope, Promptfoo — todos los frameworks serios separan prompt de código.</em></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-prompt-eval">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Iteraci%C3%B3n:-%C2%BFc%C3%B3mo-s%C3%A9-si-mi-prompt-mejor%C3%B3?">Iteración: ¿cómo sé si mi prompt mejoró?<a class="anchor-link" href="#Iteraci%C3%B3n:-%C2%BFc%C3%B3mo-s%C3%A9-si-mi-prompt-mejor%C3%B3?">¶</a></h2><p><img alt="Tres pasos: armar dataset de tests, correr ambos prompts (v1 y v2), comparar accuracy. Abajo, una nota sobre cómo medir según la tarea (clasificación, generación, código, latencia)" class="slide-figure" src="figures/prompt_evaluation.svg" style="width: 86%;"/></p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-playground">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Pr%C3%A1ctica-abierta-%E2%80%94-dise%C3%B1%C3%A1-tu-propio-prompt">Práctica abierta — diseñá tu propio prompt<a class="anchor-link" href="#Pr%C3%A1ctica-abierta-%E2%80%94-dise%C3%B1%C3%A1-tu-propio-prompt">¶</a></h2><p>🌐 <a href="https://console.groq.com/playground">https://console.groq.com/playground</a> · o desde el notebook 04.</p>
+<p><strong>Tarea (15–20 min, en parejas):</strong></p>
+<ol>
+<li><strong>Elegí</strong> un caso de uso real para tu vida o tu trabajo: clasificar emails, extraer datos de un PDF, resumir reuniones, generar SQL desde lenguaje natural, etc.</li>
+<li><strong>Armá 5 casos de prueba</strong> con input + output esperado (esto es tu mini dataset).</li>
+<li><strong>Escribí v1</strong> del prompt: simple, zero-shot. Corré los 5 casos.</li>
+<li><strong>Iterá a v2</strong>: agregá rol + un par de ejemplos few-shot + restringí formato (JSON si aplica). Corré los 5 casos.</li>
+<li><strong>Compará</strong>: ¿cuántos casos pasan v1? ¿cuántos v2? Si empata, ¿cuál es más corto / barato?</li>
+<li><strong>Reportá</strong> el caso de uso, los dos prompts, y el accuracy de cada uno.</li>
+</ol>
+<blockquote>
+<p>El playground es para iterar rápido. La API + dataset de tests es para producción.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-best-practices">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Mejores-pr%C3%A1cticas-(resumen)">Mejores prácticas (resumen)<a class="anchor-link" href="#Mejores-pr%C3%A1cticas-(resumen)">¶</a></h2><ul>
+<li><strong>Específico</strong> &gt; genérico. "Resumí en 3 bullets" &gt; "resumí".</li>
+<li><strong>Ejemplos</strong> &gt; descripciones. Few-shot beat zero-shot cuando podés.</li>
+<li><strong>Instrucciones positivas</strong> &gt; restricciones. "Hacé X" &gt; "no hagas Y".</li>
+<li><strong>Estructura clara</strong>: usá tags (XML, JSON, markdown) para delimitar.</li>
+<li><strong>Iterá</strong>: cambiá una cosa por vez. Documentá qué probaste.</li>
+<li><strong>Temperatura baja</strong> para tareas factuales, alta para creatividad.</li>
+<li><strong>CoT</strong> para razonamiento, <strong>structured output</strong> para integración con código.</li>
+<li><strong>Variables y templating</strong> desde el día 1: el prompt es código, versionalo en git.</li>
+<li><strong>Iterá con dataset de tests</strong> si la tarea importa. "Probé una vez y anduvo" no escala.</li>
 </ul>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-tecnicas-prompting">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-b6-section">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Las-4-t%C3%A9cnicas-fundamentales">Las 4 técnicas fundamentales<a class="anchor-link" href="#Las-4-t%C3%A9cnicas-fundamentales">¶</a></h2><table>
-<thead>
-<tr>
-<th>Técnica</th>
-<th>Cuándo usarla</th>
-<th>Costo de tokens</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Zero-shot</strong></td>
-<td>Tarea simple, modelo capaz</td>
-<td>Mínimo</td>
-</tr>
-<tr>
-<td><strong>Few-shot</strong></td>
-<td>Formato específico, tarea nueva</td>
-<td>Medio</td>
-</tr>
-<tr>
-<td><strong>Chain of Thought</strong></td>
-<td>Razonamiento, matemática, lógica</td>
-<td>Alto</td>
-</tr>
-<tr>
-<td><strong>Structured output</strong></td>
-<td>Integración con código, JSON</td>
-<td>Medio</td>
-</tr>
-</tbody>
-</table>
-<pre><code>  Zero-shot:  "Clasificá este email: [email]"  →  spam / no spam
-
-  Few-shot:   "Email 1: [texto] → spam
-               Email 2: [texto] → no spam
-               Email 3: [texto] →"               ← el modelo completa
-
-  CoT:        "Pensá paso a paso antes de responder.
-               ¿Cuántos tokens tiene este texto?"
-
-  Structured: "Respondé SOLO en JSON con campos: {spam: bool, razon: str}"
-</code></pre>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Bloque-6">Bloque 6<a class="anchor-link" href="#Bloque-6">¶</a></h1><h2 id="Evals-y-monitoreo:-del-prompt-al-producto">Evals y monitoreo: del prompt al producto<a class="anchor-link" href="#Evals-y-monitoreo:-del-prompt-al-producto">¶</a></h2><hr/>
+<p><em>El prompt ya está bien diseñado. Ahora viene producción.</em></p>
 </div>
 </div>
 </div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-setup-llm">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-evals-offline-online">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># Setup para ejercicios de prompting</span>
-<span class="c1"># Opción A: Ollama local (sin costo, requiere ollama instalado)</span>
-<span class="c1"># Opción B: Groq API (gratis con límites, requiere API key)</span>
-
-<span class="n">USE_OLLAMA</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># cambiar a False para usar Groq</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">llamar_llm</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Wrapper unificado para Ollama o Groq."""</span>
-    <span class="k">if</span> <span class="n">USE_OLLAMA</span><span class="p">:</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">ollama</span>
-        <span class="n">model</span> <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="s1">'qwen3:8b'</span>
-        <span class="n">resp</span>  <span class="o">=</span> <span class="n">ollama</span><span class="o">.</span><span class="n">chat</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span>
-                            <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">'temperature'</span><span class="p">:</span> <span class="n">temperature</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">resp</span><span class="p">[</span><span class="s1">'message'</span><span class="p">][</span><span class="s1">'content'</span><span class="p">]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">groq</span><span class="w"> </span><span class="kn">import</span> <span class="n">Groq</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-        <span class="n">client</span> <span class="o">=</span> <span class="n">Groq</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'GROQ_API_KEY'</span><span class="p">))</span>
-        <span class="n">model</span>  <span class="o">=</span> <span class="n">model</span> <span class="ow">or</span> <span class="s1">'llama-3.1-8b-instant'</span>
-        <span class="n">resp</span>   <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">chat</span><span class="o">.</span><span class="n">completions</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-            <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span> <span class="n">messages</span><span class="o">=</span><span class="n">messages</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span>
-        <span class="p">)</span>
-        <span class="k">return</span> <span class="n">resp</span><span class="o">.</span><span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">content</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'✓ Función llamar_llm() lista'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  Usando: </span><span class="si">{</span><span class="s2">"Ollama"</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">USE_OLLAMA</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s2">"Groq API"</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Evals-offline-vs-online">Evals offline vs online<a class="anchor-link" href="#Evals-offline-vs-online">¶</a></h2><p><img alt="Dos paneles lado a lado: eval offline (antes del deploy, dataset estático, en CI) vs eval online (en producción, tráfico real, continuo)" class="slide-figure" src="figures/evals_offline_online.svg" style="width: 86%;"/></p>
 </div>
 </div>
 </div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-zero-shot">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-monitoring">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># ── TÉCNICA 1: Zero-shot ──────────────────────────────────────</span>
-
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span>
-     <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Sos un clasificador de sentimientos. Respondés SOLO con: positivo, negativo o neutro."</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
-     <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"El sistema funcionó bien al principio pero luego comenzó a fallar constantemente."</span><span class="p">}</span>
-<span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Zero-shot — sin ejemplos:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Prompt: "</span><span class="si">{</span><span class="n">messages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s2">"content"</span><span class="p">]</span><span class="si">}</span><span class="s1">"'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="n">respuesta</span> <span class="o">=</span> <span class="n">llamar_llm</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Respuesta: </span><span class="si">{</span><span class="n">respuesta</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Qu%C3%A9-loggear-en-producci%C3%B3n">Qué loggear en producción<a class="anchor-link" href="#Qu%C3%A9-loggear-en-producci%C3%B3n">¶</a></h2><p><img alt="Pipeline App → LLM → Logger middleware → Storage → Dashboard. Abajo, los 4 datos clave: input completo, output completo, latencia/costo, señal de calidad" class="slide-figure" src="figures/monitoring_pipeline.svg" style="width: 86%;"/></p>
 </div>
 </div>
 </div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-few-shot">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-drift">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># ── TÉCNICA 2: Few-shot ───────────────────────────────────────</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n</span><span class="s1">📖 Brown, T., et al. (2020). Language Models are Few-Shot Learners. https://arxiv.org/abs/2005.14165'</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Drift:-lo-que-cambia-con-el-tiempo">Drift: lo que cambia con el tiempo<a class="anchor-link" href="#Drift:-lo-que-cambia-con-el-tiempo">¶</a></h2><p><img alt="Cuatro tipos de drift: input drift, quality drift, cost drift, abuse drift. Abajo, un mini-dashboard mostrando accuracy bajando y costo subiendo a lo largo de 3 meses, con alerta disparada" class="slide-figure" src="figures/drift_detection.svg" style="width: 86%;"/></p>
+<blockquote>
+<p>Tu sistema fue bueno el día del deploy. Tres meses después, no necesariamente.</p>
+</blockquote>
 </div>
 </div>
 </div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-cot">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-tools-landscape">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># ── TÉCNICA 3: Chain of Thought ──────────────────────────────────────────────</span>
-<span class="c1"># Problema de sistemas: comparación SIN y CON CoT</span>
-<span class="c1"># El mismo problema — resultado potencialmente diferente</span>
-
-<span class="n">PROBLEMA</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"Una base de datos tiene 1.000.000 de usuarios registrados. "</span>
-    <span class="s2">"El 0,3</span><span class="si">% s</span><span class="s2">on usuarios premium. Cada usuario premium genera "</span>
-    <span class="s2">"en promedio 15 eventos por día. Los eventos se almacenan en "</span>
-    <span class="s2">"un log de 512 bytes cada uno. ¿Cuántos GB de logs de eventos "</span>
-    <span class="s2">"premium se generan por semana?"</span>
-<span class="p">)</span>
-
-<span class="c1"># Sin CoT</span>
-<span class="n">msg_sin_cot</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">PROBLEMA</span><span class="p">}]</span>
-
-<span class="c1"># Con CoT</span>
-<span class="n">msg_con_cot</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span>
-     <span class="s2">"content"</span><span class="p">:</span> <span class="p">(</span>
-         <span class="s2">"Sos un ingeniero de sistemas. Resolvé los problemas paso a paso, "</span>
-         <span class="s2">"mostrando cada operación con su unidad antes de dar la respuesta final."</span>
-     <span class="p">)},</span>
-    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">PROBLEMA</span><span class="p">}</span>
-<span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'PROBLEMA:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">PROBLEMA</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'─'</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'SIN Chain of Thought:'</span><span class="p">)</span>
-<span class="n">resp_sin</span> <span class="o">=</span> <span class="n">llamar_llm</span><span class="p">(</span><span class="n">msg_sin_cot</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">resp_sin</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'─'</span> <span class="o">*</span> <span class="mi">65</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'CON Chain of Thought:'</span><span class="p">)</span>
-<span class="n">resp_con</span> <span class="o">=</span> <span class="n">llamar_llm</span><span class="p">(</span><span class="n">msg_con_cot</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">resp_con</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'📌 Respuesta correcta:'</span><span class="p">)</span>
-<span class="n">usuarios_premium</span> <span class="o">=</span> <span class="mi">1_000_000</span> <span class="o">*</span> <span class="mf">0.003</span>
-<span class="n">eventos_dia</span>      <span class="o">=</span> <span class="n">usuarios_premium</span> <span class="o">*</span> <span class="mi">15</span>
-<span class="n">eventos_semana</span>   <span class="o">=</span> <span class="n">eventos_dia</span> <span class="o">*</span> <span class="mi">7</span>
-<span class="n">bytes_semana</span>     <span class="o">=</span> <span class="n">eventos_semana</span> <span class="o">*</span> <span class="mi">512</span>
-<span class="n">gb_semana</span>        <span class="o">=</span> <span class="n">bytes_semana</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   </span><span class="si">{</span><span class="n">usuarios_premium</span><span class="si">:</span><span class="s1">,.0f</span><span class="si">}</span><span class="s1"> usuarios premium'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   × 15 eventos/día × 7 días = </span><span class="si">{</span><span class="n">eventos_semana</span><span class="si">:</span><span class="s1">,.0f</span><span class="si">}</span><span class="s1"> eventos/semana'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   × 512 bytes = </span><span class="si">{</span><span class="n">bytes_semana</span><span class="si">:</span><span class="s1">,.0f</span><span class="si">}</span><span class="s1"> bytes = </span><span class="si">{</span><span class="n">gb_semana</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1"> GB'</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'→ CoT reduce errores en razonamiento encadenado'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'📖 Wei, J., et al. (2022). Chain-of-Thought Prompting. https://arxiv.org/abs/2201.11903'</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Herramientas-(mayo-2026)">Herramientas (mayo 2026)<a class="anchor-link" href="#Herramientas-(mayo-2026)">¶</a></h2><p><img alt="Tres columnas: evals offline (Promptfoo, Braintrust, DeepEval, OpenAI Evals, Inspect AI), evals de RAG (Ragas, preview Clase 3), monitoreo (Langfuse, LangSmith, Arize Phoenix, Helicone, TruLens). Una caja con 'por dónde empezar' según el caso" class="slide-figure" src="figures/tools_landscape.svg" style="width: 86%;"/></p>
 </div>
 </div>
 </div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-structured-output">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-feedback-loop">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># ── TÉCNICA 4: Structured Output ─────────────────────────────</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
-
-<span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span>
-     <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"""</span>
-<span class="s2">Analizás requerimientos de software.</span>
-<span class="s2">Respondés SOLO con un JSON válido con esta estructura exacta:</span>
-<span class="s2">{</span>
-<span class="s2">  "tipo": "funcional" | "no_funcional" | "restriccion",</span>
-<span class="s2">  "prioridad": "alta" | "media" | "baja",</span>
-<span class="s2">  "componente": string,</span>
-<span class="s2">  "resumen": string (max 15 palabras)</span>
-<span class="s2">}</span>
-<span class="s2">No incluyas nada más que el JSON."""</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
-     <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"El sistema debe responder en menos de 200ms al 95</span><span class="si">% d</span><span class="s2">e las solicitudes bajo carga normal."</span><span class="p">}</span>
-<span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Structured Output — el modelo devuelve JSON parseable:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">()</span>
-<span class="n">raw</span> <span class="o">=</span> <span class="n">llamar_llm</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">'Respuesta raw:'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="c1"># Limpiar posibles bloques de código markdown</span>
-    <span class="n">clean</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'```json'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">'```'</span><span class="p">,</span> <span class="s1">''</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">parsed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">clean</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Parseado correctamente:'</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">parsed</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'  </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-<span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Error al parsear JSON: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Tip: ajustar el prompt para reforzar el formato.'</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="El-loop-completo:-prompt-%E2%86%92-producto-%E2%86%92-mejora">El loop completo: prompt → producto → mejora<a class="anchor-link" href="#El-loop-completo:-prompt-%E2%86%92-producto-%E2%86%92-mejora">¶</a></h2><p><img alt="Ciclo de 6 nodos: diseño → eval offline → producción → eval online → análisis → feedback → vuelve al diseño. En el centro: 'PROMPT LIFECYCLE'" class="slide-figure" src="figures/feedback_loop.svg" style="width: 86%;"/></p>
+<blockquote>
+<p>Igual que el código, el prompt nunca está "terminado". Evoluciona con feedback de la realidad.</p>
+</blockquote>
 </div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-b7-section">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Bloque-7">Bloque 7<a class="anchor-link" href="#Bloque-7">¶</a></h1><h2 id="Cierre-y-puente-a-Clase-3">Cierre y puente a Clase 3<a class="anchor-link" href="#Cierre-y-puente-a-Clase-3">¶</a></h2><hr/>
+<p><em>Lo que aprendimos hoy nos lleva directo al próximo problema.</em></p>
 </div>
 </div>
 </div>
@@ -8799,178 +8337,75 @@ El mejor modelo es el que funciona en tu caso de uso con tu presupuesto.</p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Context-window-%E2%80%94-el-l%C3%ADmite-que-genera-RAG">Context window — el límite que genera RAG<a class="anchor-link" href="#Context-window-%E2%80%94-el-l%C3%ADmite-que-genera-RAG">¶</a></h2><pre><code>  Context window = todo lo que el modelo puede "ver" en una llamada
-
-  ┌─────────────────────────────────────────────────────────┐
-  │  System prompt  +  Historial  +  Documento  +  Query   │
-  │  (fijo)            (crece)       (grande)     (input)  │
-  │                                                         │
-  │  ◄─────────────── context window ───────────────────►  │
-  │  Claude: 200K tokens   ≈   150.000 palabras            │
-  │  Gemini: 1M tokens     ≈   750.000 palabras            │
-  │  Llama 4 Scout: 10M    ≈   7.5M palabras               │
-  └─────────────────────────────────────────────────────────┘
-
-  Problema real:
-  ─────────────
-  ✗ Contexto grande = más costo por llamada
-  ✗ Contexto grande = más lento
-  ✗ "Lost in the middle": el modelo olvida info del medio del contexto
-  ✗ Tu empresa tiene 50.000 documentos → no caben en ningún contexto
-</code></pre>
-<blockquote>
-<p><strong>Esta limitación es exactamente por qué existe RAG</strong> — lo vemos en Clase 3.</p>
-</blockquote>
-<blockquote>
-<p>📖 <em>Liu, N. F., et al. (2023). Lost in the Middle: How Language Models Use Long Contexts. TACL 2023. <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></em></p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=code-prompting-ejercicio">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># ✏️ EJERCICIO — diseñá tu propio prompt</span>
-<span class="c1"># Contexto: sos un ingeniero de sistemas que necesita un asistente</span>
-<span class="c1"># para revisar pull requests de su equipo.</span>
-<span class="c1">#</span>
-<span class="c1"># Diseñá un system prompt que:</span>
-<span class="c1"># 1. Defina el rol del asistente</span>
-<span class="c1"># 2. Establezca el formato de respuesta (usa structured output)</span>
-<span class="c1"># 3. Incluya al menos un ejemplo (few-shot)</span>
-
-<span class="n">my_system_prompt</span> <span class="o">=</span> <span class="s2">"""</span>
-<span class="s2"># Escribí tu system prompt acá</span>
-<span class="s2">"""</span>
-
-<span class="n">my_user_message</span> <span class="o">=</span> <span class="s2">"""</span>
-<span class="s2"># Escribí el código a revisar acá</span>
-<span class="s2">def calcular_total(items):</span>
-<span class="s2">    total = 0</span>
-<span class="s2">    for i in range(len(items)):</span>
-<span class="s2">        total = total + items[i]['precio']</span>
-<span class="s2">    return total</span>
-<span class="s2">"""</span>
-
-<span class="k">if</span> <span class="n">my_system_prompt</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">'# Escribí tu system prompt acá'</span><span class="p">:</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span>  <span class="s2">"content"</span><span class="p">:</span> <span class="n">my_system_prompt</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>    <span class="s2">"content"</span><span class="p">:</span> <span class="n">my_user_message</span><span class="p">}</span>
-    <span class="p">]</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">llamar_llm</span><span class="p">(</span><span class="n">messages</span><span class="p">))</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">'Completá el system prompt para probar tu diseño.'</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Context-window:-el-l%C3%ADmite-que-motiva-RAG">Context window: el límite que motiva RAG<a class="anchor-link" href="#Context-window:-el-l%C3%ADmite-que-motiva-RAG">¶</a></h2><p><img alt="Una barra apilada que muestra cómo SYSTEM + historial + documentos + USER compiten por el espacio del context window" class="slide-figure" src="figures/context_window.svg" style="width: 88%;"/></p>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-cierre">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-two-limits">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Las-dos-limitaciones-que-motivan-Clase-3">Las dos limitaciones que motivan Clase 3<a class="anchor-link" href="#Las-dos-limitaciones-que-motivan-Clase-3">¶</a></h2><p>Volvemos al hook del inicio. Vimos:</p>
+<p><strong>1. El modelo alucina</strong> (Bloque 1) — siempre genera el documento más plausible, exista o no. Sin grounding en datos reales, inventa con confianza.</p>
+<p><strong>2. El context window es finito</strong> (recién vimos) — y aunque sea de 10M tokens, <strong>tu base de conocimiento no entra</strong>.</p>
+<pre><code>                    ╔══════════════════════════════════╗
+                    ║                                  ║
+   Alucina ───────▶║   ¿Cómo le damos al modelo       ║
+                    ║   conocimiento propio,           ║
+   Context  ───────▶║   sin reentrenarlo?              ║
+   limits           ║                                  ║
+                    ╚══════════════╤═══════════════════╝
+                                   │
+                                   ▼
+                              RAG (Clase 3)
+</code></pre>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-recap-cierre">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Lo-que-vimos-hoy">Lo que vimos hoy<a class="anchor-link" href="#Lo-que-vimos-hoy">¶</a></h2><table>
 <thead>
 <tr>
 <th>Bloque</th>
 <th>Concepto clave</th>
-<th>Conexión con el curso</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>B1 — Tokenizers</td>
-<td>BPE y WordPiece en GPT-4o, BERT, Qwen</td>
-<td>Cierra Clase 1</td>
+<td>1 — ¿Qué es un LLM?</td>
+<td>Two files. Compresión de internet. Alucina por arquitectura.</td>
 </tr>
 <tr>
-<td>B2 — Transformer</td>
-<td>Attention resuelve contexto y polisemia</td>
-<td>Base de todo LLM</td>
+<td>2 — Transformer</td>
+<td>Attention en paralelo. Encoder vs decoder. Q/K/V.</td>
 </tr>
 <tr>
-<td>B3 — Ciclo de vida</td>
-<td>Pre-training → SFT → RLHF/DPO</td>
-<td>Por qué instruct ≠ base</td>
+<td>3 — Ciclo de vida</td>
+<td>Pretrain → SFT → RLHF/DPO. Base vs Instruct.</td>
 </tr>
 <tr>
-<td>B4 — Ecosistema</td>
-<td>Open weight vs closed, MoE, Kimi K2.5</td>
-<td>Stack del curso</td>
+<td>4 — Scaling 2026</td>
+<td>El pretraining se aplana; el eje hoy es post-training y test-time compute.</td>
 </tr>
 <tr>
-<td>B5 — Prompting</td>
-<td>Zero-shot, few-shot, CoT, structured output</td>
-<td>Base de Clases 3 y 4</td>
+<td>5 — Prompting</td>
+<td>System / few-shot / CoT / structured output / variables / iteración.</td>
+</tr>
+<tr>
+<td>6 — Evals y monitoreo</td>
+<td>Eval offline + online. Logging. Drift. Loop de mejora continua.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Archivos generados:</strong></p>
-<ul>
-<li><code>ecosistema_llm_2026.png</code></li>
-</ul>
-<p><strong>Stack que sigue siendo válido:</strong></p>
-<ul>
-<li><code>corpus_embeddings_clase1.npy</code> + <code>corpus_clase1.csv</code> → los usamos en Clase 3</li>
-</ul>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-referencias-c2">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<hr/>
-<h2 id="%F0%9F%93%9A-Bibliograf%C3%ADa">📚 Bibliografía<a class="anchor-link" href="#%F0%9F%93%9A-Bibliograf%C3%ADa">¶</a></h2><h3 id="Libros-de-referencia">Libros de referencia<a class="anchor-link" href="#Libros-de-referencia">¶</a></h3><ul>
-<li><p>Jurafsky, D. &amp; Martin, J. H. (2024). <em>Speech and Language Processing</em> (3rd ed. draft). Stanford University.<br/>
-🔗 <a href="https://web.stanford.edu/~jurafsky/slp3/">https://web.stanford.edu/~jurafsky/slp3/</a></p>
-</li>
-<li><p>Goodfellow, I., Bengio, Y. &amp; Courville, A. (2016). <em>Deep Learning</em>. MIT Press.<br/>
-🔗 <a href="https://www.deeplearningbook.org/">https://www.deeplearningbook.org/</a></p>
-</li>
-<li><p>Tunstall, L., von Werra, L. &amp; Wolf, T. (2022). <em>Natural Language Processing with Transformers</em>. O'Reilly Media.<br/>
-🔗 <a href="https://www.oreilly.com/library/view/natural-language-processing/9781098136789/">https://www.oreilly.com/library/view/natural-language-processing/9781098136789/</a></p>
-</li>
-</ul>
-<h3 id="Papers">Papers<a class="anchor-link" href="#Papers">¶</a></h3><ul>
-<li><p>Vaswani, A., Shazeer, N., Parmar, N., et al. (2017). Attention Is All You Need. <em>NeurIPS 2017</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></p>
-</li>
-<li><p>Devlin, J., Chang, M., Lee, K. &amp; Toutanova, J. (2018). BERT: Pre-training of Deep Bidirectional Transformers. <em>NAACL 2019</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a></p>
-</li>
-<li><p>Radford, A., et al. (2018). Improving Language Understanding by Generative Pre-Training. <em>OpenAI Technical Report</em>.<br/>
-🔗 <a href="https://openai.com/index/language-unsupervised/">https://openai.com/index/language-unsupervised/</a></p>
-</li>
-<li><p>Brown, T., et al. (2020). Language Models are Few-Shot Learners (GPT-3). <em>NeurIPS 2020</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2005.14165">https://arxiv.org/abs/2005.14165</a></p>
-</li>
-<li><p>Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. <em>NeurIPS 2022</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></p>
-</li>
-<li><p>Rafailov, R., et al. (2023). Direct Preference Optimization: Your Language Model is Secretly a Reward Model. <em>NeurIPS 2023</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2305.18290">https://arxiv.org/abs/2305.18290</a></p>
-</li>
-<li><p>Wei, J., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. <em>NeurIPS 2022</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2201.11903">https://arxiv.org/abs/2201.11903</a></p>
-</li>
-<li><p>Shazeer, N., et al. (2017). Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer. <em>ICLR 2017</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/1701.06538">https://arxiv.org/abs/1701.06538</a></p>
-</li>
-</ul>
+<p><strong>Notebooks que quedaron para ejecutar:</strong> <code>01_groq_intro</code>, <code>02_attention_bertviz</code>, <code>03_sampling_params</code>, <code>04_prompting_techniques</code>, <code>05_cot_structured</code>.</p>
 </div>
 </div>
 </div>
@@ -8979,20 +8414,45 @@ El mejor modelo es el que funciona en tu caso de uso con tu presupuesto.</p>
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="Clase-3-%E2%80%94-%C2%BFqu%C3%A9-viene?">Clase 3 — ¿qué viene?<a class="anchor-link" href="#Clase-3-%E2%80%94-%C2%BFqu%C3%A9-viene?">¶</a></h2><p>Hoy aprendimos a <strong>hablarle</strong> a un LLM. En Clase 3 vemos cómo darle <strong>conocimiento propio</strong> sin reentrenarlo.</p>
 <hr/>
 <ul>
-<li><strong>¿Por qué RAG?</strong> — hallucination, knowledge cutoff, context limits</li>
-<li><strong>Pipeline RAG naive</strong> — chunking → embeddings → vector store → retrieval → augmentation</li>
-<li><strong>Hybrid search</strong> — BM25 (Clase 1) + búsqueda semántica (Clase 1) combinados</li>
-<li><strong>RAG avanzado</strong> — reranking, HyDE, parent-child chunks</li>
-<li><strong>Práctica</strong> — RAG funcional sobre documentos propios con ChromaDB + Ollama</li>
+<li><strong>¿Por qué RAG?</strong> — alucinación, knowledge cutoff, context limits.</li>
+<li><strong>Pipeline RAG naive</strong> — chunking → embeddings → vector store → retrieval → augmentation.</li>
+<li><strong>Hybrid search</strong> — BM25 (Clase 1) + búsqueda semántica (Clase 1) combinados.</li>
+<li><strong>RAG avanzado</strong> — reranking, HyDE, parent-child chunks.</li>
+<li><strong>Práctica</strong> — RAG funcional sobre documentos propios con ChromaDB + Ollama.</li>
 </ul>
-<blockquote>
-<p>Los embeddings del corpus de Clase 1 (<code>corpus_embeddings_clase1.npy</code>) los cargamos directamente en el vector store de Clase 3.</p>
-</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-bibliografia">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%93%9A-Bibliograf%C3%ADa">📚 Bibliografía<a class="anchor-link" href="#%F0%9F%93%9A-Bibliograf%C3%ADa">¶</a></h2><h3 id="Charla-central">Charla central<a class="anchor-link" href="#Charla-central">¶</a></h3><ul>
+<li><strong>Karpathy, A. (2023). Intro to Large Language Models.</strong>
+🔗 <a href="https://www.youtube.com/watch?v=zjkBMFhNj_g">https://www.youtube.com/watch?v=zjkBMFhNj_g</a>
+<em>La charla en la que se basa el grueso de los Bloques 1, 3, 4, 5.</em></li>
+</ul>
+<h3 id="Papers-fundacionales">Papers fundacionales<a class="anchor-link" href="#Papers-fundacionales">¶</a></h3><ul>
+<li>Vaswani, A., et al. (2017). <em>Attention Is All You Need.</em> <a href="https://arxiv.org/abs/1706.03762">https://arxiv.org/abs/1706.03762</a></li>
+<li>Devlin, J., et al. (2018). <em>BERT.</em> <a href="https://arxiv.org/abs/1810.04805">https://arxiv.org/abs/1810.04805</a></li>
+<li>Brown, T., et al. (2020). <em>Language Models are Few-Shot Learners.</em> <a href="https://arxiv.org/abs/2005.14165">https://arxiv.org/abs/2005.14165</a></li>
+<li>Ouyang, L., et al. (2022). <em>Training language models to follow instructions with human feedback (InstructGPT).</em> <a href="https://arxiv.org/abs/2203.02155">https://arxiv.org/abs/2203.02155</a></li>
+<li>Wei, J., et al. (2022). <em>Chain-of-Thought Prompting.</em> <a href="https://arxiv.org/abs/2201.11903">https://arxiv.org/abs/2201.11903</a></li>
+<li>Hoffmann, J., et al. (2022). <em>Training Compute-Optimal LLMs (Chinchilla).</em> <a href="https://arxiv.org/abs/2203.15556">https://arxiv.org/abs/2203.15556</a></li>
+<li>Rafailov, R., et al. (2023). <em>Direct Preference Optimization.</em> <a href="https://arxiv.org/abs/2305.18290">https://arxiv.org/abs/2305.18290</a></li>
+<li>Berglund, L., et al. (2023). <em>The Reversal Curse.</em> <a href="https://arxiv.org/abs/2309.12288">https://arxiv.org/abs/2309.12288</a></li>
+<li>Hubinger, E., et al. (2024). <em>Sleeper Agents.</em> <a href="https://arxiv.org/abs/2401.05566">https://arxiv.org/abs/2401.05566</a></li>
+</ul>
+<h3 id="Libros">Libros<a class="anchor-link" href="#Libros">¶</a></h3><ul>
+<li>Jurafsky, D. &amp; Martin, J. H. (2024). <em>Speech and Language Processing</em> (3rd ed. draft). <a href="https://web.stanford.edu/~jurafsky/slp3/">https://web.stanford.edu/~jurafsky/slp3/</a></li>
+<li>Tunstall, L., von Werra, L. &amp; Wolf, T. (2022). <em>NLP with Transformers.</em> O'Reilly.</li>
+</ul>
 </div>
 </div>
 </div>
