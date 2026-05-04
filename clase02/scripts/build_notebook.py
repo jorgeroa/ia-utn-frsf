@@ -350,7 +350,23 @@ cells.append(md_slide("slide-base-vs-instruct", """\
 | `Llama-3.1-8B` | base | continued pretraining |
 | `Llama-3.1-8B-Instruct` | instruct | chatbots, asistentes |
 
-> Cuando bajes un modelo de HuggingFace, fijate siempre el sufijo. Si te da respuestas raras o no responde, probablemente bajaste el base model."""))
+> Cuando bajes un modelo, fijate siempre el sufijo. Si te da respuestas raras o no responde, probablemente bajaste el base model."""))
+
+
+cells.append(md_slide("slide-quiz-lifecycle", """\
+## Quiz — LLMs y su ciclo de vida
+
+*¿Verdadero o falso?*
+
+1. Un LLM moderno consiste en dos archivos: los parámetros del modelo (~140 GB para uno de 70B) y un programa relativamente corto que los ejecuta. <span class="fragment">**Verdadero**</span>
+
+2. Cuando un LLM "alucina" (genera información falsa con seguridad), es un bug que se puede arreglar con mejores datos de entrenamiento. <span class="fragment">**Falso** — es consecuencia de cómo está construido: siempre genera el documento más plausible que puede.</span>
+
+3. En el Transformer, la atención causal del decoder permite que cada token mire tanto los anteriores como los siguientes en la secuencia. <span class="fragment">**Falso** — la atención causal solo mira los tokens anteriores.</span>
+
+4. El base model y el modelo Instruct comparten la misma arquitectura y los mismos parámetros iniciales. La diferencia está en la última etapa de entrenamiento. <span class="fragment">**Verdadero**</span>
+
+5. DPO necesita entrenar una segunda red (el *reward model*) antes de poder ajustar el LLM con las preferencias humanas. <span class="fragment">**Falso** — eso lo hace RLHF; DPO se saltea ese paso.</span>"""))
 
 
 # ─────────────────────────────────────────────────────────────────────────────

@@ -7837,8 +7837,30 @@ Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
 </tbody>
 </table>
 <blockquote>
-<p>Cuando bajes un modelo de HuggingFace, fijate siempre el sufijo. Si te da respuestas raras o no responde, probablemente bajaste el base model.</p>
+<p>Cuando bajes un modelo, fijate siempre el sufijo. Si te da respuestas raras o no responde, probablemente bajaste el base model.</p>
 </blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-quiz-lifecycle">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Quiz-%E2%80%94-LLMs-y-su-ciclo-de-vida">Quiz — LLMs y su ciclo de vida<a class="anchor-link" href="#Quiz-%E2%80%94-LLMs-y-su-ciclo-de-vida">¶</a></h2><p><em>¿Verdadero o falso?</em></p>
+<ol>
+<li><p>Un LLM moderno consiste en dos archivos: los parámetros del modelo (~140 GB para uno de 70B) y un programa relativamente corto que los ejecuta. <span class="fragment"><strong>Verdadero</strong></span></p>
+</li>
+<li><p>Cuando un LLM "alucina" (genera información falsa con seguridad), es un bug que se puede arreglar con mejores datos de entrenamiento. <span class="fragment"><strong>Falso</strong> — es consecuencia de cómo está construido: siempre genera el documento más plausible que puede.</span></p>
+</li>
+<li><p>En el Transformer, la atención causal del decoder permite que cada token mire tanto los anteriores como los siguientes en la secuencia. <span class="fragment"><strong>Falso</strong> — la atención causal solo mira los tokens anteriores.</span></p>
+</li>
+<li><p>El base model y el modelo Instruct comparten la misma arquitectura y los mismos parámetros iniciales. La diferencia está en la última etapa de entrenamiento. <span class="fragment"><strong>Verdadero</strong></span></p>
+</li>
+<li><p>DPO necesita entrenar una segunda red (el <em>reward model</em>) antes de poder ajustar el LLM con las preferencias humanas. <span class="fragment"><strong>Falso</strong> — eso lo hace RLHF; DPO se saltea ese paso.</span></p>
+</li>
+</ol>
 </div>
 </div>
 </div>
