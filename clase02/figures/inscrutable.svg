@@ -70,11 +70,11 @@
       <text x="14" y="19" class="text" font-weight="600">Ejemplo: la "maldición de la reversibilidad"</text>
 
       <g transform="translate(16,48)">
-        <text class="text-mono" y="0">Q: ¿Quién es la madre de Tom Cruise?</text>
-        <text class="text-mono" y="22">A: Mary Lee Pfeiffer  </text>
-        <text class="ok" x="220" y="22">✓</text>
+        <text class="text-mono" y="0">Q: ¿Quién es la madre de Barack Obama?</text>
+        <text class="text-mono" y="22">A: Stanley Ann Dunham  </text>
+        <text class="ok" x="232" y="22">✓</text>
 
-        <text class="text-mono" y="60">Q: ¿Quién es el hijo de Mary Lee Pfeiffer?</text>
+        <text class="text-mono" y="60">Q: ¿Quién es el hijo de Stanley Ann Dunham?</text>
         <text class="text-mono" y="82">A: No lo sé.  </text>
         <text class="err" x="124" y="82">✗</text>
 
@@ -83,6 +83,4 @@
     </g>
   </g>
 
-  <!-- bottom takeaway -->
-  <text x="480" y="446" text-anchor="middle" class="text" fill="#7F77DD" font-weight="600">→ Pensá en los LLMs como artefactos en gran medida inescrutables. Evaluemos en consecuencia.</text>
 </svg>

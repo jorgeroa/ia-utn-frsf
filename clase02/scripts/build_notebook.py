@@ -193,11 +193,9 @@ Si dejás al modelo generar libre, **inventa** documentos plausibles: código qu
 cells.append(md_slide("slide-inscrutable", f"""\
 ## ¿Cómo funciona por dentro? Casi nadie lo sabe
 
-{fig("inscrutable.svg", "Diagrama Transformer simplificado a la izquierda; ejemplo del 'reversal curse' Tom Cruise/Mary Lee Pfeiffer a la derecha")}
+{fig("inscrutable.svg", "Diagrama Transformer simplificado a la izquierda; ejemplo del 'reversal curse' Obama/Stanley Ann Dunham a la derecha")}
 
 Sabemos **ajustar** los parámetros para que prediga mejor. No sabemos cómo **colaboran** los miles de millones de parámetros para hacerlo.
-
-> Tratá a los LLMs como **artefactos en gran medida inescrutables**. Evaluá en consecuencia.
 
 > 📖 *Berglund, L., et al. (2023). The Reversal Curse: LLMs trained on "A is B" fail to learn "B is A".*"""))
 
@@ -230,7 +228,7 @@ cells.append(md_slide("slide-transformer-arch", f"""\
 
 Vaswani et al. (2017) la propusieron para **traducción**. La idea: el encoder "lee y entiende" la entrada, el decoder genera la salida token a token, y el cross-attention los conecta.
 
-> A partir de acá la familia se dividió en tres ramas — las vemos en el próximo slide."""))
+> A partir de acá la familia se dividió: la mayoría de los LLMs modernos usan **solo el decoder** — lo vemos en el próximo slide."""))
 
 
 cells.append(md_slide("slide-encoder-decoder", f"""\

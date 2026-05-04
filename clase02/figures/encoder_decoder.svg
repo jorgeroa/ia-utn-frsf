@@ -75,14 +75,14 @@
       </g>
     </g>
 
-    <text x="170" y="170" text-anchor="middle" class="text-xs" fill="#7F77DD">← atención causal (solo el pasado)</text>
+    <text x="170" y="170" text-anchor="middle" class="text-xs" fill="#7F77DD">← atención causal (solo tokens anteriores)</text>
 
     <text x="20" y="210" class="text">Sirve para <tspan font-weight="600">generar</tspan> texto:</text>
     <text x="20" y="232" class="text-xs">• completar, escribir, resumir</text>
     <text x="20" y="250" class="text-xs">• chatbots, asistentes</text>
     <text x="20" y="268" class="text-xs">• código, traducción</text>
 
-    <text x="20" y="298" class="text-xs" fill="#666">Predice el siguiente token; nunca espía el futuro.</text>
+    <text x="20" y="298" class="text-xs" fill="#666">Predice el siguiente token mirando solo los anteriores.</text>
   </g>
 
   <!-- bottom -->
