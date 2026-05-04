@@ -263,15 +263,6 @@ for p in [0.1, 0.5, 1.0]:
     print()"""),
 
     md("""\
-## 4. El bug del repetition loop
-
-Con `temperature` muy baja **y** un prompt ambiguo, el modelo puede entrar en bucle repitiendo frases. Lo provocamos a propósito:"""),
-
-    code("""\
-# Prompt cuasi-vacío + temperatura mínima -> riesgo de loop
-print(generar("repetí: ", temperature=0.0, max_tokens=100))"""),
-
-    md("""\
 ## Cuándo usar qué
 
 | Caso | temperature | top_p |
