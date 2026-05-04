@@ -316,7 +316,7 @@ MODELS = {
     "deepseek":     "deepseek-r1-distill-llama-70b",
     "gemma":        "gemma2-9b-it",
 }
-MODEL = MODELS["llama_strong"]  # cambiá la clave para probar otros modelos
+MODEL = MODELS["llama_fast"]  # cambiá la clave para probar otros modelos
 
 def clasificar(messages, temperature=0.1):
     resp = client.chat.completions.create(
