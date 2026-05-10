@@ -24,9 +24,22 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
   - `04_prompting_techniques.ipynb` — zero/one/few-shot.
 - `clase02/scripts/` — generadores: `build_notebook.py` (slides) y `build_colabs.py` (notebooks).
 
+### Clase 3 — RAG + Evaluación y monitoreo
+
+- `clase03/clase3_slides.ipynb` — slides de la clase (reveal.js).
+- `clase03/figures/` — figuras SVG.
+- `clase03/notebooks/` — notebooks de práctica para Colab:
+  - `01_arize_eval_handson.ipynb` — end-to-end eval + monitoring de un
+    chatbot Q&A con Arize AX (OpenTelemetry tracing, LLM-as-judge,
+    dashboards, drift simulation).
+
+La clase incluye dos grandes bloques: RAG (B1-B4: pipeline naive,
+búsqueda híbrida, RAG avanzado) y un bloque profundo sobre evaluación,
+monitoreo y benchmarks (B5: del prompt al producto, organizado por
+fase del ciclo).
+
 ### Próximas clases
 
-- Clase 3 — RAG
 - Clase 4 — Agentes
 
 ---
@@ -59,6 +72,19 @@ python scripts/build_colabs.py      # regenera las notebooks de Colab
 jupyter nbconvert clase2_slides.ipynb --to slides --no-input
 ```
 
+### Clase 3 — pipeline de generación
+
+Las slides de clase 3 contienen celdas de código que se muestran en
+las slides (demos de RAG), por lo que se regeneran sin `--no-input`:
+
+```bash
+cd clase03
+jupyter nbconvert clase3_slides.ipynb --to slides
+```
+
+Los notebooks de Colab de clase 3 se editan directamente (no hay
+build script todavía).
+
 ### Dependencias mínimas
 
 Recomendamos un entorno virtual aislado para no contaminar el Python del
@@ -88,6 +114,12 @@ El directorio `venv/` está en `.gitignore`. Para salir del entorno:
 │   ├── figures/
 │   ├── notebooks/
 │   └── scripts/
+├── clase03/
+│   ├── clase3_slides.ipynb
+│   ├── clase3_slides.slides.html
+│   ├── figures/
+│   └── notebooks/
+│       └── 01_arize_eval_handson.ipynb
 ├── CITATION.cff
 ├── LICENSE
 └── README.md
