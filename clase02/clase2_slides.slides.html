@@ -7523,8 +7523,8 @@ Tiene un botón "Open in Colab" arriba. Abrilo y seguilo en paralelo.</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Recorrido-de-la-clase">Recorrido de la clase<a class="anchor-link" href="#Recorrido-de-la-clase">¶</a></h2><p><img alt="Roadmap de los 7 bloques de la clase, con dos cortes intermedios" class="slide-figure" src="figures/roadmap.svg" style="width: 92%;"/></p>
-<p>Vamos primero a entender <strong>qué es</strong> un LLM (bloques 1–4), después a <strong>usarlo bien</strong> (bloque 5), y finalmente a <strong>operarlo en producción</strong> (bloque 6). Cerramos conectando con Clase 3.</p>
+<h2 id="Recorrido-de-la-clase">Recorrido de la clase<a class="anchor-link" href="#Recorrido-de-la-clase">¶</a></h2><p><img alt="Roadmap de los bloques de la clase, con un corte intermedio" class="slide-figure" src="figures/roadmap.svg" style="width: 92%;"/></p>
+<p>Vamos primero a entender <strong>qué es</strong> un LLM (bloques 1–4) y después a <strong>usarlo bien</strong> (bloque 5). Cerramos conectando con Clase 3.</p>
 </div>
 </div>
 </div>
@@ -8240,79 +8240,12 @@ Ahora tengo 20. ¿Cuántos años tiene mi pareja?
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-b6-section">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-6">Bloque 6<a class="anchor-link" href="#Bloque-6">¶</a></h1><h2 id="Evals-y-monitoreo:-del-prompt-al-producto">Evals y monitoreo: del prompt al producto<a class="anchor-link" href="#Evals-y-monitoreo:-del-prompt-al-producto">¶</a></h2><hr/>
-<p><em>El prompt ya está bien diseñado. Ahora viene producción.</em></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-evals-offline-online">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Evals-offline-vs-online">Evals offline vs online<a class="anchor-link" href="#Evals-offline-vs-online">¶</a></h2><p><img alt="Dos paneles lado a lado: eval offline (antes del deploy, dataset estático, en CI) vs eval online (en producción, tráfico real, continuo)" class="slide-figure" src="figures/evals_offline_online.svg" style="width: 86%;"/></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-monitoring">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Qu%C3%A9-loggear-en-producci%C3%B3n">Qué loggear en producción<a class="anchor-link" href="#Qu%C3%A9-loggear-en-producci%C3%B3n">¶</a></h2><p><img alt="Pipeline App → LLM → Logger middleware → Storage → Dashboard. Abajo, los 4 datos clave: input completo, output completo, latencia/costo, señal de calidad" class="slide-figure" src="figures/monitoring_pipeline.svg" style="width: 86%;"/></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-drift">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Drift:-lo-que-cambia-con-el-tiempo">Drift: lo que cambia con el tiempo<a class="anchor-link" href="#Drift:-lo-que-cambia-con-el-tiempo">¶</a></h2><p><img alt="Cuatro tipos de drift: input drift, quality drift, cost drift, abuse drift. Abajo, un mini-dashboard mostrando accuracy bajando y costo subiendo a lo largo de 3 meses, con alerta disparada" class="slide-figure" src="figures/drift_detection.svg" style="width: 86%;"/></p>
-<blockquote>
-<p>Tu sistema fue bueno el día del deploy. Tres meses después, no necesariamente.</p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-tools-landscape">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Herramientas-(mayo-2026)">Herramientas (mayo 2026)<a class="anchor-link" href="#Herramientas-(mayo-2026)">¶</a></h2><p><img alt="Tres columnas: evals offline (Promptfoo, Braintrust, DeepEval, OpenAI Evals, Inspect AI), evals de RAG (Ragas, preview Clase 3), monitoreo (Langfuse, LangSmith, Arize Phoenix, Helicone, TruLens). Una caja con 'por dónde empezar' según el caso" class="slide-figure" src="figures/tools_landscape.svg" style="width: 86%;"/></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-feedback-loop">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="El-loop-completo:-prompt-%E2%86%92-producto-%E2%86%92-mejora">El loop completo: prompt → producto → mejora<a class="anchor-link" href="#El-loop-completo:-prompt-%E2%86%92-producto-%E2%86%92-mejora">¶</a></h2><p><img alt="Ciclo de 6 nodos: diseño → eval offline → producción → eval online → análisis → feedback → vuelve al diseño. En el centro: 'PROMPT LIFECYCLE'" class="slide-figure" src="figures/feedback_loop.svg" style="width: 86%;"/></p>
-<blockquote>
-<p>Igual que el código, el prompt nunca está "terminado". Evoluciona con feedback de la realidad.</p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-b7-section">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-7">Bloque 7<a class="anchor-link" href="#Bloque-7">¶</a></h1><h2 id="Cierre-y-puente-a-Clase-3">Cierre y puente a Clase 3<a class="anchor-link" href="#Cierre-y-puente-a-Clase-3">¶</a></h2><hr/>
+<h1 id="Bloque-6">Bloque 6<a class="anchor-link" href="#Bloque-6">¶</a></h1><h2 id="Cierre-y-puente-a-Clase-3">Cierre y puente a Clase 3<a class="anchor-link" href="#Cierre-y-puente-a-Clase-3">¶</a></h2><hr/>
 <p><em>Lo que aprendimos hoy nos lleva directo al próximo problema.</em></p>
 </div>
 </div>
@@ -8383,10 +8316,6 @@ Ahora tengo 20. ¿Cuántos años tiene mi pareja?
 <tr>
 <td>5 — Prompting</td>
 <td>System / few-shot / CoT / structured output / variables / iteración.</td>
-</tr>
-<tr>
-<td>6 — Evals y monitoreo</td>
-<td>Eval offline + online. Logging. Drift. Loop de mejora continua.</td>
 </tr>
 </tbody>
 </table>

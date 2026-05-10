@@ -61,9 +61,17 @@ jupyter nbconvert clase2_slides.ipynb --to slides --no-input
 
 ### Dependencias mínimas
 
+Recomendamos un entorno virtual aislado para no contaminar el Python del
+sistema:
+
 ```bash
+python3 -m venv venv
+source venv/bin/activate    # en Windows: venv\Scripts\activate
 pip install jupyter nbconvert
 ```
+
+El directorio `venv/` está en `.gitignore`. Para salir del entorno:
+`deactivate`.
 
 ---
 
