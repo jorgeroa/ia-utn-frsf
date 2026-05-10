@@ -7787,6 +7787,146 @@ pip<span class="w"> </span>install<span class="w"> </span>arize<span class="w"> 
 </div>
 </div>
 </div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b1-llm-vs-rag">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="LLM-cl%C3%A1sico-vs-LLM-con-RAG">LLM clásico vs LLM con RAG<a class="anchor-link" href="#LLM-cl%C3%A1sico-vs-LLM-con-RAG">¶</a></h2><table>
+<thead>
+<tr>
+<th>Capacidad</th>
+<th>LLM clásico</th>
+<th>LLM + RAG</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conocimiento posterior al training</strong></td>
+<td>❌ Imposible</td>
+<td>✅ Vía retrieval sobre fuentes recientes</td>
+</tr>
+<tr>
+<td><strong>Conocimiento privado / propietario</strong></td>
+<td>❌ Requiere fine-tuning</td>
+<td>✅ Solo indexar — el modelo queda intacto</td>
+</tr>
+<tr>
+<td><strong>Citas y trazabilidad</strong></td>
+<td>❌ Inventa fuentes o no las da</td>
+<td>✅ Cada respuesta se rastrea a chunks específicos</td>
+</tr>
+<tr>
+<td><strong>Reducción de alucinaciones</strong></td>
+<td>❌ Confianza alta en respuestas inventadas</td>
+<td>✅ Forzado a basarse en contexto (faithfulness)</td>
+</tr>
+<tr>
+<td><strong>Razonamiento sobre documentos largos</strong></td>
+<td>⚠️ Limitado al context window</td>
+<td>✅ Solo trae lo relevante (evita lost-in-the-middle)</td>
+</tr>
+<tr>
+<td><strong>Actualización del conocimiento</strong></td>
+<td>⚠️ Re-entrenar (caro y lento)</td>
+<td>✅ Re-indexar (rápido, barato, incremental)</td>
+</tr>
+<tr>
+<td><strong>Costo por consulta</strong></td>
+<td>💚 Más barato</td>
+<td>🟡 Mayor (retrieval + generation)</td>
+</tr>
+<tr>
+<td><strong>Latencia</strong></td>
+<td>💚 Menor</td>
+<td>🟡 Mayor (extra retrieval step)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Las dos últimas filas son los <strong>tradeoffs reales</strong> que RAG impone. Por todo lo demás, RAG es la opción default cuando hay corpus propio.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b1-aplicaciones">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Aplicaciones-t%C3%ADpicas-de-RAG-(2025-2026)">Aplicaciones típicas de RAG (2025-2026)<a class="anchor-link" href="#Aplicaciones-t%C3%ADpicas-de-RAG-(2025-2026)">¶</a></h2><table>
+<thead>
+<tr>
+<th>Dominio</th>
+<th>Caso de uso</th>
+<th>Por qué encaja RAG</th>
+<th>Productos reales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Soporte / Customer success</strong></td>
+<td>Q&amp;A sobre docs de producto, helpdesks internos, triage de tickets</td>
+<td>Base de conocimiento que cambia frecuentemente; respuesta con citas</td>
+<td>Intercom Fin, Glean, Notion AI</td>
+</tr>
+<tr>
+<td><strong>Legal</strong></td>
+<td>Búsqueda de jurisprudencia, revisión de contratos, compliance</td>
+<td>Citas obligatorias; vocabulario muy técnico; corpus enorme</td>
+<td>Harvey, Casetext CoCounsel, Eve.legal</td>
+</tr>
+<tr>
+<td><strong>Salud / Medicina</strong></td>
+<td>Decisión clínica sobre papers y guías; resumen de historia clínica</td>
+<td>Knowledge cutoff es crítico (papers nuevos); auditabilidad regulatoria</td>
+<td>Glass, OpenEvidence, Hippocratic AI</td>
+</tr>
+<tr>
+<td><strong>Finanzas / Regulatorio</strong></td>
+<td>Q&amp;A sobre filings (10-K/10-Q), due diligence, riesgo regulatorio</td>
+<td>Documentos largos y técnicos; toda respuesta debe rastrearse</td>
+<td>Hebbia, AlphaSense, BloombergGPT</td>
+</tr>
+<tr>
+<td><strong>Ingeniería / Código</strong></td>
+<td>Q&amp;A sobre codebase, runbooks, postmortems, generación de tests</td>
+<td>Repos grandes, contexto distribuido en muchos archivos</td>
+<td>Sourcegraph Cody, Cursor, Sentry Autofix</td>
+</tr>
+<tr>
+<td><strong>Educación</strong></td>
+<td>Tutor sobre apuntes/libros, asistente de cursada, prep de examen</td>
+<td>Cada estudiante consulta el mismo material desde ángulos distintos</td>
+<td>Khanmigo, CourseHero, Speak</td>
+</tr>
+<tr>
+<td><strong>Investigación científica</strong></td>
+<td>Literature review, búsqueda semántica, generación de hipótesis</td>
+<td>Volumen masivo (millones de papers); terminología específica</td>
+<td>Elicit, Consensus, Scite</td>
+</tr>
+<tr>
+<td><strong>Enterprise / Knowledge ops</strong></td>
+<td>"Ask the company": wikis, políticas, HR, runbooks internos</td>
+<td>Datos privados que no entran en el training de ningún LLM público</td>
+<td>Glean, Notion AI, Slack AI</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Patr%C3%B3n-com%C3%BAn-a-todos">Patrón común a todos<a class="anchor-link" href="#Patr%C3%B3n-com%C3%BAn-a-todos">¶</a></h3><p><strong>(1) corpus propio o nicho</strong> + <strong>(2) requerimiento de citas/groundedness</strong> + <strong>(3) actualización frecuente</strong>.</p>
+<h3 id="Cu%C3%A1ndo-RAG-no-es-la-respuesta">Cuándo RAG <em>no</em> es la respuesta<a class="anchor-link" href="#Cu%C3%A1ndo-RAG-no-es-la-respuesta">¶</a></h3><ul>
+<li>Tareas <strong>sin necesidad de conocimiento externo</strong> (traducción, redacción creativa, conversación general).</li>
+<li>Datos que <strong>caben en el context window</strong> (&lt; 200K tokens) → mandalos directo, sin retrieval.</li>
+<li>Tareas donde lo que falta es <strong>razonamiento estructurado</strong>, no información (cálculo numérico exacto, código complejo).</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-header">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -7878,6 +8018,65 @@ pip<span class="w"> </span>install<span class="w"> </span>arize<span class="w"> 
 </code></pre>
 <p><strong>Overlap:</strong> repetir N caracteres entre chunks para no cortar ideas a la mitad.<br/>
 Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-chunk-size">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Tama%C3%B1o-de-chunk-%E2%80%94-el-knob-m%C3%A1s-importante">Tamaño de chunk — el knob más importante<a class="anchor-link" href="#Tama%C3%B1o-de-chunk-%E2%80%94-el-knob-m%C3%A1s-importante">¶</a></h2><table>
+<thead>
+<tr>
+<th>Tamaño</th>
+<th>Precisión</th>
+<th>Contexto</th>
+<th>Costo / Latencia</th>
+<th>Cuándo usarlo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>64-128 tokens</strong></td>
+<td>🟢 Alta</td>
+<td>🔴 Bajo</td>
+<td>🟢 Bajo</td>
+<td>Q&amp;A factual corta, lookups exactos</td>
+</tr>
+<tr>
+<td><strong>256-512 tokens</strong></td>
+<td>🟡 Media</td>
+<td>🟡 Medio</td>
+<td>🟡 Medio</td>
+<td><strong>Default — el sweet spot</strong> para la mayoría</td>
+</tr>
+<tr>
+<td><strong>1024+ tokens</strong></td>
+<td>🔴 Baja</td>
+<td>🟢 Alto</td>
+<td>🔴 Alto</td>
+<td>Documentos legales/técnicos con razonamiento largo</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Reglas-de-bolsillo">Reglas de bolsillo<a class="anchor-link" href="#Reglas-de-bolsillo">¶</a></h3><pre><code>  ┌────────────────────────────────────────────────────────────────────┐
+  │ overlap     = 10-20% del tamaño del chunk                          │
+  │ k           = 5-10 (cuántos chunks recuperás)                      │
+  │ contexto    = k × chunk_size + prompt + query ≤ 50% del window     │
+  └────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="C%C3%B3mo-ajustarlo-en-la-pr%C3%A1ctica">Cómo ajustarlo en la práctica<a class="anchor-link" href="#C%C3%B3mo-ajustarlo-en-la-pr%C3%A1ctica">¶</a></h3><ol>
+<li>Empezá con <strong>chunk=512, overlap=50, k=5</strong> y un eval offline mínimo.</li>
+<li>Si faltan detalles en la respuesta → <strong>bajá chunk, subí k</strong>.</li>
+<li>Si la respuesta pierde coherencia entre chunks → <strong>subí chunk, mantené k</strong>.</li>
+<li>Si latencia o costo duelen → <strong>bajá k antes de bajar chunk</strong>.</li>
+</ol>
+<blockquote>
+<p>No hay una respuesta universal. <strong>Es un parámetro que se afina con eval offline</strong> (lo vemos en B5).</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -8286,6 +8485,44 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 <span class="c1"># respuesta, _ = rag_query("tu pregunta", n_chunks=3)</span>
 </pre></div>
 </div>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-santa-fe">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Ejemplo-end-to-end-%E2%80%94-multas-de-tr%C3%A1nsito-en-Santa-Fe">Ejemplo end-to-end — multas de tránsito en Santa Fe<a class="anchor-link" href="#Ejemplo-end-to-end-%E2%80%94-multas-de-tr%C3%A1nsito-en-Santa-Fe">¶</a></h2><p><strong>Usuario:</strong> <em>"¿Cuál es el plazo de prescripción para multas de tránsito en la Ciudad de Santa Fe?"</em></p>
+<pre><code>  ┌─────────────────────────────────────────────────────────────────────┐
+  │ 1. INDEXACIÓN (offline, se hace una vez)                             │
+  │    • Código de Faltas + Resoluciones + Jurisprudencia local          │
+  │    • Chunking semántico (~400 tokens, overlap 50)                    │
+  │    • Embeddings multilingüe → ChromaDB                               │
+  ├─────────────────────────────────────────────────────────────────────┤
+  │ 2. RETRIEVAL (online, por query)                                     │
+  │    • Embed de la pregunta del usuario                                │
+  │    • Top-5 chunks: Art. 47 (prescripción), Art. 52 (cómputo de plazo),│
+  │      resumen de jurisprudencia 2023 sobre suspensión del plazo       │
+  ├─────────────────────────────────────────────────────────────────────┤
+  │ 3. AUGMENTATION                                                      │
+  │    • Prompt = system("citá fuentes") + chunks + query                │
+  ├─────────────────────────────────────────────────────────────────────┤
+  │ 4. GENERACIÓN                                                        │
+  │    • "Según el Art. 47 del Código de Faltas de Santa Fe,             │
+  │       la prescripción es de 2 años desde la notificación.            │
+  │       El plazo se suspende durante el proceso administrativo         │
+  │       (Art. 52). Fuente: [Art. 47, Código de Faltas]"                │
+  └─────────────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="Por-qu%C3%A9-este-caso-es-paradigm%C3%A1tico-para-RAG">Por qué este caso es <strong>paradigmático</strong> para RAG<a class="anchor-link" href="#Por-qu%C3%A9-este-caso-es-paradigm%C3%A1tico-para-RAG">¶</a></h3><ul>
+<li>Datos <strong>públicos pero dispersos</strong> (no entran en el training de ningún LLM global).</li>
+<li><strong>Auditabilidad obligatoria</strong> — la respuesta debe rastrearse al artículo (no es opcional en lo legal).</li>
+<li><strong>Actualización constante</strong> — los reglamentos cambian; re-entrenar el LLM no es viable.</li>
+<li>Dominio <strong>localizado</strong> que ningún modelo genérico cubre con la precisión necesaria.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -8738,6 +8975,197 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </ul>
 <blockquote>
 <p>Esta técnica se implementa con LangChain <code>ParentDocumentRetriever</code>. La vemos en detalle en Clase 4 si hace falta para el TP Integrador.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-graph-multihop">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Graph-RAG-y-Multi-Hop-RAG-%E2%80%94-m%C3%A1s-all%C3%A1-del-top-k">Graph RAG y Multi-Hop RAG — más allá del top-k<a class="anchor-link" href="#Graph-RAG-y-Multi-Hop-RAG-%E2%80%94-m%C3%A1s-all%C3%A1-del-top-k">¶</a></h2><h3 id="Multi-Hop-RAG-%E2%80%94-razonamiento-sobre-varios-documentos">Multi-Hop RAG — razonamiento sobre varios documentos<a class="anchor-link" href="#Multi-Hop-RAG-%E2%80%94-razonamiento-sobre-varios-documentos">¶</a></h3><pre><code>  Query: "Compará cómo evolucionó la ley X en Argentina vs Brasil entre 2020-2025"
+
+  Naive RAG:                       Multi-Hop:
+  ──────────                       ─────────
+  1 embed(query)                   Paso 1: retrieval sobre "ley X Argentina"
+  2 top-5 chunks                   Paso 2: retrieval sobre "ley X Brasil"
+  3 (chunks dispersos              Paso 3: retrieval sobre "evolución 2020-2025"
+     no alcanzan)                  Paso 4: síntesis con todos los chunks
+</code></pre>
+<h3 id="Graph-RAG-%E2%80%94-knowledge-graph-como-%C3%ADndice-(Microsoft,-2024)">Graph RAG — knowledge graph como índice (Microsoft, 2024)<a class="anchor-link" href="#Graph-RAG-%E2%80%94-knowledge-graph-como-%C3%ADndice-(Microsoft,-2024)">¶</a></h3><pre><code>  Documentos                Graph                    Query
+  ─────────                 ─────                    ─────
+  ┌──────────┐  extract    [Persona A] ──trabaja──▶ [Empresa X]
+  │ Doc 1    │ ──con LLM──▶                              │
+  ├──────────┤              [Persona A] ──colaboró──▶ [Persona B]
+  │ Doc 2    │                                              │
+  ├──────────┤              [Empresa X] ──proyecto──▶ [Tema IA]
+  │ Doc 3    │
+  └──────────┘   "¿Quién trabajó con A en X en proyectos de IA?"
+                  → traverse: A → X → proyectos → IA → B
+</code></pre>
+<h3 id="Cu%C3%A1ndo-usarlas">Cuándo usarlas<a class="anchor-link" href="#Cu%C3%A1ndo-usarlas">¶</a></h3><table>
+<thead>
+<tr>
+<th>Técnica</th>
+<th>Caso ideal</th>
+<th>Cuándo NO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Multi-Hop</strong></td>
+<td>Preguntas que combinan info de ≥ 2 fuentes distintas</td>
+<td>Q&amp;A de un solo concepto, lookups simples</td>
+</tr>
+<tr>
+<td><strong>Graph RAG</strong></td>
+<td>Dominios <strong>entidad-céntricos</strong> (legal, biomedicina, investigación) donde las <strong>relaciones</strong> importan tanto como los textos</td>
+<td>Corpus principalmente narrativo o documental</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>📖 <em>Edge, D., et al. (2024). From Local to Global: A Graph RAG Approach to Query-Focused Summarization.</em> <a href="https://arxiv.org/abs/2404.16130">https://arxiv.org/abs/2404.16130</a></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-comparativa">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Naive-vs-Hybrid-vs-Advanced-RAG-%E2%80%94-recap">Naive vs Hybrid vs Advanced RAG — recap<a class="anchor-link" href="#Naive-vs-Hybrid-vs-Advanced-RAG-%E2%80%94-recap">¶</a></h2><table>
+<thead>
+<tr>
+<th>Componente</th>
+<th><strong>Naive</strong></th>
+<th><strong>Hybrid</strong></th>
+<th><strong>Advanced</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Chunking</strong></td>
+<td>Tamaño fijo, sin overlap</td>
+<td>Semántico + overlap</td>
+<td>Jerárquico (parent-child)</td>
+</tr>
+<tr>
+<td><strong>Retrieval</strong></td>
+<td>Solo dense (embeddings)</td>
+<td>Dense + sparse (BM25)</td>
+<td>Multi-hop, graph traversal</td>
+</tr>
+<tr>
+<td><strong>Reranking</strong></td>
+<td>Ninguno</td>
+<td>Cross-encoder</td>
+<td>Cross-encoder + scoring global</td>
+</tr>
+<tr>
+<td><strong>Fusión de fuentes</strong></td>
+<td>No</td>
+<td>Sí (RRF, weighted)</td>
+<td>Múltiples retrievers + voto</td>
+</tr>
+<tr>
+<td><strong>Query enrichment</strong></td>
+<td>No</td>
+<td>Query expansion básica</td>
+<td>HyDE, query rewriting con LLM</td>
+</tr>
+<tr>
+<td><strong>Memoria conversacional</strong></td>
+<td>No</td>
+<td>Parcial</td>
+<td>Completa (multi-turn coherente)</td>
+</tr>
+<tr>
+<td><strong>Costo / Latencia</strong></td>
+<td>🟢 Bajo</td>
+<td>🟡 Medio</td>
+<td>🔴 Alto</td>
+</tr>
+<tr>
+<td><strong>Cuándo elegirlo</strong></td>
+<td>Prototipo, corpus chico</td>
+<td>Producto en serio</td>
+<td>Dominios complejos (legal, médico)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Regla de oro:</strong> empezá <em>siempre</em> por Naive. Subí complejidad sólo cuando una métrica concreta (faithfulness, recall@k, latencia) lo justifique. El bloque 5 te enseña cómo medir.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-troubleshooting">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Problemas-comunes-en-RAG-%E2%80%94-gu%C3%ADa-de-troubleshooting">Problemas comunes en RAG — guía de troubleshooting<a class="anchor-link" href="#Problemas-comunes-en-RAG-%E2%80%94-gu%C3%ADa-de-troubleshooting">¶</a></h2><table>
+<thead>
+<tr>
+<th>Síntoma observable</th>
+<th>Causa probable</th>
+<th>Mitigación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Top-k trae chunks <strong>irrelevantes</strong></td>
+<td>Embedding model mal elegido; distribución de queries ≠ corpus</td>
+<td>Hybrid search (BM25 + dense), reranking con cross-encoder</td>
+</tr>
+<tr>
+<td>Respuestas que <strong>ignoran</strong> los chunks</td>
+<td>Prompt débil, alucinación del LLM</td>
+<td>Faithfulness eval, prompt con "basate SOLO en…", structured output</td>
+</tr>
+<tr>
+<td><strong>Recall bajo</strong> — falta info que sí existe</td>
+<td>Chunks muy chicos; embedding sub-óptimo; falta query rewriting</td>
+<td>Parent-child chunks, HyDE, query expansion</td>
+</tr>
+<tr>
+<td><strong>Latencia inaceptable</strong></td>
+<td>Reranking sobre demasiados candidatos; embeddings no cacheados</td>
+<td>Reranking sólo top-20; cache de queries frecuentes; embedding quantization</td>
+</tr>
+<tr>
+<td><strong>Costo alto</strong></td>
+<td>Sin caching; embedding model caro; sobre-recuperación</td>
+<td>Semantic cache; modelos OSS para embeddings; ajustar <code>k</code></td>
+</tr>
+<tr>
+<td><strong>Datos desactualizados</strong></td>
+<td>Re-indexación manual; sin pipeline de ingesta</td>
+<td>Pipeline incremental con CDC; versionar chunks; alerta de staleness</td>
+</tr>
+<tr>
+<td><strong>Multi-documento falla</strong></td>
+<td>Naive retrieval no enlaza chunks disjuntos</td>
+<td>Multi-hop retrieval, graph RAG, agentic retrieval</td>
+</tr>
+<tr>
+<td><strong>Vocabulario de dominio</strong> mal entendido</td>
+<td>Embedding genérico no captura jerga técnica</td>
+<td>Fine-tuned embeddings (BGE, GTE); glosario de términos; query rewriting</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Estos son <strong>diagnósticos</strong>, no recetas. Cada caso requiere medir si la mitigación realmente mueve la métrica (B5).</p>
 </blockquote>
 </div>
 </div>
