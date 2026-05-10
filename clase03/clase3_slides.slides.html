@@ -7488,6 +7488,61 @@ main {
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Pendiente de Clase 2 que cerramos hoy:</strong> evaluación y monitoreo de LLMs. Vuelve como Bloque 5, profundizado y con práctica end-to-end con Arize AX.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=recorrido">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Recorrido-de-la-clase">Recorrido de la clase<a class="anchor-link" href="#Recorrido-de-la-clase">¶</a></h2><table>
+<thead>
+<tr>
+<th>Bloque</th>
+<th>Tema</th>
+<th>Tiempo aprox.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B1</strong></td>
+<td>¿Por qué RAG?</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td><strong>B2</strong></td>
+<td>Pipeline RAG paso a paso</td>
+<td>25 min</td>
+</tr>
+<tr>
+<td><strong>B3</strong></td>
+<td>Búsqueda híbrida (BM25 + semántica)</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td><strong>B4</strong></td>
+<td>RAG avanzado (Reranking, HyDE, parent-child)</td>
+<td>20 min</td>
+</tr>
+<tr>
+<td>☕</td>
+<td><em>break</em></td>
+<td>10 min</td>
+</tr>
+<tr>
+<td><strong>B5</strong></td>
+<td>Evaluación, monitoreo y benchmarks (teoría + práctica con Arize)</td>
+<td>~100 min</td>
+</tr>
+</tbody>
+</table>
+<p>Vamos a <strong>construir el RAG primero</strong> (B1–B4) y después dedicamos la mitad larga a <strong>medir y operarlo en producción</strong> (B5). El bloque 5 cierra con una práctica end-to-end con Arize AX sobre un chatbot Q&amp;A que vamos a instrumentar entre todos.</p>
 </div>
 </div>
 </div>
@@ -7498,7 +7553,11 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%E2%9A%99%EF%B8%8F-Setup-%E2%80%94-ejecutar-antes-de-arrancar">⚙️ Setup — ejecutar antes de arrancar<a class="anchor-link" href="#%E2%9A%99%EF%B8%8F-Setup-%E2%80%94-ejecutar-antes-de-arrancar">¶</a></h2><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>sentence-transformers<span class="w"> </span>chromadb<span class="w"> </span>rank_bm25<span class="w"> </span>groq
+<h2 id="%E2%9A%99%EF%B8%8F-Setup-%E2%80%94-ejecutar-antes-de-arrancar">⚙️ Setup — ejecutar antes de arrancar<a class="anchor-link" href="#%E2%9A%99%EF%B8%8F-Setup-%E2%80%94-ejecutar-antes-de-arrancar">¶</a></h2><div class="highlight"><pre><span></span><span class="c1"># Para los bloques 1-4 (RAG):</span>
+pip<span class="w"> </span>install<span class="w"> </span>sentence-transformers<span class="w"> </span>chromadb<span class="w"> </span>rank_bm25<span class="w"> </span>groq
+
+<span class="c1"># Para la práctica del bloque 5 (eval/monitoreo):</span>
+pip<span class="w"> </span>install<span class="w"> </span>arize<span class="w"> </span>arize-otel<span class="w"> </span>openinference-instrumentation-openai
 </pre></div>
 <p><strong>Lo que usamos hoy:</strong></p>
 <ul>
@@ -7506,7 +7565,8 @@ main {
 <li><code>chromadb</code> — vector store in-memory</li>
 <li><code>rank_bm25</code> — búsqueda léxica</li>
 <li><code>groq</code> — API LLM (free tier, rápido)</li>
-<li><code>llamar_llm()</code> — wrapper de Clase 2 (ahora default Groq)</li>
+<li><code>llamar_llm()</code> — wrapper de Clase 2 (default Groq)</li>
+<li><code>arize</code> + <code>arize-otel</code> + <code>openinference</code> — instrumentación y dashboards (sólo para la práctica de B5; cuenta gratuita en <a href="https://app.arize.com/">https://app.arize.com/</a>)</li>
 </ul>
 </div>
 </div>
@@ -8683,251 +8743,1298 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-b6-section">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-5">Bloque 5<a class="anchor-link" href="#Bloque-5">¶</a></h1><h2 id="Evals-y-monitoreo:-del-prompt-al-producto">Evals y monitoreo: del prompt al producto<a class="anchor-link" href="#Evals-y-monitoreo:-del-prompt-al-producto">¶</a></h2><hr/>
-<p><em>El prompt ya está bien diseñado. Ahora viene producción.</em></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-evals-offline-online">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Evals-offline-vs-online">Evals offline vs online<a class="anchor-link" href="#Evals-offline-vs-online">¶</a></h2><p><img alt="Dos paneles lado a lado: eval offline (antes del deploy, dataset estático, en CI) vs eval online (en producción, tráfico real, continuo)" class="slide-figure" src="figures/evals_offline_online.svg" style="width: 86%;"/></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-monitoring">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Qu%C3%A9-loggear-en-producci%C3%B3n">Qué loggear en producción<a class="anchor-link" href="#Qu%C3%A9-loggear-en-producci%C3%B3n">¶</a></h2><p><img alt="Pipeline App → LLM → Logger middleware → Storage → Dashboard. Abajo, los 4 datos clave: input completo, output completo, latencia/costo, señal de calidad" class="slide-figure" src="figures/monitoring_pipeline.svg" style="width: 86%;"/></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-drift">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Drift:-lo-que-cambia-con-el-tiempo">Drift: lo que cambia con el tiempo<a class="anchor-link" href="#Drift:-lo-que-cambia-con-el-tiempo">¶</a></h2><p><img alt="Cuatro tipos de drift: input drift, quality drift, cost drift, abuse drift. Abajo, un mini-dashboard mostrando accuracy bajando y costo subiendo a lo largo de 3 meses, con alerta disparada" class="slide-figure" src="figures/drift_detection.svg" style="width: 86%;"/></p>
-<blockquote>
-<p>Tu sistema fue bueno el día del deploy. Tres meses después, no necesariamente.</p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-tools-landscape">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Herramientas-(mayo-2026)">Herramientas (mayo 2026)<a class="anchor-link" href="#Herramientas-(mayo-2026)">¶</a></h2><p><img alt="Tres columnas: evals offline (Promptfoo, Braintrust, DeepEval, OpenAI Evals, Inspect AI), evals de RAG (Ragas), monitoreo (Langfuse, LangSmith, Arize Phoenix, Helicone, TruLens). Una caja con 'por dónde empezar' según el caso" class="slide-figure" src="figures/tools_landscape.svg" style="width: 86%;"/></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=slide-feedback-loop">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="El-loop-completo:-prompt-%E2%86%92-producto-%E2%86%92-mejora">El loop completo: prompt → producto → mejora<a class="anchor-link" href="#El-loop-completo:-prompt-%E2%86%92-producto-%E2%86%92-mejora">¶</a></h2><p><img alt="Ciclo de 6 nodos: diseño → eval offline → producción → eval online → análisis → feedback → vuelve al diseño. En el centro: 'PROMPT LIFECYCLE'" class="slide-figure" src="figures/feedback_loop.svg" style="width: 86%;"/></p>
-<blockquote>
-<p>Igual que el código, el prompt nunca está "terminado". Evoluciona con feedback de la realidad.</p>
-</blockquote>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-header">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Bloque-6">Bloque 6<a class="anchor-link" href="#Bloque-6">¶</a></h1><h2 id="Evaluaci%C3%B3n-de-RAG">Evaluación de RAG<a class="anchor-link" href="#Evaluaci%C3%B3n-de-RAG">¶</a></h2><hr/>
-<p><em>Si no podés medir, no podés mejorar.</em></p>
+<h1 id="Bloque-5">Bloque 5<a class="anchor-link" href="#Bloque-5">¶</a></h1><h2 id="Evaluaci%C3%B3n,-monitoreo-y-benchmarks">Evaluación, monitoreo y benchmarks<a class="anchor-link" href="#Evaluaci%C3%B3n,-monitoreo-y-benchmarks">¶</a></h2><hr/>
+<p><em>Del prompt al producto: cómo saber si tu LLM funciona bien — y cómo seguir sabiéndolo.</em></p>
+<pre><code>  Fase 0          Fase 1          Fase 2        Fase 3         Fase 4
+  ──────          ──────          ──────        ──────         ──────
+  Fundamentos  →  Pre-deploy  →   Deploy   →    Producción  →  Cierre
+  (qué medir,     (eval offline)  (release      (monitoring,   (loop
+   con qué)                        patterns)     drift)         continuo)
+</code></pre>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-por-que-evaluar">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-fund-1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%C2%BFPor-qu%C3%A9-necesitamos-m%C3%A9tricas-espec%C3%ADficas?">¿Por qué necesitamos métricas específicas?<a class="anchor-link" href="#%C2%BFPor-qu%C3%A9-necesitamos-m%C3%A9tricas-espec%C3%ADficas?">¶</a></h2><p>Un RAG puede fallar en <strong>dos puntos distintos</strong>:</p>
-<pre><code>  Query → Retrieval → Chunks → LLM → Respuesta
-              │                  │
-              ▼                  ▼
-         ¿Trajo los chunks   ¿Usó bien los
-          correctos?          chunks para
-                              responder?
-</code></pre>
-<table>
+<h2 id="%C2%BFPor-qu%C3%A9-evaluar-LLMs-es-distinto?">¿Por qué evaluar LLMs es distinto?<a class="anchor-link" href="#%C2%BFPor-qu%C3%A9-evaluar-LLMs-es-distinto?">¶</a></h2><table>
 <thead>
 <tr>
-<th>El retrieval es...</th>
-<th>La generación es...</th>
-<th>Resultado</th>
+<th>ML clásico</th>
+<th>LLMs</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Bueno ✓</td>
-<td>Buena ✓</td>
-<td>Respuesta correcta</td>
+<td>Output discreto (clase, número)</td>
+<td>Output texto libre, espacio infinito</td>
 </tr>
 <tr>
-<td>Bueno ✓</td>
-<td>Mala ✗</td>
-<td>Tiene la info pero la ignora o distorsiona</td>
+<td>Accuracy / F1 / RMSE bien definidos</td>
+<td>"¿Está bien la respuesta?" es subjetivo</td>
 </tr>
 <tr>
-<td>Malo ✗</td>
-<td>Buena ✓</td>
-<td>Respuesta coherente pero sobre chunks incorrectos</td>
+<td>Test set con label único</td>
+<td>Múltiples respuestas pueden ser correctas</td>
 </tr>
 <tr>
-<td>Malo ✗</td>
-<td>Mala ✗</td>
-<td>Desastre total</td>
+<td>Determinístico para mismo input</td>
+<td>Estocástico (<code>temperature &gt; 0</code>)</td>
+</tr>
+<tr>
+<td>Falla → respuesta incorrecta</td>
+<td>Falla → puede <strong>inventar con confianza</strong> (alucinar)</td>
 </tr>
 </tbody>
 </table>
-<p>Necesitamos evaluar <strong>retrieval</strong> y <strong>generación</strong> por separado.</p>
+<blockquote>
+<p><strong>El problema central:</strong> no hay un "ground truth" único ni una métrica universal. Hay que <strong>diseñar el protocolo de eval a medida</strong> del producto.</p>
+</blockquote>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-ragas-metricas">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-fund-2">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="RAGAS-%E2%80%94-framework-de-evaluaci%C3%B3n-de-RAG">RAGAS — framework de evaluación de RAG<a class="anchor-link" href="#RAGAS-%E2%80%94-framework-de-evaluaci%C3%B3n-de-RAG">¶</a></h2><h3 id="4-m%C3%A9tricas-complementarias">4 métricas complementarias<a class="anchor-link" href="#4-m%C3%A9tricas-complementarias">¶</a></h3><table>
+<h2 id="Reference-based-vs-reference-free">Reference-based vs reference-free<a class="anchor-link" href="#Reference-based-vs-reference-free">¶</a></h2><table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Métrica</th>
+<th>Necesita ground truth</th>
+<th>Cuándo sirve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reference-based léxico</strong></td>
+<td>BLEU, ROUGE, METEOR</td>
+<td>Sí (referencia exacta)</td>
+<td>Traducción / resumen con referencia humana fija</td>
+</tr>
+<tr>
+<td><strong>Reference-based semántico</strong></td>
+<td>BERTScore, embedding similarity</td>
+<td>Sí (semántica)</td>
+<td>Cuando hay paráfrasis válidas</td>
+</tr>
+<tr>
+<td><strong>Reference-free determinista</strong></td>
+<td>Exact match, regex, parseo JSON</td>
+<td>No</td>
+<td>Outputs estructurados (clasificación, extracción)</td>
+</tr>
+<tr>
+<td><strong>Reference-free LLM-as-judge</strong></td>
+<td>Faithfulness, relevance, quality (0-5)</td>
+<td>No</td>
+<td>Respuestas abiertas (chat, RAG, creativo)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Para LLMs en producción <strong>reference-free domina</strong>: no podés tener referencia humana para cada query real. Pero <strong>reference-based sigue siendo útil offline</strong> para regresión sobre golden datasets.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-fund-3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Detecci%C3%B3n-de-alucinaciones-(sin-ground-truth)">Detección de alucinaciones (sin ground truth)<a class="anchor-link" href="#Detecci%C3%B3n-de-alucinaciones-(sin-ground-truth)">¶</a></h2><table>
+<thead>
+<tr>
+<th>Técnica</th>
+<th>Idea</th>
+<th>Pros</th>
+<th>Contras</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SelfCheckGPT</strong></td>
+<td>Generar N respuestas con <code>temperature&gt;0</code> y medir consistencia</td>
+<td>No necesita referencia</td>
+<td>Caro (N veces el costo)</td>
+</tr>
+<tr>
+<td><strong>Citation-based</strong></td>
+<td>Forzar al LLM a citar fragmentos del contexto y verificar coverage</td>
+<td>Auditable, explicable</td>
+<td>Sólo aplica si hay contexto (RAG)</td>
+</tr>
+<tr>
+<td><strong>Faithfulness via NLI</strong></td>
+<td>Pedirle a un modelo NLI/LLM-juez si cada afirmación está soportada</td>
+<td>Granularidad por afirmación</td>
+<td>Depende del juez</td>
+</tr>
+<tr>
+<td><strong>Token-level uncertainty</strong></td>
+<td>Probabilidades del logits (entropy, perplejidad)</td>
+<td>Gratis si tenés acceso</td>
+<td>Sólo modelos open / API que lo expongan</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Para RAG, <strong>citation-based + faithfulness</strong> son la base. Para chatbots sin contexto, <strong>SelfCheckGPT</strong> o un <strong>juez con web search</strong> son las opciones.</p>
+</blockquote>
+<blockquote>
+<p>📖 <em>Manakul et al. (2023). SelfCheckGPT.</em> <a href="https://arxiv.org/abs/2303.08896">https://arxiv.org/abs/2303.08896</a></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-fund-4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Tracing-y-observability-%E2%80%94-fundamentos">Tracing y observability — fundamentos<a class="anchor-link" href="#Tracing-y-observability-%E2%80%94-fundamentos">¶</a></h2><pre><code>  Trace = una "request" end-to-end
+  ┌──────────────────────────────────────────────────┐
+  │  user_query → retrieve → rerank → generate       │
+  │                                                   │
+  │  Span 1: retrieve     [12 ms]                     │
+  │  Span 2: rerank       [340 ms]                    │
+  │  Span 3: generate     [1850 ms, 432 tokens, $0.02]│
+  │                                                   │
+  │  Total: 2.2s · $0.02 · trace_id = abc-123         │
+  └──────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Conceptos clave:</strong></p>
+<ul>
+<li><strong>Span</strong> — operación atómica con start/end, atributos, eventos.</li>
+<li><strong>Trace</strong> — DAG de spans de una misma request (<code>trace_id</code> los une).</li>
+<li><strong>Context propagation</strong> — cómo el <code>trace_id</code> viaja entre componentes (HTTP headers, runtime context).</li>
+<li><strong>Attributes</strong> — input, output, latency, tokens, costo, model, prompt_version…</li>
+<li><strong>OpenTelemetry (OTel)</strong> — el estándar abierto. Arize, Langfuse, Phoenix lo soportan.</li>
+</ul>
+<blockquote>
+<p>Sin tracing <strong>no hay debugging post-mortem</strong>. En producción, "¿por qué esta respuesta fue mala?" sólo se contesta con un trace.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="El-loop-offline-%E2%80%94-dataset-%E2%86%92-eval-%E2%86%92-score">El loop offline — <code>dataset → eval → score</code><a class="anchor-link" href="#El-loop-offline-%E2%80%94-dataset-%E2%86%92-eval-%E2%86%92-score">¶</a></h2><p><img alt="Eval offline (pre-deploy con dataset estático en CI) vs eval online (en producción con tráfico real)" class="slide-figure" src="figures/evals_offline_online.svg" style="width: 86%;"/></p>
+<pre><code>  Eval offline (pre-deploy)
+  ─────────────────────────
+  golden_dataset.jsonl  ──┐
+                          ├──▶ correr(app)  ──▶  scorer  ──▶  reporte
+  app(prompt, modelo) ────┘                       (LLM-judge,
+                                                   exact-match,
+                                                   RAGAS…)
+
+  → bloquea el merge si el score baja umbral X
+</code></pre>
+<p><strong>Outputs típicos:</strong></p>
+<ul>
+<li>Tabla por ejemplo (input, output, score, reasoning)</li>
+<li>Métrica agregada (avg, p50/p95)</li>
+<li>Diff vs versión anterior</li>
+<li><strong>Verde/Rojo</strong> para CI</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Dise%C3%B1o-de-eval-datasets-%E2%80%94-parte-1:-golden-manual">Diseño de eval datasets — parte 1: golden manual<a class="anchor-link" href="#Dise%C3%B1o-de-eval-datasets-%E2%80%94-parte-1:-golden-manual">¶</a></h2><p><strong>Un golden dataset bien hecho cuesta más que el prototipo.</strong> Y vale más.</p>
+<p><strong>Criterios de selección:</strong></p>
+<ul>
+<li><strong>Cobertura</strong> — todas las intenciones reales (no sólo las "fáciles").</li>
+<li><strong>Estratificación</strong> — proporción real por categoría/dificultad/idioma.</li>
+<li><strong>Edge cases</strong> — preguntas ambiguas, fuera de dominio, adversariales.</li>
+<li><strong>Diversidad léxica</strong> — paráfrasis, errores tipográficos, variaciones formales/informales.</li>
+<li><strong>Frescura</strong> — datos no contaminados con el training del modelo.</li>
+</ul>
+<p><strong>Tamaño mínimo (regla de campo):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Etapa</th>
+<th>Tamaño</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Smoke test (pre-PR)</td>
+<td>20-50 ejemplos</td>
+</tr>
+<tr>
+<td>Regresión semanal</td>
+<td>200-500</td>
+</tr>
+<tr>
+<td>Acceptance pre-release</td>
+<td>500-2000</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>No empezar con 5000. Empezar con 30 <em>bien elegidos</em>, expandir cuando duele.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Dise%C3%B1o-de-eval-datasets-%E2%80%94-parte-2:-sint%C3%A9tico-+-rotaci%C3%B3n">Diseño de eval datasets — parte 2: sintético + rotación<a class="anchor-link" href="#Dise%C3%B1o-de-eval-datasets-%E2%80%94-parte-2:-sint%C3%A9tico-+-rotaci%C3%B3n">¶</a></h2><p><strong>Generación sintética con LLMs</strong> (cuando manual no escala):</p>
+<div class="highlight"><pre><span></span><span class="n">prompt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">'''Generá 10 preguntas variadas sobre el dominio "</span><span class="si">{</span><span class="n">tema</span><span class="si">}</span><span class="s1">".</span>
+<span class="s1">Reglas: 3 fáciles, 4 medias, 3 difíciles. 2 de las difíciles deben ser</span>
+<span class="s1">ambiguas o fuera de dominio. Devolvé JSON: [</span><span class="se">{{</span><span class="s1">q, gold, dificultad</span><span class="se">}}</span><span class="s1">].'''</span>
+</pre></div>
+<p><strong>Riesgos del sintético:</strong></p>
+<ul>
+<li><strong>Sesgo del generador</strong> — si lo arma GPT-4, evals con GPT-4 quedan fáciles.</li>
+<li><strong>Distribución artificial</strong> — no refleja queries reales.</li>
+<li><strong>Contaminación</strong> — el modelo a evaluar puede haber visto outputs similares.</li>
+</ul>
+<p><strong>Mitigación:</strong> mezclar <strong>30% golden manual + 70% sintético</strong>, validar con humanos por muestreo, <strong>rotar</strong> el dataset cada N iteraciones para evitar overfitting al benchmark interno.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="LLM-as-judge-%E2%80%94-dise%C3%B1o-del-juez">LLM-as-judge — diseño del juez<a class="anchor-link" href="#LLM-as-judge-%E2%80%94-dise%C3%B1o-del-juez">¶</a></h2><p><strong>Estructura mínima del prompt:</strong></p>
+<pre><code>SYSTEM:
+  Sos un evaluador experto. Tu única tarea es scorear la respuesta
+  contra la rúbrica y devolver JSON estricto.
+
+USER:
+  [Pregunta]: ...
+  [Respuesta a evaluar]: ...
+  [Contexto / referencia ideal (opcional)]: ...
+
+  Rúbrica:
+  - Faithfulness (0-5): ¿afirmaciones soportadas por el contexto?
+  - Relevance (0-5): ¿responde la pregunta?
+  - Completeness (0-5): ¿cubre los aspectos pedidos?
+
+  Devolvé JSON: {scores: {...}, reasoning: "..."}
+</code></pre>
+<p><strong>Tips de diseño:</strong></p>
+<ul>
+<li><strong>Rúbrica explícita</strong> &gt; "evalualo bien". Cada dimensión por separado.</li>
+<li><strong>Output estructurado</strong> (JSON) — parseable, audit-friendly.</li>
+<li><strong>Reasoning antes que score</strong> (CoT) — calibra mejor.</li>
+<li><strong>Modelo del juez ≠ modelo evaluado</strong> cuando se pueda (evita auto-bias).</li>
+<li><strong>Few-shot</strong> del juez con casos límite ya scoreados a mano.</li>
+</ul>
+<blockquote>
+<p>📖 <em>Zheng et al. (2023). Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> <a href="https://arxiv.org/abs/2306.05685">https://arxiv.org/abs/2306.05685</a></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="LLM-as-judge-%E2%80%94-calibraci%C3%B3n-y-sesgos">LLM-as-judge — calibración y sesgos<a class="anchor-link" href="#LLM-as-judge-%E2%80%94-calibraci%C3%B3n-y-sesgos">¶</a></h2><p><strong>Sesgos conocidos del juez:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Sesgo</th>
+<th>Qué hace</th>
+<th>Mitigación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Position bias</strong></td>
+<td>Prefiere la primera (o segunda) respuesta en pairwise</td>
+<td>Aleatorizar orden, evaluar ambas posiciones y promediar</td>
+</tr>
+<tr>
+<td><strong>Length bias</strong></td>
+<td>Prefiere respuestas largas</td>
+<td>Penalizar length, o normalizar por tokens</td>
+</tr>
+<tr>
+<td><strong>Self-preference</strong></td>
+<td>Si el juez es GPT-4, prefiere outputs de GPT-4</td>
+<td>Cross-model evaluation (3+ jueces)</td>
+</tr>
+<tr>
+<td><strong>Authority bias</strong></td>
+<td>Prefiere respuestas con tono formal/seguro</td>
+<td>Rúbrica con criterio de "evidencia, no certeza"</td>
+</tr>
+<tr>
+<td><strong>Verbosity = quality</strong></td>
+<td>Más palabras = mejor para el juez</td>
+<td>Métricas separadas de calidad y concisión</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Calibración contra humanos:</strong></p>
+<ol>
+<li>Tomar 50-100 ejemplos.</li>
+<li>Scorear con humanos (idealmente 2-3 anotadores → IAA con Cohen's κ).</li>
+<li>Scorear con el juez.</li>
+<li>Reportar correlación (Spearman / Pearson). <strong>Aceptable si κ_humano-juez &gt; 0.5.</strong></li>
+</ol>
+<p><strong>Pairwise vs pointwise:</strong></p>
+<ul>
+<li><strong>Pointwise</strong> (score 0-5 por respuesta): más informativo, menos confiable.</li>
+<li><strong>Pairwise</strong> ("A es mejor que B"): más robusto, escalable a leaderboards (Chatbot Arena).</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-6">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="RAGAS-%E2%80%94-m%C3%A9tricas-y-f%C3%B3rmulas">RAGAS — métricas y fórmulas<a class="anchor-link" href="#RAGAS-%E2%80%94-m%C3%A9tricas-y-f%C3%B3rmulas">¶</a></h2><pre><code>  Pipeline:  Query → Retrieval → Chunks → LLM → Respuesta
+                       │                    │
+              ┌────────┴────────┐  ┌────────┴────────┐
+              ▼                 ▼  ▼                 ▼
+         Context Precision   Context Recall  Faithfulness  Answer Relevance
+         "¿chunks         "¿están todos    "¿afirmaciones   "¿la respuesta
+          relevantes        los chunks      soportadas?"     responde?"
+          al principio?"    necesarios?"
+</code></pre>
+<table>
 <thead>
 <tr>
 <th>Métrica</th>
-<th>Qué evalúa</th>
-<th>Pregunta clave</th>
+<th>Fórmula simplificada</th>
 <th>Rango</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>Faithfulness</strong></td>
-<td>Generación</td>
-<td>¿La respuesta está soportada por los chunks?</td>
+<td><code># afirmaciones soportadas / # afirmaciones totales</code></td>
 <td>0-1</td>
 </tr>
 <tr>
 <td><strong>Answer Relevance</strong></td>
-<td>Generación</td>
-<td>¿La respuesta responde la pregunta?</td>
+<td>Similitud entre query original y queries reconstruidas desde la respuesta</td>
 <td>0-1</td>
 </tr>
 <tr>
 <td><strong>Context Precision</strong></td>
-<td>Retrieval</td>
-<td>¿Los chunks relevantes están primeros?</td>
+<td><code>mean(precision@k)</code> ponderada por posición de chunks relevantes</td>
 <td>0-1</td>
 </tr>
 <tr>
 <td><strong>Context Recall</strong></td>
-<td>Retrieval</td>
-<td>¿Se recuperaron todos los chunks necesarios?</td>
+<td><code># afirmaciones del gold cubiertas por chunks / # afirmaciones del gold</code></td>
 <td>0-1</td>
 </tr>
 </tbody>
 </table>
-<pre><code>  Faithfulness ejemplo:
-  ─────────────────────
-  Respuesta: "Los modelos se despliegan como microservicios con Docker."
-  Chunk dice: "Los modelos se despliegan como microservicios."
-  Chunk NO dice nada de Docker.
-  → Faithfulness = 1/2 = 0.5  (una afirmación verificable, una no)
-</code></pre>
-<pre><code>  Answer Relevance ejemplo:
-  ─────────────────────────
-  Query: "¿Qué métrica de distancia se usa para texto?"
-  Respuesta A: "Para texto se usa coseno."              → relevance alta
-  Respuesta B: "ChromaDB es una base vectorial."        → relevance baja
-</code></pre>
+<p><strong>Ejemplo numérico (Faithfulness):</strong></p>
+<ul>
+<li>Respuesta: "Los modelos se despliegan como microservicios con Docker."</li>
+<li>2 afirmaciones: ["se despliegan como microservicios", "se usan con Docker"].</li>
+<li>Chunks dicen sólo lo primero. → <code>Faithfulness = 1/2 = 0.5</code>.</li>
+</ul>
 <blockquote>
-<p>RAGAS usa un LLM como juez. Esto tiene su propia limitación: el juez también puede equivocarse.</p>
-</blockquote>
-<blockquote>
-<p>📖 <em>Es, S., et al. (2023). RAGAS: Automated Evaluation of Retrieval Augmented Generation. EMNLP 2023. <a href="https://arxiv.org/abs/2309.15217">https://arxiv.org/abs/2309.15217</a></em></p>
+<p>📖 <em>Es et al. (2023). RAGAS.</em> <a href="https://arxiv.org/abs/2309.15217">https://arxiv.org/abs/2309.15217</a></p>
 </blockquote>
 </div>
 </div>
 </div>
-</div></section><section><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b5-bonus-ragas-demo">
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-python"><pre><span></span><span class="c1"># 🔽 Bonus: evaluación manual inspirada en RAGAS ─────────────────</span>
-<span class="c1"># (RAGAS completo requiere pip install ragas — acá lo mostramos conceptualmente)</span>
-
-<span class="k">def</span><span class="w"> </span><span class="nf">evaluar_faithfulness_manual</span><span class="p">(</span><span class="n">pregunta</span><span class="p">,</span> <span class="n">respuesta</span><span class="p">,</span> <span class="n">chunks</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Usa el LLM como juez para evaluar faithfulness."""</span>
-    <span class="n">chunks_text</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">] </span><span class="si">{</span><span class="n">c</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">chunks</span><span class="p">)])</span>
-    <span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span>
-         <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"""Sos un evaluador de calidad de respuestas RAG.</span>
-<span class="s2">Tu tarea: verificar si CADA afirmación de la respuesta está soportada por los chunks.</span>
-
-<span class="s2">Respondé SOLO con un JSON:</span>
-<span class="s2">{</span>
-<span class="s2">  "afirmaciones": ["afirmación 1", "afirmación 2", ...],</span>
-<span class="s2">  "soportadas": [true, false, ...],</span>
-<span class="s2">  "faithfulness": 0.XX</span>
-<span class="s2">}"""</span><span class="p">},</span>
-        <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span>
-         <span class="s2">"content"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Chunks:</span><span class="se">\n</span><span class="si">{</span><span class="n">chunks_text</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Respuesta a evaluar:</span><span class="se">\n</span><span class="si">{</span><span class="n">respuesta</span><span class="si">}</span><span class="s2">"</span><span class="p">}</span>
-    <span class="p">]</span>
-    <span class="k">return</span> <span class="n">llamar_llm</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">temperature</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
-
-<span class="c1"># ── Ejecutar una evaluación ─────────────────────────────────────</span>
-<span class="n">pregunta_eval</span> <span class="o">=</span> <span class="s2">"¿Cómo se despliegan modelos de IA en producción?"</span>
-<span class="n">respuesta_rag</span><span class="p">,</span> <span class="n">results_eval</span> <span class="o">=</span> <span class="n">rag_query</span><span class="p">(</span><span class="n">pregunta_eval</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="n">chunks_usados</span> <span class="o">=</span> <span class="n">results_eval</span><span class="p">[</span><span class="s1">'documents'</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'Pregunta: </span><span class="si">{</span><span class="n">pregunta_eval</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Respuesta RAG: </span><span class="si">{</span><span class="n">respuesta_rag</span><span class="si">}</span><span class="s1">'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">── Evaluación de Faithfulness: ──'</span><span class="p">)</span>
-<span class="n">evaluacion</span> <span class="o">=</span> <span class="n">evaluar_faithfulness_manual</span><span class="p">(</span><span class="n">pregunta_eval</span><span class="p">,</span> <span class="n">respuesta_rag</span><span class="p">,</span> <span class="n">chunks_usados</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">evaluacion</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'</span><span class="se">\n</span><span class="s1">💡 En producción se usa RAGAS completo con datasets de evaluación.'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   pip install ragas → ragas.evaluate(dataset)'</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">'   Docs: https://docs.ragas.io/'</span><span class="p">)</span>
-</pre></div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="RAGAS-%E2%80%94-casos-l%C3%ADmite-y-cu%C3%A1ndo-falla">RAGAS — casos límite y cuándo falla<a class="anchor-link" href="#RAGAS-%E2%80%94-casos-l%C3%ADmite-y-cu%C3%A1ndo-falla">¶</a></h2><p><strong>Cuándo RAGAS no es suficiente:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Problema</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pregunta multi-hop ("X y por qué")</td>
+<td>Recall del retrieval baja → métrica engañosa</td>
+<td>Eval por sub-pregunta, o usar BEIR</td>
+</tr>
+<tr>
+<td>Respuestas creativas o subjetivas</td>
+<td>Faithfulness se vuelve meaningless</td>
+<td>Reemplazar por LLM-as-judge custom</td>
+</tr>
+<tr>
+<td>Idiomas no-inglés</td>
+<td>El juez (GPT-4) puede tener performance dispar</td>
+<td>Validar con anotadores nativos</td>
+</tr>
+<tr>
+<td>Preguntas que NO deberían responderse</td>
+<td>RAGAS no penaliza "alucinar abstención"</td>
+<td>Agregar métrica de "knew_to_refuse"</td>
+</tr>
+<tr>
+<td>Modelo del juez muy parecido al evaluado</td>
+<td>Auto-preference bias</td>
+<td>Rotar jueces, o usar humanos por muestreo</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Costo oculto:</strong> RAGAS llama al LLM <strong>varias veces por ejemplo</strong> (faithfulness solo: 1 call por afirmación). En 1000 ejemplos × 5 afirmaciones promedio = <strong>5000 calls al juez</strong>. Presupuestar.</p>
+<blockquote>
+<p>RAGAS es excelente como <strong>señal</strong>. No es ground truth.</p>
+</blockquote>
 </div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Safety-evals-%E2%80%94-jailbreak,-toxicity,-bias">Safety evals — jailbreak, toxicity, bias<a class="anchor-link" href="#Safety-evals-%E2%80%94-jailbreak,-toxicity,-bias">¶</a></h2><p><strong>Más allá de calidad: ¿es seguro deployear?</strong></p>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Qué se mide</th>
+<th>Datasets / herramientas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jailbreak resistance</strong></td>
+<td>¿El modelo cede ante prompts adversariales?</td>
+<td>AdvBench, HarmBench, JailbreakBench</td>
+</tr>
+<tr>
+<td><strong>Toxicity</strong></td>
+<td>¿Genera contenido tóxico, ofensivo, hateful?</td>
+<td>Perspective API, RealToxicityPrompts, ToxiGen</td>
+</tr>
+<tr>
+<td><strong>Bias (demográfico)</strong></td>
+<td>¿Trata distinto por género/raza/edad?</td>
+<td>BBQ, BOLD, StereoSet, CrowS-Pairs</td>
+</tr>
+<tr>
+<td><strong>PII leakage</strong></td>
+<td>¿Reproduce datos personales del training?</td>
+<td>Custom canary strings, MEMIT-style probes</td>
+</tr>
+<tr>
+<td><strong>Hallucination factual</strong></td>
+<td>Inventa hechos contraverificables</td>
+<td>TruthfulQA, FActScore, HaluEval</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cuándo es obligatorio:</strong> producto con usuarios externos, dominio regulado (salud, legal, financiero), menores como audiencia, cualquier integración con redes sociales.</p>
+<p><strong>Cuándo es nice-to-have:</strong> prototipos internos, herramientas dev, audiencias técnicas.</p>
+<blockquote>
+<p>No es opcional para producto. Lo que es opcional es <strong>cuán formal</strong> es el proceso.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-9">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Red-teaming-methodology">Red-teaming methodology<a class="anchor-link" href="#Red-teaming-methodology">¶</a></h2><p><strong>Manual red-teaming:</strong></p>
+<ol>
+<li>Reclutar 3-5 adversarios (idealmente fuera del equipo).</li>
+<li>Brief: "rompé el modelo, documentá cada hallazgo".</li>
+<li>Categorizar por severidad (CVSS-style: alto/medio/bajo).</li>
+<li>Iterar: fix → re-test.</li>
+</ol>
+<p><strong>Automated red-teaming (escala):</strong></p>
+<pre><code>  ┌──────────────────┐         ┌──────────────────┐
+  │  Attacker LLM    │ ──────▶ │  Target LLM      │
+  │  (genera        │         │  (el que         │
+  │   prompts        │ ◀────── │   evaluamos)     │
+  │   adversariales) │  refusal │                  │
+  └──────────────────┘  / leak  └──────────────────┘
+           ▲                              │
+           │                              ▼
+           └────── feedback loop ──── judge LLM
+                  (clasifica si      (¿el output viola
+                  hubo bypass)        la policy?)
+</code></pre>
+<p><strong>Frameworks notables:</strong></p>
+<ul>
+<li><strong>PAIR</strong> (Chao et al. 2023) — attacker iterativo</li>
+<li><strong>GPTFuzzer</strong> — fuzzing genético sobre seed prompts</li>
+<li><strong>HarmBench</strong> — pipeline + dataset estandarizado</li>
+</ul>
+<blockquote>
+<p>📖 <em>Chao et al. (2023). Jailbreaking Black Box LLMs in Twenty Queries.</em> <a href="https://arxiv.org/abs/2310.08419">https://arxiv.org/abs/2310.08419</a></p>
+</blockquote>
+<blockquote>
+<p>Output esperado: tabla de <strong>attack success rate</strong> por categoría, con ejemplos de prompts que pasaron.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-10">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Lectura-cr%C3%ADtica-de-benchmarks-p%C3%BAblicos">Lectura crítica de benchmarks públicos<a class="anchor-link" href="#Lectura-cr%C3%ADtica-de-benchmarks-p%C3%BAblicos">¶</a></h2><table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>Mide</th>
+<th>Limitación principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>MMLU</strong></td>
+<td>Conocimiento multitarea (57 dominios)</td>
+<td>Contaminación masiva en modelos 2024+</td>
+</tr>
+<tr>
+<td><strong>GSM8K</strong></td>
+<td>Razonamiento matemático (escolar)</td>
+<td>Ya saturado (&gt;95% en SOTA)</td>
+</tr>
+<tr>
+<td><strong>HumanEval</strong></td>
+<td>Generación de código Python</td>
+<td>164 ejemplos, gameable</td>
+</tr>
+<tr>
+<td><strong>BIG-Bench Hard</strong></td>
+<td>Razonamiento difícil</td>
+<td>Heterogéneo, difícil de interpretar agregado</td>
+</tr>
+<tr>
+<td><strong>MT-Bench</strong></td>
+<td>Conversación multi-turn (LLM-judge)</td>
+<td>Sólo 80 preguntas, sesgo del juez (GPT-4)</td>
+</tr>
+<tr>
+<td><strong>Chatbot Arena</strong></td>
+<td>Preferencia humana pairwise</td>
+<td>Refleja preferencias de la comunidad LMSYS, no usuarios finales</td>
+</tr>
+<tr>
+<td><strong>HELM</strong></td>
+<td>Holistic (acc + fairness + robustness + cost)</td>
+<td>Pesado, costoso de correr</td>
+</tr>
+<tr>
+<td><strong>HumanEval+ / SWE-Bench</strong></td>
+<td>Código real (issues GitHub)</td>
+<td>Contaminación + complejidad de setup</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reglas de oro:</strong></p>
+<ol>
+<li><strong>Un benchmark mide una proxy, no tu producto.</strong> Buen MMLU ≠ buen asistente.</li>
+<li><strong>Sospecha de contamination.</strong> Si salió antes del cutoff del modelo, revisalo.</li>
+<li><strong>Mirá la variance</strong>, no sólo la mean. Diferencias &lt;1pt suelen ser ruido.</li>
+<li><strong>Combiná benchmarks.</strong> Ningún número solo decide.</li>
+</ol>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-11">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Armar-tu-propio-benchmark-de-dominio">Armar tu propio benchmark de dominio<a class="anchor-link" href="#Armar-tu-propio-benchmark-de-dominio">¶</a></h2><p><strong>Protocolo de 5 pasos:</strong></p>
+<pre><code>  1. Definir tarea           → input, output esperado, restricciones
+                               (ej. "clasificar tickets de soporte
+                                en {bug, feature, account, billing}")
+
+  2. Recolectar inputs       → 200-500 reales (anonimizados)
+                               + 50-100 sintéticos (edge cases)
+
+  3. Labelear gold           → 2-3 anotadores, IAA via Cohen's κ
+                               κ &lt; 0.6 → la rúbrica está mal
+
+  4. Elegir métrica          → exact_match (clasificación)
+                               + LLM-judge (calidad explicación)
+                               + custom (compliance, etc.)
+
+  5. Validar reproducibilidad → correr 3 veces, varianza &lt; 2pt
+                               (con seed fijo y temperature=0)
+</code></pre>
+<p><strong>Output entregable:</strong></p>
+<ul>
+<li><code>benchmark_v1.jsonl</code> — el dataset versionado</li>
+<li><code>eval_protocol.md</code> — métricas, modelos, condiciones</li>
+<li><code>baseline_results.md</code> — score de modelos conocidos como referencia</li>
+<li><strong>Versionado en git como cualquier otro asset.</strong></li>
+</ul>
+<blockquote>
+<p>El benchmark <strong>es el contrato</strong> entre el equipo y el producto. Sin él, "mejoramos el modelo" no significa nada.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-pre-12">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Frameworks-de-eval-offline-%E2%80%94-landscape">Frameworks de eval offline — landscape<a class="anchor-link" href="#Frameworks-de-eval-offline-%E2%80%94-landscape">¶</a></h2><table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Sweet spot</th>
+<th>Open Source</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Promptfoo</strong></td>
+<td>A/B de prompts en CLI/CI, regression suites</td>
+<td>Sí (MIT)</td>
+<td>Excelente DX en YAML, integra con CI fácil</td>
+</tr>
+<tr>
+<td><strong>DeepEval</strong></td>
+<td>Pytest-style con métricas built-in (RAGAS-like)</td>
+<td>Sí</td>
+<td>Buena para "test-driven prompts"</td>
+</tr>
+<tr>
+<td><strong>OpenAI Evals</strong></td>
+<td>Estándar de evals declarativos (graders YAML)</td>
+<td>Sí</td>
+<td>Repo grande, comunidad activa</td>
+</tr>
+<tr>
+<td><strong>Inspect AI (UK AISI)</strong></td>
+<td>Evals científicas, agentic tasks, sandboxing</td>
+<td>Sí</td>
+<td>Bueno para safety / capabilities research</td>
+</tr>
+<tr>
+<td><strong>Arize Phoenix</strong></td>
+<td>Tracing + evals offline + UI local</td>
+<td>Sí</td>
+<td>Lo que Arize AX es en cloud, pero local</td>
+</tr>
+<tr>
+<td><strong>LangSmith</strong></td>
+<td>Eval + tracing tightly integrado con LangChain</td>
+<td>No</td>
+<td>Bueno si ya estás en LangChain</td>
+</tr>
+<tr>
+<td><strong>Langfuse</strong></td>
+<td>Tracing + evals + prompt mgmt</td>
+<td>Sí (self-host)</td>
+<td>Alternativa OSS a LangSmith</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>No elijas la herramienta primero.</strong> Elegí la métrica primero, después la herramienta que mejor la implementa.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-dep-1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Eval-online-%E2%80%94-A/B,-shadow,-canary">Eval online — A/B, shadow, canary<a class="anchor-link" href="#Eval-online-%E2%80%94-A/B,-shadow,-canary">¶</a></h2><pre><code>  A/B testing                Shadow mode                Canary
+  ───────────                ───────────                ──────
+  ┌────────┐                  ┌────────┐                ┌────────┐
+  │ 50% v1 │                  │  v1    │ ──▶ usuario   │ 5%  v2 │ ──▶ usuario
+  │ 50% v2 │ ──▶ usuario      │  v2    │ ──▶ /dev/null │ 95% v1 │ ──▶ usuario
+  └────────┘                  └────────┘   (compara)   └────────┘
+  Compará métricas            Sin riesgo,              Rollout gradual,
+  online (CTR,                pero no medís            rollback fácil
+  retention)                  preferencia              ante anomalía
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Patrón</th>
+<th>Mide</th>
+<th>Riesgo</th>
+<th>Cuándo usar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A/B test</strong></td>
+<td>Preferencia / KPI de negocio</td>
+<td>Medio (50% expuesto a v2)</td>
+<td>Hipótesis clara y métrica online</td>
+</tr>
+<tr>
+<td><strong>Shadow mode</strong></td>
+<td>Performance técnica (latency, error rate)</td>
+<td>Bajo (no afecta UX)</td>
+<td>Cambio de modelo / arquitectura</td>
+</tr>
+<tr>
+<td><strong>Canary</strong></td>
+<td>Regresión amplia (todo a la vez)</td>
+<td>Bajo a medio</td>
+<td>Releases generales</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Métricas online típicas para LLMs:</strong></p>
+<ul>
+<li>Tasa de respuesta del usuario (clic, copy, follow-up)</li>
+<li>Tiempo de la sesión, # mensajes, abandono</li>
+<li>Thumbs up/down explícito</li>
+<li>Re-asks ("eso no era lo que pregunté")</li>
+<li>p95 latency, error rate, $ por trace</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-dep-2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Prompt-versioning-&amp;-experimentaci%C3%B3n">Prompt versioning &amp; experimentación<a class="anchor-link" href="#Prompt-versioning-&amp;-experimentaci%C3%B3n">¶</a></h2><p><strong>Anti-pattern típico:</strong> prompt hardcodeado en el código, cambia entre PRs sin tracking.</p>
+<p><strong>Solución mínima — prompt registry:</strong></p>
+<div class="highlight"><pre><span></span><span class="c1"># prompts/qa_assistant_v3.txt</span>
+<span class="n">SYSTEM</span><span class="p">:</span>
+  <span class="n">Sos</span> <span class="n">un</span> <span class="n">asistente</span> <span class="n">que</span> <span class="n">responde</span> <span class="n">basándose</span> <span class="n">SÓLO</span> <span class="n">en</span> <span class="n">el</span> <span class="n">contexto</span> <span class="n">provisto</span><span class="o">.</span>
+  <span class="n">Si</span> <span class="n">no</span> <span class="n">sabés</span><span class="p">,</span> <span class="n">decí</span> <span class="s2">"no lo sé"</span> <span class="n">en</span> <span class="n">vez</span> <span class="n">de</span> <span class="n">inventar</span><span class="o">.</span>
+
+<span class="c1"># código</span>
+<span class="n">prompt</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'qa_assistant'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">'v3'</span><span class="p">)</span>
+<span class="n">log_event</span><span class="p">(</span><span class="s1">'prompt_used'</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">'v3'</span><span class="p">,</span> <span class="n">trace_id</span><span class="o">=</span><span class="n">current_trace</span><span class="p">())</span>
+</pre></div>
+<p><strong>Lo que tu sistema debe permitir:</strong></p>
+<ul>
+<li>Versionar prompts como código (git, semver: <code>v1.2.0</code>).</li>
+<li>Linkear cada trace a la versión usada (<code>prompt_version</code> como atributo).</li>
+<li>Rollback inmediato (cambiar default version, no necesita deploy).</li>
+<li><strong>Regression suite obligatoria</strong> antes de promover una versión:<ul>
+<li>Mismo dataset offline → score &gt;= versión anterior.</li>
+<li>Mismas safety evals → no regresión.</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>El prompt <strong>es código</strong>. Los prompts sin versionar son la deuda técnica más insidiosa de los sistemas LLM.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-dep-3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Experiment-tracking-en-LLMOps">Experiment tracking en LLMOps<a class="anchor-link" href="#Experiment-tracking-en-LLMOps">¶</a></h2><p><strong>Para cada experimento (o release), trackear:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Por qué importa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prompt_version</code></td>
+<td>Reproducibilidad post-mortem</td>
+</tr>
+<tr>
+<td><code>model</code> + <code>model_version</code></td>
+<td>Mismo "GPT-4" tiene snapshots distintos</td>
+</tr>
+<tr>
+<td><code>temperature</code>, <code>top_p</code>, <code>max_tokens</code></td>
+<td>Cambios silenciosos de comportamiento</td>
+</tr>
+<tr>
+<td><code>dataset_hash</code> (offline)</td>
+<td>Saber sobre qué datos se midió</td>
+</tr>
+<tr>
+<td><code>eval_scores</code> (todos)</td>
+<td>Comparar runs, detectar regresión</td>
+</tr>
+<tr>
+<td><code>git_commit</code> del código</td>
+<td>Reproducibilidad determinística</td>
+</tr>
+<tr>
+<td><code>cost_total</code>, <code>latency_p50/p95</code></td>
+<td>Restricciones operacionales</td>
+</tr>
+<tr>
+<td><code>timestamp</code>, <code>user</code></td>
+<td>Auditoría</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tooling:</strong></p>
+<ul>
+<li><strong>MLflow / Weights &amp; Biases</strong> — adaptados a LLM (W&amp;B Prompts, MLflow LLM evaluate).</li>
+<li><strong>Arize AX / LangSmith / Langfuse</strong> — runs como first-class concept.</li>
+<li><strong>DIY:</strong> un JSONL por run, indexado en SQLite/DuckDB. Funciona y es portable.</li>
+</ul>
+<blockquote>
+<p>La regla: <strong>si no puedo reproducir un run de hace 3 meses, no tengo experiment tracking</strong>. Tengo un log.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-dep-4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="LLMOps-lifecycle-%E2%80%94-model-registry-&amp;-deployment-patterns">LLMOps lifecycle — model registry &amp; deployment patterns<a class="anchor-link" href="#LLMOps-lifecycle-%E2%80%94-model-registry-&amp;-deployment-patterns">¶</a></h2><pre><code>  ┌────────────┐    ┌────────────┐    ┌────────────┐    ┌────────────┐
+  │  Experiment│───▶│   Model    │───▶│  Staging   │───▶│ Production │
+  │  Tracking  │    │  Registry  │    │ (eval gate)│    │ (canary→100%)│
+  └────────────┘    └────────────┘    └────────────┘    └────────────┘
+       │                  │                 │                  │
+       ▼                  ▼                 ▼                  ▼
+   N runs por           1 source of      regression           rollback
+   feature              truth, semver    suite + sign-off     automático
+                        (prompt + model + params              ante regresión
+                         como un "modelo")                    de eval online
+</code></pre>
+<p><strong>Deployment patterns aplicables a LLMs:</strong></p>
+<ul>
+<li><strong>Blue/Green</strong> — dos entornos paralelos, switch instantáneo, doble costo.</li>
+<li><strong>Canary progresivo</strong> — 1% → 5% → 25% → 100% con auto-rollback si algún SLO se viola.</li>
+<li><strong>Feature flags por usuario/segmento</strong> — control fino, A/B nativo.</li>
+<li><strong>Shadow + Canary híbrido</strong> — shadow primero (sin riesgo), después canary (con tráfico).</li>
+</ul>
+<p><strong>Auto-rollback triggers típicos:</strong></p>
+<ul>
+<li>Drop &gt; X% en eval online (LLM-judge sobre tráfico real)</li>
+<li>Spike &gt; Y% en latency p95 / error rate</li>
+<li>Drop &gt; Z% en feedback positivo</li>
+<li>Spike de safety incidents (toxicity, jailbreak success)</li>
+</ul>
+<blockquote>
+<p>El registro y el rollback automático son lo que separa "experimento puesto en prod" de "producto operable".</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-prod-1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Qu%C3%A9-loggear-en-producci%C3%B3n">Qué loggear en producción<a class="anchor-link" href="#Qu%C3%A9-loggear-en-producci%C3%B3n">¶</a></h2><p><img alt="Pipeline App → LLM → Logger middleware → Storage → Dashboard. Abajo, los 4 datos clave: input completo, output completo, latencia/costo, señal de calidad" class="slide-figure" src="figures/monitoring_pipeline.svg" style="width: 86%;"/></p>
+<p><strong>Las 4 cosas mínimas (por trace):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Atributos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conversacional</strong></td>
+<td><code>input</code> completo (con system prompt), <code>output</code> completo, <code>messages</code> history</td>
+</tr>
+<tr>
+<td><strong>Operacional</strong></td>
+<td><code>latency_total</code>, <code>latency_per_span</code>, <code>tokens_in</code>, <code>tokens_out</code>, <code>model</code>, <code>prompt_version</code></td>
+</tr>
+<tr>
+<td><strong>Económico</strong></td>
+<td><code>cost_usd</code> (calculado o reportado), <code>cache_hit</code> (si aplica)</td>
+</tr>
+<tr>
+<td><strong>Calidad</strong></td>
+<td><code>eval_score</code> (LLM-judge async), <code>user_feedback</code> (thumbs, copy, re-ask)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Privacidad / compliance:</strong></p>
+<ul>
+<li><strong>PII redaction</strong> antes de loggear (regex + LLM detector).</li>
+<li>Retención configurada por categoría (logs operacionales 30d; conversacionales 7d).</li>
+<li>Tracing distribuido respetando GDPR / consentimiento.</li>
+</ul>
+<blockquote>
+<p>Sin logs no hay debugging post-mortem. Sin atributos estandarizados, los logs son ruido.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-prod-2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Cost-&amp;-latency-observability">Cost &amp; latency observability<a class="anchor-link" href="#Cost-&amp;-latency-observability">¶</a></h2><p><strong>Anatomía de costo de una request:</strong></p>
+<pre><code>  Una llamada típica RAG (~$0.025):
+  ─────────────────────────────────
+  embed(query)         ~$0.0001     (cheap)
+  retrieve (k=10)      ~0 (local)
+  rerank (cross-enc)   ~$0.001      (~30 spans, gpu)
+  generate (LLM)       ~$0.024      (98% del costo)
+
+  → para optimizar costo: 95% del impacto está en el LLM call.
+</code></pre>
+<p><strong>Levers de optimización (de mayor a menor impacto):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Lever</th>
+<th>Impacto típico</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cache de respuestas</strong> (hash de query + context)</td>
+<td>30-70% en queries repetidas</td>
+<td>Latencia primera vez sigue mala</td>
+</tr>
+<tr>
+<td><strong>Model routing</strong> (smaller model para queries simples)</td>
+<td>50-80% en mix</td>
+<td>Calidad heterogénea, hay que monitorearla</td>
+</tr>
+<tr>
+<td><strong>Prompt compression</strong></td>
+<td>20-40% (Microsoft LLMLingua)</td>
+<td>Setup y mantenimiento</td>
+</tr>
+<tr>
+<td><strong>Batching</strong> (donde aplica)</td>
+<td>Hasta 5x throughput</td>
+<td>No reduce $ por request, sí latencia agregada</td>
+</tr>
+<tr>
+<td><strong>Quantization</strong> (self-hosted)</td>
+<td>2-4x throughput</td>
+<td>Calidad puede caer</td>
+</tr>
+</tbody>
+</table>
+<p><strong>SLOs típicos en producción:</strong></p>
+<ul>
+<li>p95 latency &lt; 3s (Q&amp;A simple), &lt; 10s (RAG complejo)</li>
+<li>p99 &lt; 2x p95</li>
+<li>error rate &lt; 0.5%</li>
+<li>cost per query &lt; límite por endpoint</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-prod-3">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Drift-detection">Drift detection<a class="anchor-link" href="#Drift-detection">¶</a></h2><p><img alt="Cuatro tipos de drift: input drift, quality drift, cost drift, abuse drift. Abajo, un mini-dashboard mostrando accuracy bajando y costo subiendo a lo largo de 3 meses, con alerta disparada" class="slide-figure" src="figures/drift_detection.svg" style="width: 86%;"/></p>
+<p><strong>Los 4 tipos de drift en LLM apps:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Síntoma</th>
+<th>Detección</th>
+<th>Causa típica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Input drift</strong></td>
+<td>Distribución de queries cambia</td>
+<td>Embedding distance vs baseline</td>
+<td>Cambio de producto, nuevo segmento de usuarios</td>
+</tr>
+<tr>
+<td><strong>Quality drift</strong></td>
+<td>Eval score baja sin cambio de versión</td>
+<td>LLM-judge online sobre sample</td>
+<td>Modelo upstream cambió silenciosamente</td>
+</tr>
+<tr>
+<td><strong>Cost drift</strong></td>
+<td>$/query sube</td>
+<td>Métrica directa</td>
+<td>Queries más largas, menos cache hits</td>
+</tr>
+<tr>
+<td><strong>Abuse drift</strong></td>
+<td>Spike de safety violations</td>
+<td>Toxicity classifier en logs</td>
+<td>Usuarios adversariales, nuevo ataque</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Alertas razonables (umbrales de campo):</strong></p>
+<ul>
+<li>Input drift: distancia coseno &gt; 0.15 vs baseline → review humana.</li>
+<li>Quality drift: avg LLM-judge cae &gt; 5% vs 7 días → page.</li>
+<li>Cost drift: $/query sube &gt; 20% week-over-week → page.</li>
+<li>Abuse drift: tasa de safety viol. &gt; 0.5% del tráfico → page.</li>
+</ul>
+<blockquote>
+<p>Tu sistema fue bueno el día del deploy. Tres meses después, no necesariamente — y el modelo upstream pudo haber cambiado <strong>sin que te avisen</strong>.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-prod-4">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Feedback-loops-en-producci%C3%B3n">Feedback loops en producción<a class="anchor-link" href="#Feedback-loops-en-producci%C3%B3n">¶</a></h2><p><strong>Señales explícitas vs implícitas:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Ejemplos</th>
+<th>Pros</th>
+<th>Contras</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Explícitas</strong></td>
+<td>thumbs up/down, rating 1-5, "¿esto te sirvió?"</td>
+<td>Intencionales, auditables</td>
+<td>Bajo opt-in (1-5% típico), sesgo de extremos</td>
+</tr>
+<tr>
+<td><strong>Implícitas</strong></td>
+<td>Re-ask, copy del output, follow-up question, abandono, tiempo en respuesta</td>
+<td>Cobertura completa</td>
+<td>Ruidosas, requieren modeling</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Loop típico: feedback → dataset → eval → mejora</strong></p>
+<pre><code>  thumbs_down   ──┐
+  re-ask        ──┼──▶ "casos negativos"  ──▶  agregar al
+  abandono      ──┘                              golden dataset
+                                                       │
+                                                       ▼
+                                                 eval offline en
+                                                 próxima iteración
+                                                       │
+                                                       ▼
+                                                 mejorar prompt /
+                                                 modelo / retrieval
+</code></pre>
+<p><strong>Human-in-the-loop selectivo:</strong></p>
+<ul>
+<li>100% review si: jailbreak detectado, score juez &lt; 2, cost outlier.</li>
+<li>1-5% sample aleatorio para calibración del LLM-judge.</li>
+</ul>
+<blockquote>
+<p>El feedback loop es lo que <strong>convierte usuarios en data</strong>. Sin él, mejorás a ciegas.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-close-1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="El-loop-completo-%E2%80%94-prompt-%E2%86%92-producto-%E2%86%92-mejora">El loop completo — prompt → producto → mejora<a class="anchor-link" href="#El-loop-completo-%E2%80%94-prompt-%E2%86%92-producto-%E2%86%92-mejora">¶</a></h2><p><img alt="Ciclo de 6 nodos: diseño → eval offline → producción → eval online → análisis → feedback → vuelve al diseño. En el centro: PROMPT LIFECYCLE" class="slide-figure" src="figures/feedback_loop.svg" style="width: 86%;"/></p>
+<pre><code>   ┌──────────────────────────────────────────────────────────┐
+   │                                                            │
+   │   diseño  →  eval offline  →  staging  →  canary deploy   │
+   │      ▲          (golden)        (eval gate)        │       │
+   │      │                                              ▼       │
+   │   feedback ◀── eval online ◀── traces ◀── 100% prod        │
+   │   (humano +    (LLM-judge      (Arize/Phoenix              │
+   │    señales      sobre tráfico    + drift detection)         │
+   │    impl.)       muestreado)                                  │
+   │                                                            │
+   └──────────────────────────────────────────────────────────┘
+</code></pre>
+<blockquote>
+<p>Igual que el código, <strong>el prompt nunca está "terminado"</strong>. Evoluciona con feedback de la realidad.</p>
+</blockquote>
+<blockquote>
+<p>La diferencia con ML clásico: el ciclo es <strong>continuo y mensual</strong>, no "modelo entrenado una vez al año". Cada release puede degradar (o mejorar) silenciosamente.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-close-2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%C2%BFCu%C3%A1ndo-invertir-en-cada-cosa?">¿Cuándo invertir en cada cosa?<a class="anchor-link" href="#%C2%BFCu%C3%A1ndo-invertir-en-cada-cosa?">¶</a></h2><p><strong>No todos los proyectos necesitan todo desde día 1.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Madurez</th>
+<th>Mínimo viable</th>
+<th>Nice-to-have</th>
+<th>Skippeable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Prototipo / Demo</strong></td>
+<td>Smoke test (10 ejemplos), logs básicos</td>
+<td>LLM-judge manual</td>
+<td>Drift, A/B, registry</td>
+</tr>
+<tr>
+<td><strong>Beta / Early adopters</strong></td>
+<td>Golden dataset (50-100), tracing básico, thumbs feedback</td>
+<td>RAGAS / safety evals, dashboards</td>
+<td>Auto-rollback, red-teaming formal</td>
+</tr>
+<tr>
+<td><strong>Producción usuarios externos</strong></td>
+<td>Todo lo de beta + safety evals + canary deploy + cost monitoring</td>
+<td>Red-team trimestral, multi-judge</td>
+<td>(mucho ya es must-have)</td>
+</tr>
+<tr>
+<td><strong>Producto regulado / escala</strong></td>
+<td>+ SLOs auditables, retention compliance, audit trail completo, eval gate en CI</td>
+<td>Continuous red-team, formal verification</td>
+<td>(poco)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Antipattern común:</strong> invertir en dashboards y registry antes de tener un golden dataset. Empezá por el dataset, lo demás se construye encima.</p>
+<p><strong>El "primer eval" pragmático:</strong></p>
+<ol>
+<li>Día 1 — 20 ejemplos a mano, exact match o regex donde puedas.</li>
+<li>Día 7 — 50 ejemplos, LLM-judge para los abiertos.</li>
+<li>Día 30 — primer dashboard de tracing.</li>
+<li>Día 90 — drift detection + canary.</li>
+</ol>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-practice-bridge">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="%F0%9F%9B%A0-Pr%C3%A1ctica-end-to-end-con-Arize-AX">🛠 Práctica end-to-end con Arize AX<a class="anchor-link" href="#%F0%9F%9B%A0-Pr%C3%A1ctica-end-to-end-con-Arize-AX">¶</a></h2><p><strong>Lo que vamos a hacer (35 min):</strong></p>
+<pre><code>  ┌─────────────────────────────────────────────────────────┐
+  │ 1. Crear cuenta gratis en https://app.arize.com/        │
+  │ 2. Levantar un chatbot Q&amp;A sobre IA/ML (pre-built)      │
+  │ 3. Correr eval offline con LLM-as-judge sobre 20 Q&amp;A    │
+  │ 4. Instrumentar tracing con OpenTelemetry → Arize       │
+  │ 5. Generar tráfico y ver dashboards online              │
+  │ 6. Simular drift y ver la alerta                         │
+  │ 7. Reflexión final: ¿qué medirías en TU próximo proyecto?│
+  └─────────────────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Notebook:</strong> <a href="notebooks/01_arize_eval_handson.ipynb"><code>clase03/notebooks/01_arize_eval_handson.ipynb</code></a></p>
+<p><strong>Lo que necesitás antes de empezar:</strong></p>
+<ul>
+<li>Cuenta de Groq (ya la tenés de Clase 2).</li>
+<li>Cuenta de Arize gratuita (signup en clase, ~3 min).</li>
+<li>Python con <code>arize</code>, <code>arize-otel</code>, <code>openinference-instrumentation-openai</code> instalado.</li>
+</ul>
+<blockquote>
+<p>Demo del docente sobre la pipeline RAG primero (5 min) → después ejercicio individual con el chatbot (30 min).</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -8968,23 +10075,20 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <td>Técnicas para mejorar calidad</td>
 </tr>
 <tr>
-<td>B5 — Evals y monitoreo</td>
-<td>Eval offline + online. Logging. Drift. Loop de mejora continua.</td>
-<td>Productización de LLMs (de Clase 2)</td>
-</tr>
-<tr>
-<td>B6 — Evaluación de RAG</td>
-<td>Faithfulness, answer relevance, RAGAS</td>
-<td>Cómo medir si RAG funciona</td>
+<td>B5 — Eval, monitoreo y benchmarks</td>
+<td>Fundamentos → offline (LLM-judge, RAGAS, safety) → deploy (A/B, registry) → producción (tracing, drift, feedback)</td>
+<td>Operacionalizar LLMs end-to-end</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Stack que usamos hoy:</strong></p>
 <pre><code>sentence-transformers · chromadb · rank_bm25 · groq · cross-encoder
+arize · arize-otel · openinference (en la práctica de B5)
 </code></pre>
-<p><strong>Lo que sigue siendo válido:</strong></p>
+<p><strong>Lo que sigue siendo válido para Clase 4:</strong></p>
 <ul>
-<li><code>llamar_llm()</code> + <code>rag_query()</code> + <code>hybrid_search()</code> → los usamos en Clase 4</li>
+<li><code>llamar_llm()</code> + <code>rag_query()</code> + <code>hybrid_search()</code> → los agentes los usarán como herramientas</li>
+<li>Tracing + evals → los agentes son <strong>mucho más difíciles de evaluar</strong> que un LLM call único</li>
 </ul>
 </div>
 </div>
@@ -8998,30 +10102,32 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <hr/>
 <h2 id="%F0%9F%93%9A-Bibliograf%C3%ADa">📚 Bibliografía<a class="anchor-link" href="#%F0%9F%93%9A-Bibliograf%C3%ADa">¶</a></h2><h3 id="Libros-de-referencia">Libros de referencia<a class="anchor-link" href="#Libros-de-referencia">¶</a></h3><ul>
-<li>Jurafsky, D. &amp; Martin, J. H. (2024). <em>Speech and Language Processing</em> (3rd ed. draft). Cap. 14 — Question Answering.<br/>
-🔗 <a href="https://web.stanford.edu/~jurafsky/slp3/">https://web.stanford.edu/~jurafsky/slp3/</a></li>
+<li>Jurafsky, D. &amp; Martin, J. H. (2024). <em>Speech and Language Processing</em> (3rd ed. draft). Cap. 14 — Question Answering. <a href="https://web.stanford.edu/~jurafsky/slp3/">https://web.stanford.edu/~jurafsky/slp3/</a></li>
 </ul>
-<h3 id="Papers">Papers<a class="anchor-link" href="#Papers">¶</a></h3><ul>
-<li><p>Lewis, P., Perez, E., Piktus, A., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks. <em>NeurIPS 2020</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2005.11401">https://arxiv.org/abs/2005.11401</a></p>
-</li>
-<li><p>Robertson, S. &amp; Zaragoza, H. (2009). The Probabilistic Relevance Framework: BM25 and Beyond. <em>Foundations and Trends in IR</em>.<br/>
-🔗 <a href="https://dl.acm.org/doi/10.1561/1500000019">https://dl.acm.org/doi/10.1561/1500000019</a></p>
-</li>
-<li><p>Gao, L., Ma, X., Lin, J. &amp; Callan, J. (2023). Precise Zero-Shot Dense Retrieval without Relevance Labels (HyDE). <em>ACL 2023</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2212.10496">https://arxiv.org/abs/2212.10496</a></p>
-</li>
-<li><p>Es, S., James, J., Espinosa-Anke, L. &amp; Schockaert, S. (2023). RAGAS: Automated Evaluation of Retrieval Augmented Generation. <em>EMNLP 2023</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2309.15217">https://arxiv.org/abs/2309.15217</a></p>
-</li>
-<li><p>Liu, N. F., et al. (2023). Lost in the Middle: How Language Models Use Long Contexts. <em>TACL 2023</em>.<br/>
-🔗 <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></p>
-</li>
+<h3 id="RAG-%E2%80%94-papers-fundamentales">RAG — papers fundamentales<a class="anchor-link" href="#RAG-%E2%80%94-papers-fundamentales">¶</a></h3><ul>
+<li>Lewis, P. et al. (2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</em> NeurIPS. <a href="https://arxiv.org/abs/2005.11401">https://arxiv.org/abs/2005.11401</a></li>
+<li>Robertson, S. &amp; Zaragoza, H. (2009). <em>The Probabilistic Relevance Framework: BM25 and Beyond.</em></li>
+<li>Gao, L. et al. (2023). <em>HyDE — Precise Zero-Shot Dense Retrieval without Relevance Labels.</em> ACL. <a href="https://arxiv.org/abs/2212.10496">https://arxiv.org/abs/2212.10496</a></li>
+<li>Liu, N. F. et al. (2023). <em>Lost in the Middle.</em> TACL. <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
 </ul>
-<h3 id="Documentaci%C3%B3n">Documentación<a class="anchor-link" href="#Documentaci%C3%B3n">¶</a></h3><ul>
+<h3 id="Evaluaci%C3%B3n,-monitoreo-y-benchmarks-(B5)">Evaluación, monitoreo y benchmarks (B5)<a class="anchor-link" href="#Evaluaci%C3%B3n,-monitoreo-y-benchmarks-(B5)">¶</a></h3><ul>
+<li>Es, S. et al. (2023). <em>RAGAS — Automated Evaluation of Retrieval Augmented Generation.</em> EMNLP. <a href="https://arxiv.org/abs/2309.15217">https://arxiv.org/abs/2309.15217</a></li>
+<li>Zheng, L. et al. (2023). <em>Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena.</em> <a href="https://arxiv.org/abs/2306.05685">https://arxiv.org/abs/2306.05685</a></li>
+<li>Manakul, P. et al. (2023). <em>SelfCheckGPT.</em> <a href="https://arxiv.org/abs/2303.08896">https://arxiv.org/abs/2303.08896</a></li>
+<li>Chao, P. et al. (2023). <em>Jailbreaking Black Box LLMs in Twenty Queries (PAIR).</em> <a href="https://arxiv.org/abs/2310.08419">https://arxiv.org/abs/2310.08419</a></li>
+<li>Liang, P. et al. (2023). <em>HELM — Holistic Evaluation of Language Models.</em> TMLR. <a href="https://arxiv.org/abs/2211.09110">https://arxiv.org/abs/2211.09110</a></li>
+<li>Wang, B. et al. (2024). <em>DecodingTrust — Comprehensive Trustworthiness Evaluation.</em> <a href="https://arxiv.org/abs/2306.11698">https://arxiv.org/abs/2306.11698</a></li>
+</ul>
+<h3 id="Documentaci%C3%B3n-/-herramientas">Documentación / herramientas<a class="anchor-link" href="#Documentaci%C3%B3n-/-herramientas">¶</a></h3><ul>
 <li>ChromaDB — <a href="https://docs.trychroma.com/">https://docs.trychroma.com/</a></li>
 <li>Sentence-Transformers — <a href="https://www.sbert.net/">https://www.sbert.net/</a></li>
 <li>RAGAS — <a href="https://docs.ragas.io/">https://docs.ragas.io/</a></li>
+<li>Arize AX — <a href="https://docs.arize.com/">https://docs.arize.com/</a></li>
+<li>Arize Phoenix (OSS) — <a href="https://docs.arize.com/phoenix">https://docs.arize.com/phoenix</a></li>
+<li>OpenTelemetry — <a href="https://opentelemetry.io/docs/">https://opentelemetry.io/docs/</a></li>
+<li>OpenInference (semantic conventions LLM) — <a href="https://github.com/Arize-ai/openinference">https://github.com/Arize-ai/openinference</a></li>
+<li>Promptfoo — <a href="https://www.promptfoo.dev/">https://www.promptfoo.dev/</a></li>
+<li>Inspect AI (UK AISI) — <a href="https://inspect.ai-safety-institute.org.uk/">https://inspect.ai-safety-institute.org.uk/</a></li>
 </ul>
 </div>
 </div>
