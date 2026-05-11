@@ -28,21 +28,26 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
 
 - `clase03/clase3_slides.ipynb` — slides conceptuales (reveal.js).
 - `clase03/figures/` — figuras SVG.
-- `clase03/notebooks/rag/` — 4 notebooks de práctica para Colab que
-  comparten **un mismo benchmark de 7 queries** (fácil / ambigua /
-  multi-hop / edge case) para comparar técnicas apples-to-apples:
-  - `01_naive.ipynb` — pipeline naive completo (chunking, embeddings,
-    ChromaDB, augmentation) y baseline contra el benchmark.
-  - `02_hybrid.ipynb` — BM25 + Hybrid (weighted sum con α), corre el
-    mismo benchmark con los 3 métodos.
-  - `03_advanced.ipynb` — Reranking (cross-encoder), HyDE y
-    Parent-child chunks, también sobre el mismo benchmark.
-  - `04_capstone.ipynb` — toma 1 query multi-hop difícil y muestra la
-    evolución stage-by-stage (LLM puro → naive → hybrid → reranking →
-    HyDE → parent-child) con tabla y gráfico.
+- `clase03/notebooks/rag/` — notebooks de práctica para Colab:
+  - `practica_completa.ipynb` — práctica principal, narrativa
+    incremental. Parte 1-3: RAG naive implementado a mano sobre el
+    programa de la cátedra (corpus chico, 5 docs). Parte 4: subiendo a
+    framework con LangChain (`EnsembleRetriever` con RRF + cross-encoder
+    reranker). Cierra con 3 casos cualitativos comparando naive vs
+    hybrid vs hybrid+reranker.
+  - `practica_legal.ipynb` — caso de uso sobre un corpus real y extenso:
+    la Ley argentina 21.526 de Entidades Financieras (67 artículos,
+    ~91k chars). Muestra dónde el reranker **sí** agrega valor (rescata
+    artículos que el hybrid solo dejaba afuera), dónde **filtra de más
+    y empeora**, y dónde **ambos fallan** porque el vocabulario del
+    usuario no se cruza con el del corpus. Benchmark de 15 queries +
+    análisis cualitativo de 3 casos.
+  - `ley21526.pdf` — el corpus de `practica_legal.ipynb` bundleado en
+    el repo para que la notebook funcione offline / sin depender del
+    servidor de origen.
 
-Pipeline RAG paso a paso, búsqueda híbrida, técnicas avanzadas (incluyendo
-Graph/Multi-Hop), troubleshooting y aplicaciones reales.
+Pipeline RAG paso a paso, búsqueda híbrida con RRF, reranking con cross-encoder,
+y troubleshooting de retrieval con casos concretos.
 
 ### Clase 3b — Evaluación, monitoreo y benchmarks de sistemas LLM
 
@@ -142,10 +147,9 @@ El directorio `venv/` está en `.gitignore`. Para salir del entorno:
 │   └── notebooks/
 │       ├── 01_arize_eval_handson.ipynb  # práctica de clase 3b
 │       └── rag/                          # prácticas de clase 3
-│           ├── 01_naive.ipynb
-│           ├── 02_hybrid.ipynb
-│           ├── 03_advanced.ipynb
-│           └── 04_capstone.ipynb
+│           ├── practica_completa.ipynb   # naive desde cero → LangChain
+│           ├── practica_legal.ipynb      # caso real sobre Ley 21.526
+│           └── ley21526.pdf              # corpus de practica_legal
 ├── CITATION.cff
 ├── LICENSE
 └── README.md
