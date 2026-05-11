@@ -8161,6 +8161,51 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div>
 </div>
 </div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b3-rrf">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Combinar-BM25-+-dense-%E2%80%94-dos-estrategias">Combinar BM25 + dense — dos estrategias<a class="anchor-link" href="#Combinar-BM25-+-dense-%E2%80%94-dos-estrategias">¶</a></h2><p>Tenés dos retrievers que asignan scores en escalas distintas. ¿Cómo los mezclás?</p>
+<p><strong>Opción 1 — Weighted sum (intuitiva pero frágil):</strong></p>
+<p><code>score(d) = α · dense_norm(d) + (1−α) · bm25_norm(d)</code></p>
+<p>Normalizás cada score a <code>[0,1]</code> y promediás. <em>Modo de falla:</em> cuando BM25 y dense <strong>disienten</strong> sobre cuál chunk es el más relevante, el promedio empuja la respuesta correcta fuera del top-k.</p>
+<p><strong>Opción 2 — Reciprocal Rank Fusion (RRF, estándar de industria):</strong></p>
+<p><code>score(d) = Σᵢ 1 / (k + rankᵢ(d))</code>   con k=60</p>
+<p>Sumás recíprocos del <strong>ranking</strong>, no de scores. Si un chunk está en el top-3 de <strong>cualquier</strong> retriever, queda con score competitivo — sin importar la escala del otro. Es lo que usan Elasticsearch, OpenSearch, Vespa.</p>
+<blockquote>
+<p><strong>Regla práctica:</strong> empezá con RRF (es el default de <code>EnsembleRetriever</code> en LangChain). Si después medís y ves que weighted sum con un α tuneado te da mejor recall en tu corpus, ahí lo cambiás.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b3-rerank">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Reranking-%E2%80%94-el-segundo-paso">Reranking — el segundo paso<a class="anchor-link" href="#Reranking-%E2%80%94-el-segundo-paso">¶</a></h2><p>Hasta acá todo el pipeline es <strong>bi-encoder</strong>: los embeddings de query y documentos se calculan <strong>por separado</strong> y se comparan después. Es rápido (indexás millones de docs offline), pero impreciso — la query nunca "ve" al documento.</p>
+<p>Un <strong>cross-encoder</strong> procesa el par <code>(query, doc)</code> <strong>juntos</strong> por una red neuronal. Mucho más preciso, pero también mucho más lento: no se puede precalcular.</p>
+<p><strong>Pipeline de 2 etapas</strong> (lo mejor de los dos mundos):</p>
+<pre><code>  query
+    │
+    ▼
+  [Bi-encoder]      BM25 + dense + RRF     →  top 6-10 candidatos rápidos
+    │
+    ▼
+  [Cross-encoder]   reranking preciso      →  top 3 finales
+</code></pre>
+<p>Filtrás mucho con velocidad, elegís poco con precisión.</p>
+<blockquote>
+<p><strong>Modelos típicos:</strong> <code>BAAI/bge-reranker-base</code> (multilingual, ~280 MB), <code>cross-encoder/ms-marco-MiniLM-L-6-v2</code> (inglés, ~80 MB).</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bridge-b3">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8188,61 +8233,6 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Bloque-4">Bloque 4<a class="anchor-link" href="#Bloque-4">¶</a></h1><h2 id="RAG-avanzado">RAG avanzado<a class="anchor-link" href="#RAG-avanzado">¶</a></h2><hr/>
 <p><em>El pipeline naive funciona. Estas técnicas lo hacen funcionar mejor.</em></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-reranking-teoria">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Reranking-%E2%80%94-segunda-pasada-de-precisi%C3%B3n">Reranking — segunda pasada de precisión<a class="anchor-link" href="#Reranking-%E2%80%94-segunda-pasada-de-precisi%C3%B3n">¶</a></h2><h3 id="Problema:-el-retrieval-trae-top-k,-pero-el-orden-no-siempre-es-%C3%B3ptimo.">Problema: el retrieval trae top-k, pero el orden no siempre es óptimo.<a class="anchor-link" href="#Problema:-el-retrieval-trae-top-k,-pero-el-orden-no-siempre-es-%C3%B3ptimo.">¶</a></h3><pre><code>  Pipeline naive:                    Con reranking:
-  ───────────────                    ──────────────
-  Query → Vector Store → Top 10     Query → Vector Store → Top 10
-                          ↓                                  ↓
-                        LLM ✗                        Cross-encoder
-                                                     reordena → Top 3
-                                                          ↓
-                                                        LLM ✓
-</code></pre>
-<p><strong>Cross-encoder vs Bi-encoder:</strong></p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>Bi-encoder (lo que usamos)</th>
-<th>Cross-encoder (reranker)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Input</td>
-<td>Query y doc por separado</td>
-<td>Query + doc juntos</td>
-</tr>
-<tr>
-<td>Velocidad</td>
-<td>Rápido (embeddings pre-calculados)</td>
-<td>Lento (procesa cada par)</td>
-</tr>
-<tr>
-<td>Precisión</td>
-<td>Buena</td>
-<td>Mejor</td>
-</tr>
-<tr>
-<td>Uso</td>
-<td>Retrieval inicial (miles de docs)</td>
-<td>Reranking (top 10-20 candidatos)</td>
-</tr>
-</tbody>
-</table>
-<pre><code>  Bi-encoder:    embed(query)  →  comparar con  ←  embed(doc)   [rápido, menos preciso]
-  Cross-encoder: model(query + doc)  →  score de relevancia     [lento, más preciso]
-</code></pre>
-<p>Modelo popular: <code>cross-encoder/ms-marco-MiniLM-L-6-v2</code> (~80MB)</p>
 </div>
 </div>
 </div>
@@ -8390,7 +8380,7 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <td><strong>Reranking</strong></td>
 <td>Ninguno</td>
 <td>Cross-encoder</td>
-<td>Cross-encoder + scoring global</td>
+<td>Cross-encoder sobre multi-hop</td>
 </tr>
 <tr>
 <td><strong>Fusión de fuentes</strong></td>
