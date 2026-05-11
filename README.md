@@ -24,19 +24,26 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
   - `04_prompting_techniques.ipynb` — zero/one/few-shot.
 - `clase02/scripts/` — generadores: `build_notebook.py` (slides) y `build_colabs.py` (notebooks).
 
-### Clase 3 — RAG + Evaluación y monitoreo
+### Clase 3 — RAG (Retrieval Augmented Generation)
 
 - `clase03/clase3_slides.ipynb` — slides de la clase (reveal.js).
 - `clase03/figures/` — figuras SVG.
-- `clase03/notebooks/` — notebooks de práctica para Colab:
+
+Pipeline RAG paso a paso (chunking, embeddings, ChromaDB, augmentation),
+búsqueda híbrida (BM25 + semántica), técnicas avanzadas (Reranking, HyDE,
+parent-child, Graph/Multi-Hop), troubleshooting y aplicaciones reales.
+
+### Clase 3b — Evaluación, monitoreo y benchmarks de sistemas LLM
+
+- `clase03/clase3b_slides.ipynb` — slides (reveal.js).
+- `clase03/notebooks/` — notebook de práctica para Colab:
   - `01_arize_eval_handson.ipynb` — end-to-end eval + monitoring de un
     chatbot Q&A con Arize AX (OpenTelemetry tracing, LLM-as-judge,
     dashboards, drift simulation).
 
-La clase incluye dos grandes bloques: RAG (B1-B4: pipeline naive,
-búsqueda híbrida, RAG avanzado) y un bloque profundo sobre evaluación,
-monitoreo y benchmarks (B5: del prompt al producto, organizado por
-fase del ciclo).
+Cinco fases del ciclo de vida (Fundamentos → Pre-deploy → Deploy →
+Producción → Cierre) cubriendo LLM-as-judge, RAGAS, safety + red-teaming,
+benchmarks propios, A/B/shadow/canary, drift detection, feedback loops.
 
 ### Próximas clases
 
@@ -72,18 +79,19 @@ python scripts/build_colabs.py      # regenera las notebooks de Colab
 jupyter nbconvert clase2_slides.ipynb --to slides --no-input
 ```
 
-### Clase 3 — pipeline de generación
+### Clase 3 y 3b — pipeline de generación
 
-Las slides de clase 3 contienen celdas de código que se muestran en
-las slides (demos de RAG), por lo que se regeneran sin `--no-input`:
+Las slides de clase 3 (RAG) contienen celdas de código visibles (demos),
+las de clase 3b (eval/monitoring) son todas markdown. Las dos se regeneran
+sin `--no-input`:
 
 ```bash
 cd clase03
 jupyter nbconvert clase3_slides.ipynb --to slides
+jupyter nbconvert clase3b_slides.ipynb --to slides
 ```
 
-Los notebooks de Colab de clase 3 se editan directamente (no hay
-build script todavía).
+Los notebooks de Colab se editan directamente (no hay build script todavía).
 
 ### Dependencias mínimas
 
@@ -115,11 +123,13 @@ El directorio `venv/` está en `.gitignore`. Para salir del entorno:
 │   ├── notebooks/
 │   └── scripts/
 ├── clase03/
-│   ├── clase3_slides.ipynb
+│   ├── clase3_slides.ipynb           # Clase 3: RAG
 │   ├── clase3_slides.slides.html
+│   ├── clase3b_slides.ipynb          # Clase 3b: Eval / monitoring / benchmarks
+│   ├── clase3b_slides.slides.html
 │   ├── figures/
 │   └── notebooks/
-│       └── 01_arize_eval_handson.ipynb
+│       └── 01_arize_eval_handson.ipynb  # práctica de clase 3b
 ├── CITATION.cff
 ├── LICENSE
 └── README.md
