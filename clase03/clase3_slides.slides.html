@@ -7457,7 +7457,7 @@ main {
 <h2 id="Recap-Clases-1-2-%E2%86%92-conexi%C3%B3n-con-hoy">Recap Clases 1-2 → conexión con hoy<a class="anchor-link" href="#Recap-Clases-1-2-%E2%86%92-conexi%C3%B3n-con-hoy">¶</a></h2><pre><code>  Clase 1                            Clase 2
   ───────                            ───────
   Texto → Tokens → Embeddings        Embeddings → Transformer → Texto generado
-       BoW  TF-IDF  Vectores 384D        Attention   Prompting   llamar_llm()
+       BoW  TF-IDF  Vectores 384D        Attention   Prompting   LLM API
                 │                              │
                 └──────── HOY ─────────────────┘
                      RAG une retrieval con generación
@@ -7475,11 +7475,11 @@ main {
 <td>Los usamos para <strong>recuperar</strong> documentos relevantes</td>
 </tr>
 <tr>
-<td>TF-IDF / BM25 buscan por coincidencia de palabras</td>
-<td>Los combinamos con búsqueda semántica</td>
+<td>TF-IDF busca por coincidencia de palabras</td>
+<td>Lo combinamos con búsqueda semántica</td>
 </tr>
 <tr>
-<td><code>llamar_llm()</code> genera texto con un prompt</td>
+<td>El LLM genera texto a partir de un prompt</td>
 <td>Le <strong>inyectamos contexto</strong> antes de generar</td>
 </tr>
 <tr>
@@ -7488,9 +7488,6 @@ main {
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p>En <strong>Clase 3b</strong> (siguiente sesión) vemos <strong>cómo medir y operar</strong> lo que construyamos hoy — eval offline, tracing en producción, drift detection, práctica con Arize AX.</p>
-</blockquote>
 </div>
 </div>
 </div>
@@ -7506,38 +7503,28 @@ main {
 <tr>
 <th>Bloque</th>
 <th>Tema</th>
-<th>Tiempo aprox.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>B1</strong></td>
 <td>¿Por qué RAG? + aplicaciones típicas + LLM vs RAG</td>
-<td>~15 min</td>
 </tr>
 <tr>
 <td><strong>B2</strong></td>
-<td>Pipeline paso a paso + chunking + ejemplo Santa Fe</td>
-<td>~30 min</td>
-</tr>
-<tr>
-<td>☕</td>
-<td><em>break</em></td>
-<td>10 min</td>
+<td>Pipeline paso a paso + chunking + vector stores + ejemplo Santa Fe</td>
 </tr>
 <tr>
 <td><strong>B3</strong></td>
-<td>Búsqueda híbrida (BM25 + semántica)</td>
-<td>~15 min</td>
+<td>Búsqueda híbrida (BM25 + semántica) + reranking</td>
 </tr>
 <tr>
 <td><strong>B4</strong></td>
-<td>RAG avanzado: reranking, HyDE, parent-child, Graph + Multi-Hop + troubleshooting</td>
-<td>~30 min</td>
+<td>RAG avanzado: HyDE, parent-child, Graph + Multi-Hop + troubleshooting</td>
 </tr>
 </tbody>
 </table>
-<p>Vamos a <strong>construir el RAG paso a paso</strong> con demos ejecutables y ejercicios. En <strong>Clase 3b</strong> profundizamos en cómo <strong>medir y operar</strong> sistemas LLM en producción, con práctica end-to-end con Arize AX.</p>
+<p>Vamos a <strong>construir el RAG paso a paso</strong> con demos ejecutables y ejercicios.</p>
 </div>
 </div>
 </div>
@@ -7725,71 +7712,31 @@ linkeados al final de cada bloque. Las slides son sólo conceptuales.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Aplicaciones-t%C3%ADpicas-de-RAG-(2025-2026)">Aplicaciones típicas de RAG (2025-2026)<a class="anchor-link" href="#Aplicaciones-t%C3%ADpicas-de-RAG-(2025-2026)">¶</a></h2><table>
-<thead>
-<tr>
-<th>Dominio</th>
-<th>Caso de uso</th>
-<th>Por qué encaja RAG</th>
-<th>Productos reales</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Soporte / Customer success</strong></td>
-<td>Q&amp;A sobre docs de producto, helpdesks internos, triage de tickets</td>
-<td>Base de conocimiento que cambia frecuentemente; respuesta con citas</td>
-<td>Intercom Fin, Glean, Notion AI</td>
-</tr>
-<tr>
-<td><strong>Legal</strong></td>
-<td>Búsqueda de jurisprudencia, revisión de contratos, compliance</td>
-<td>Citas obligatorias; vocabulario muy técnico; corpus enorme</td>
-<td>Harvey, Casetext CoCounsel, Eve.legal</td>
-</tr>
-<tr>
-<td><strong>Salud / Medicina</strong></td>
-<td>Decisión clínica sobre papers y guías; resumen de historia clínica</td>
-<td>Knowledge cutoff es crítico (papers nuevos); auditabilidad regulatoria</td>
-<td>Glass, OpenEvidence, Hippocratic AI</td>
-</tr>
-<tr>
-<td><strong>Finanzas / Regulatorio</strong></td>
-<td>Q&amp;A sobre filings (10-K/10-Q), due diligence, riesgo regulatorio</td>
-<td>Documentos largos y técnicos; toda respuesta debe rastrearse</td>
-<td>Hebbia, AlphaSense, BloombergGPT</td>
-</tr>
-<tr>
-<td><strong>Ingeniería / Código</strong></td>
-<td>Q&amp;A sobre codebase, runbooks, postmortems, generación de tests</td>
-<td>Repos grandes, contexto distribuido en muchos archivos</td>
-<td>Sourcegraph Cody, Cursor, Sentry Autofix</td>
-</tr>
-<tr>
-<td><strong>Educación</strong></td>
-<td>Tutor sobre apuntes/libros, asistente de cursada, prep de examen</td>
-<td>Cada estudiante consulta el mismo material desde ángulos distintos</td>
-<td>Khanmigo, CourseHero, Speak</td>
-</tr>
-<tr>
-<td><strong>Investigación científica</strong></td>
-<td>Literature review, búsqueda semántica, generación de hipótesis</td>
-<td>Volumen masivo (millones de papers); terminología específica</td>
-<td>Elicit, Consensus, Scite</td>
-</tr>
-<tr>
-<td><strong>Enterprise / Knowledge ops</strong></td>
-<td>"Ask the company": wikis, políticas, HR, runbooks internos</td>
-<td>Datos privados que no entran en el training de ningún LLM público</td>
-<td>Glean, Notion AI, Slack AI</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Patr%C3%B3n-com%C3%BAn-a-todos">Patrón común a todos<a class="anchor-link" href="#Patr%C3%B3n-com%C3%BAn-a-todos">¶</a></h3><p><strong>(1) corpus propio o nicho</strong> + <strong>(2) requerimiento de citas/groundedness</strong> + <strong>(3) actualización frecuente</strong>.</p>
+<h2 id="Aplicaciones-t%C3%ADpicas-de-RAG-(2025-2026)">Aplicaciones típicas de RAG (2025-2026)<a class="anchor-link" href="#Aplicaciones-t%C3%ADpicas-de-RAG-(2025-2026)">¶</a></h2><ul>
+<li><strong>Soporte / Customer success</strong> — Q&amp;A sobre docs, helpdesks internos, triage de tickets. Base que cambia frecuentemente; respuesta con citas.</li>
+<li><strong>Legal</strong> — jurisprudencia, revisión de contratos, compliance. Citas obligatorias; vocabulario técnico; corpus enorme.</li>
+<li><strong>Salud / Medicina</strong> — decisión clínica sobre papers y guías; resumen de historia clínica. Knowledge cutoff crítico; auditabilidad regulatoria.</li>
+<li><strong>Finanzas / Regulatorio</strong> — Q&amp;A sobre filings, due diligence, riesgo. Documentos largos y técnicos; rastreabilidad obligatoria.</li>
+<li><strong>Ingeniería / Código</strong> — Q&amp;A sobre codebase, runbooks, postmortems, generación de tests. Repos grandes, contexto distribuido.</li>
+<li><strong>Educación</strong> — tutor sobre apuntes/libros, asistente de cursada, prep de examen. Cada estudiante consulta lo mismo desde ángulos distintos.</li>
+<li><strong>Investigación científica</strong> — literature review, búsqueda semántica, hipótesis. Volumen masivo; terminología específica.</li>
+<li><strong>Enterprise / Knowledge ops</strong> — "ask the company": wikis, políticas, HR. Datos privados que no entran al training de un LLM público.</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b1-aplicaciones-patron">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Cu%C3%A1ndo-conviene-RAG-(y-cu%C3%A1ndo-no)">Cuándo conviene RAG (y cuándo no)<a class="anchor-link" href="#Cu%C3%A1ndo-conviene-RAG-(y-cu%C3%A1ndo-no)">¶</a></h2><h3 id="Patr%C3%B3n-com%C3%BAn-a-todos-los-casos">Patrón común a todos los casos<a class="anchor-link" href="#Patr%C3%B3n-com%C3%BAn-a-todos-los-casos">¶</a></h3><p><strong>(1) corpus propio o nicho</strong> + <strong>(2) requerimiento de citas/groundedness</strong> + <strong>(3) actualización frecuente</strong>.</p>
 <h3 id="Cu%C3%A1ndo-RAG-no-es-la-respuesta">Cuándo RAG <em>no</em> es la respuesta<a class="anchor-link" href="#Cu%C3%A1ndo-RAG-no-es-la-respuesta">¶</a></h3><ul>
-<li>Tareas <strong>sin necesidad de conocimiento externo</strong> (traducción, redacción creativa, conversación general).</li>
+<li>Tareas <strong>sin necesidad de conocimiento externo</strong> — traducción, redacción creativa, conversación general.</li>
 <li>Datos que <strong>caben en el context window</strong> (&lt; 200K tokens) → mandalos directo, sin retrieval.</li>
-<li>Tareas donde lo que falta es <strong>razonamiento estructurado</strong>, no información (cálculo numérico exacto, código complejo).</li>
+<li>Tareas donde lo que falta es <strong>razonamiento estructurado</strong>, no información — cálculo numérico exacto, código complejo.</li>
 </ul>
 </div>
 </div>
@@ -7896,7 +7843,7 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Tama%C3%B1o-de-chunk-%E2%80%94-el-knob-m%C3%A1s-importante">Tamaño de chunk — el knob más importante<a class="anchor-link" href="#Tama%C3%B1o-de-chunk-%E2%80%94-el-knob-m%C3%A1s-importante">¶</a></h2><table>
+<h2 id="Tama%C3%B1o-de-chunk-%E2%80%94-el-par%C3%A1metro-m%C3%A1s-importante">Tamaño de chunk — el parámetro más importante<a class="anchor-link" href="#Tama%C3%B1o-de-chunk-%E2%80%94-el-par%C3%A1metro-m%C3%A1s-importante">¶</a></h2><table>
 <thead>
 <tr>
 <th>Tamaño</th>
@@ -7936,14 +7883,51 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
   │ contexto    = k × chunk_size + prompt + query ≤ 50% del window     │
   └────────────────────────────────────────────────────────────────────┘
 </code></pre>
-<h3 id="C%C3%B3mo-ajustarlo-en-la-pr%C3%A1ctica">Cómo ajustarlo en la práctica<a class="anchor-link" href="#C%C3%B3mo-ajustarlo-en-la-pr%C3%A1ctica">¶</a></h3><ol>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-chunk-size-ajuste">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="C%C3%B3mo-ajustar-el-chunk-size-en-la-pr%C3%A1ctica">Cómo ajustar el chunk size en la práctica<a class="anchor-link" href="#C%C3%B3mo-ajustar-el-chunk-size-en-la-pr%C3%A1ctica">¶</a></h2><ol>
 <li>Empezá con <strong>chunk=512, overlap=50, k=5</strong> y un eval offline mínimo.</li>
-<li>Si faltan detalles en la respuesta → <strong>bajá chunk, subí k</strong>.</li>
-<li>Si la respuesta pierde coherencia entre chunks → <strong>subí chunk, mantené k</strong>.</li>
-<li>Si latencia o costo duelen → <strong>bajá k antes de bajar chunk</strong>.</li>
+<li>Si faltan <strong>detalles</strong> en la respuesta → <strong>bajá chunk, subí k</strong>.</li>
+<li>Si la respuesta pierde <strong>coherencia</strong> entre chunks → <strong>subí chunk, mantené k</strong>.</li>
+<li>Si <strong>latencia o costo</strong> duelen → <strong>bajá k antes de bajar chunk</strong>.</li>
 </ol>
 <blockquote>
-<p>No hay una respuesta universal. <strong>Es un parámetro que se afina con eval offline</strong> (lo vemos en B5).</p>
+<p>No hay una respuesta universal. <strong>Es un parámetro que se afina con eval offline.</strong></p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-embeddings-rag">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Embeddings-%E2%80%94-el-modelo-que-usamos-en-RAG">Embeddings — el modelo que usamos en RAG<a class="anchor-link" href="#Embeddings-%E2%80%94-el-modelo-que-usamos-en-RAG">¶</a></h2><p>Recap rápido de Clase 1: cada chunk se transforma en un vector que captura su significado semántico.</p>
+<p>Tres decisiones que pesan más en RAG que en Clase 1:</p>
+<ol>
+<li><p><strong>Mismo modelo para chunks y queries.</strong>
+Si embebés con modelos distintos, los vectores viven en espacios distintos y la similitud no significa nada.</p>
+</li>
+<li><p><strong>Modelo multilingüe vs específico.</strong>
+Corpus en español → <code>paraphrase-multilingual-MiniLM-L12-v2</code> (~85MB) o <code>intfloat/multilingual-e5-large</code> (~2.2GB, más calidad, más lento).
+Corpus en inglés → el <a href="https://huggingface.co/spaces/mteb/leaderboard">MTEB leaderboard</a> tiene los rankings actualizados.</p>
+</li>
+<li><p><strong>Dimensionalidad y costo.</strong>
+384D / 768D / 1024D — más dimensiones = más recall, más memoria, más latencia. Default razonable: 384D.</p>
+</li>
+</ol>
+<blockquote>
+<p>En la práctica de hoy usamos <code>paraphrase-multilingual-MiniLM-L12-v2</code>: liviano, multilingüe, corre en Colab CPU sin GPU.</p>
 </blockquote>
 </div>
 </div>
@@ -7955,7 +7939,7 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="ChromaDB-%E2%80%94-vector-store-en-memoria">ChromaDB — vector store en memoria<a class="anchor-link" href="#ChromaDB-%E2%80%94-vector-store-en-memoria">¶</a></h2><h3 id="%C2%BFQu%C3%A9-es-un-vector-store?">¿Qué es un vector store?<a class="anchor-link" href="#%C2%BFQu%C3%A9-es-un-vector-store?">¶</a></h3><p>Una base de datos especializada en guardar vectores y buscar los más similares.</p>
+<h2 id="Vector-stores-%E2%80%94-BD-para-embeddings">Vector stores — BD para embeddings<a class="anchor-link" href="#Vector-stores-%E2%80%94-BD-para-embeddings">¶</a></h2><h3 id="%C2%BFQu%C3%A9-es-un-vector-store?">¿Qué es un vector store?<a class="anchor-link" href="#%C2%BFQu%C3%A9-es-un-vector-store?">¶</a></h3><p>Una base de datos especializada en guardar vectores y buscar los más similares.</p>
 <pre><code>  Base relacional (SQL):              Vector store:
   ─────────────────────               ─────────────
   SELECT * FROM docs                  "buscar los 3 chunks
@@ -7963,41 +7947,64 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
   → coincidencia EXACTA               → similitud APROXIMADA
 
   Busca por: igualdad, rango          Busca por: distancia en espacio N-dim
-  Índice: B-tree                      Índice: HNSW
+  Índice: B-tree                      Índice: HNSW, IVF, PQ
 </code></pre>
-<p><strong>ChromaDB:</strong></p>
-<ul>
-<li>Open source, Python nativo</li>
-<li>Funciona <strong>in-memory</strong> — sin instalar nada</li>
-<li>Perfecto para prototipos y clases</li>
-<li>En producción: Pinecone, Weaviate, Qdrant, pgvector</li>
+<h3 id="Caracter%C3%ADsticas-generales-que-comparten">Características generales que comparten<a class="anchor-link" href="#Caracter%C3%ADsticas-generales-que-comparten">¶</a></h3><ul>
+<li><strong>Distancia</strong> — cosine, dot product, euclidean (cosine es lo más común para embeddings).</li>
+<li><strong>Índice ANN</strong> (Approximate Nearest Neighbor) — HNSW es el default; trade-off entre recall y latencia.</li>
+<li><strong>Metadata filtering</strong> — además del vector, filtrar por campos estructurados (<code>autor='X'</code>, <code>fecha &gt; Y</code>).</li>
+<li><strong>Persistencia</strong> — in-memory para prototipos; disk/cloud para producción.</li>
+<li><strong>Escalabilidad</strong> — millones a billones de vectores; sharding y replicación.</li>
 </ul>
-<table>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-vectorstore-opciones">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Opciones-de-vector-store">Opciones de vector store<a class="anchor-link" href="#Opciones-de-vector-store">¶</a></h2><table>
 <thead>
 <tr>
-<th>Config</th>
-<th>Valor que usamos</th>
-<th>Por qué</th>
+<th>Vector store</th>
+<th>Modo</th>
+<th>Cuándo elegirlo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Distancia</td>
-<td><code>cosine</code></td>
-<td>Misma métrica que Clase 1</td>
+<td><strong>ChromaDB</strong></td>
+<td>Open source, in-memory o local</td>
+<td>Prototipos, clases, corpus chico — <strong>el que usamos hoy</strong></td>
 </tr>
 <tr>
-<td>Embedding function</td>
-<td><code>sentence-transformers</code> manual</td>
-<td>Control total, ya lo conocemos</td>
+<td><strong>Pinecone</strong></td>
+<td>SaaS cloud</td>
+<td>Producción gestionada, sin DevOps</td>
 </tr>
 <tr>
-<td>Metadata</td>
-<td><code>titulo</code>, <code>doc_id</code>, <code>chunk_index</code></td>
-<td>Para saber de dónde viene cada chunk</td>
+<td><strong>Weaviate / Qdrant</strong></td>
+<td>Open source, self-hosted</td>
+<td>Producción con control total</td>
+</tr>
+<tr>
+<td><strong>pgvector</strong></td>
+<td>Extensión de PostgreSQL</td>
+<td>Ya tenés Postgres y querés sumar vectores</td>
+</tr>
+<tr>
+<td><strong>FAISS</strong></td>
+<td>Librería (Meta)</td>
+<td>Búsqueda batch, sin servidor</td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p>En esta clase usamos <strong>ChromaDB</strong> porque es in-memory, sin instalación, y nos deja enfocarnos en el pipeline RAG.</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -8065,11 +8072,22 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
   │       (Art. 52). Fuente: [Art. 47, Código de Faltas]"                │
   └─────────────────────────────────────────────────────────────────────┘
 </code></pre>
-<h3 id="Por-qu%C3%A9-este-caso-es-paradigm%C3%A1tico-para-RAG">Por qué este caso es <strong>paradigmático</strong> para RAG<a class="anchor-link" href="#Por-qu%C3%A9-este-caso-es-paradigm%C3%A1tico-para-RAG">¶</a></h3><ul>
-<li>Datos <strong>públicos pero dispersos</strong> (no entran en el training de ningún LLM global).</li>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2-santa-fe-paradigmatico">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Ejemplo-end-to-end-%E2%80%94-multas-de-tr%C3%A1nsito-en-Santa-Fe">Ejemplo end-to-end — multas de tránsito en Santa Fe<a class="anchor-link" href="#Ejemplo-end-to-end-%E2%80%94-multas-de-tr%C3%A1nsito-en-Santa-Fe">¶</a></h2><p><strong>Usuario:</strong> <em>"¿Cuál es el plazo de prescripción para multas de tránsito en la Ciudad de Santa Fe?"</em></p>
+<h3 id="Por-qu%C3%A9-este-caso-es-paradigm%C3%A1tico-para-RAG">Por qué este caso es paradigmático para RAG<a class="anchor-link" href="#Por-qu%C3%A9-este-caso-es-paradigm%C3%A1tico-para-RAG">¶</a></h3><ul>
+<li><strong>Datos públicos pero dispersos</strong> — no entran en el training de ningún LLM global.</li>
 <li><strong>Auditabilidad obligatoria</strong> — la respuesta debe rastrearse al artículo (no es opcional en lo legal).</li>
 <li><strong>Actualización constante</strong> — los reglamentos cambian; re-entrenar el LLM no es viable.</li>
-<li>Dominio <strong>localizado</strong> que ningún modelo genérico cubre con la precisión necesaria.</li>
+<li><strong>Dominio localizado</strong> — ningún modelo genérico lo cubre con la precisión necesaria.</li>
 </ul>
 </div>
 </div>
@@ -8081,19 +8099,20 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%9B%A0-Pr%C3%A1ctica-del-Bloque-2-%E2%80%94-Pipeline-RAG-naive">🛠 Práctica del Bloque 2 — Pipeline RAG naive<a class="anchor-link" href="#%F0%9F%9B%A0-Pr%C3%A1ctica-del-Bloque-2-%E2%80%94-Pipeline-RAG-naive">¶</a></h2><p>📓 <a href="notebooks/rag/01_naive.ipynb"><code>clase03/notebooks/rag/01_naive.ipynb</code></a></p>
-<p><a href="https://colab.research.google.com/github/jorgeroa/ia-utn-frsf/blob/main/clase03/notebooks/rag/01_naive.ipynb" target="_blank"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
-<p><strong>Lo que vas a hacer (~30 min):</strong></p>
+<h2 id="%F0%9F%9B%A0-Pr%C3%A1ctica-del-Bloque-2-%E2%80%94-Pipeline-RAG-naive">🛠 Práctica del Bloque 2 — Pipeline RAG naive<a class="anchor-link" href="#%F0%9F%9B%A0-Pr%C3%A1ctica-del-Bloque-2-%E2%80%94-Pipeline-RAG-naive">¶</a></h2><p>📓 <a href="notebooks/rag/practica_completa.ipynb"><code>clase03/notebooks/rag/practica_completa.ipynb</code></a></p>
+<p><a href="https://colab.research.google.com/github/jorgeroa/ia-utn-frsf/blob/main/clase03/notebooks/rag/practica_completa.ipynb" target="_blank"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
+<p><strong>Corpus:</strong> programa real de la <strong>Cátedra IA UTN-FRSF 2026</strong> (5 documentos: programa, condiciones de cursada, modalidad, evaluación, TPs).</p>
+<p><strong>Lo que vas a hacer:</strong></p>
 <ul>
-<li>Demo "LLM sin contexto vs con contexto" (motivación).</li>
-<li>Levantar el corpus de 5 docs sobre IA para ingeniería de sistemas.</li>
-<li>Chunkear, embeddings, ChromaDB.</li>
-<li>Construir <code>rag_query()</code> end-to-end.</li>
-<li><strong>Correr el benchmark de 7 queries con RAG naive y completar la tabla de resultados.</strong> Esta es la <strong>baseline</strong> que las notebooks 2 y 3 van a tratar de mejorar.</li>
+<li><strong>Parte 1 — Motivación:</strong> LLM puro vs RAG hardcoded (por qué hace falta retrieval).</li>
+<li><strong>Parte 2 — Pipeline naive a mano:</strong> corpus → chunking → embeddings → ChromaDB → retrieval → augmentation → <code>rag_query()</code>.</li>
+<li><strong>Parte 3 — Probamos el pipeline</strong> con tres queries representativas:<ol>
+<li><strong>Lookup directo</strong> — día, horario y aula (un sólo chunk).</li>
+<li><strong>Multi-fact</strong> — criterios para aprobar la materia (varios chunks).</li>
+<li><strong>Edge case</strong> — fecha del TP3 (no existe en el corpus → esperamos abstención, no alucinación).</li>
+</ol>
+</li>
 </ul>
-<blockquote>
-<p>El benchmark cubre: fáciles · ambiguas (sigla vs concepto) · multi-hop · edge case.</p>
-</blockquote>
 </div>
 </div>
 </div>
@@ -8122,41 +8141,34 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </code></pre>
 <p>Mejoras sobre TF-IDF:</p>
 <ul>
-<li><strong>Saturación de TF:</strong> la 10ma aparición de una palabra no suma tanto como la 1ra</li>
-<li><strong>Normalización por largo:</strong> docs cortos no se penalizan injustamente</li>
+<li><strong>Saturación de TF:</strong> la 10ma aparición de una palabra no suma tanto como la 1ra.</li>
+<li><strong>Normalización por largo:</strong> docs cortos no se penalizan injustamente.</li>
 </ul>
-<h3 id="%C2%BFCu%C3%A1ndo-falla-la-b%C3%BAsqueda-sem%C3%A1ntica?">¿Cuándo falla la búsqueda semántica?<a class="anchor-link" href="#%C2%BFCu%C3%A1ndo-falla-la-b%C3%BAsqueda-sem%C3%A1ntica?">¶</a></h3><table>
+<h3 id="%C2%BFCu%C3%A1ndo-aporta-sumar-BM25-a-la-b%C3%BAsqueda-sem%C3%A1ntica?">¿Cuándo aporta sumar BM25 a la búsqueda semántica?<a class="anchor-link" href="#%C2%BFCu%C3%A1ndo-aporta-sumar-BM25-a-la-b%C3%BAsqueda-sem%C3%A1ntica?">¶</a></h3><table>
 <thead>
 <tr>
-<th>Query</th>
-<th>Búsqueda semántica</th>
-<th>BM25</th>
+<th>Tipo de query</th>
+<th>Tendencia</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>"ChromaDB"</td>
-<td>Busca conceptos similares a DBs vectoriales ✓</td>
-<td>Busca la palabra exacta "ChromaDB" ✓✓</td>
+<td>Vocabulario natural ("¿qué es un banco comercial?")</td>
+<td>La búsqueda con embeddings suele alcanzar — captura el concepto aunque las palabras no coincidan.</td>
 </tr>
 <tr>
-<td>"HNSW"</td>
-<td>No entiende la sigla, devuelve ruido ✗</td>
-<td>Encuentra el chunk que dice "HNSW" ✓</td>
+<td>Jerga técnica o siglas ("iliquidez", "HNSW", "ChromaDB")</td>
+<td>BM25 puede rescatar la palabra exacta si el embedding la pasó por alto.</td>
 </tr>
 <tr>
-<td>"seguridad en IA"</td>
-<td>Entiende el concepto amplio ✓✓</td>
-<td>Solo matchea si dice "seguridad" literal ✓</td>
-</tr>
-<tr>
-<td>"cómo protegerse de ataques"</td>
-<td>Entiende la intención ✓✓</td>
-<td>No matchea "prompt injection" ✗</td>
+<td>Conceptos amplios ("seguridad en IA")</td>
+<td>Embeddings entienden la intención; BM25 sólo matchea literal.</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Conclusión:</strong> BM25 gana para términos técnicos y siglas. Semántica gana para conceptos. Lo ideal: combinarlos.</p>
+<blockquote>
+<p><strong>No es determinístico.</strong> A veces los embeddings ya traen el chunk técnico, a veces hybrid rescata. Por eso conviene <strong>medir en tu corpus</strong> antes de asumir que hybrid siempre mejora.</p>
+</blockquote>
 </div>
 </div>
 </div>
@@ -8167,16 +8179,41 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Combinar-BM25-+-dense-%E2%80%94-dos-estrategias">Combinar BM25 + dense — dos estrategias<a class="anchor-link" href="#Combinar-BM25-+-dense-%E2%80%94-dos-estrategias">¶</a></h2><p>Tenés dos retrievers que asignan scores en escalas distintas. ¿Cómo los mezclás?</p>
+<h2 id="Combinar-BM25-+-embeddings-%E2%80%94-weighted-sum">Combinar BM25 + embeddings — weighted sum<a class="anchor-link" href="#Combinar-BM25-+-embeddings-%E2%80%94-weighted-sum">¶</a></h2><p>Tenés dos retrievers que asignan scores en escalas distintas. ¿Cómo los mezclás?</p>
 <p><strong>Opción 1 — Weighted sum (intuitiva pero frágil):</strong></p>
-<p><code>score(d) = α · dense_norm(d) + (1−α) · bm25_norm(d)</code></p>
-<p>Normalizás cada score a <code>[0,1]</code> y promediás. <em>Modo de falla:</em> cuando BM25 y dense <strong>disienten</strong> sobre cuál chunk es el más relevante, el promedio empuja la respuesta correcta fuera del top-k.</p>
-<p><strong>Opción 2 — Reciprocal Rank Fusion (RRF, estándar de industria):</strong></p>
+<p><code>score(d) = α · emb_norm(d) + (1−α) · bm25_norm(d)</code></p>
+<p>Donde:</p>
+<ul>
+<li><strong><code>d</code></strong> — un documento (chunk) del corpus al que le estás calculando el score.</li>
+<li><strong><code>emb_norm(d)</code> / <code>bm25_norm(d)</code></strong> — score que da cada retriever, normalizado a <code>[0,1]</code>.</li>
+<li><strong><code>α</code></strong> — peso entre 0 y 1 que controla cuánto pesa cada retriever:<ul>
+<li><code>α = 1</code> → sólo embeddings</li>
+<li><code>α = 0</code> → sólo BM25</li>
+<li><code>α = 0.5</code> → mitad y mitad</li>
+<li>típico: <code>α ∈ [0.5, 0.7]</code> (algo más a embeddings).</li>
+</ul>
+</li>
+</ul>
+<p><strong>Cuándo falla:</strong> si BM25 y embeddings no se ponen de acuerdo sobre cuál chunk es el más relevante, el promedio le da score medio a todos y la respuesta correcta puede quedar fuera del top-k.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b3-rrf-fusion">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Combinar-BM25-+-embeddings-%E2%80%94-RRF">Combinar BM25 + embeddings — RRF<a class="anchor-link" href="#Combinar-BM25-+-embeddings-%E2%80%94-RRF">¶</a></h2><p><strong>Opción 2 — Reciprocal Rank Fusion (RRF, estándar de industria):</strong></p>
 <p><code>score(d) = Σᵢ 1 / (k + rankᵢ(d))</code>   con k=60</p>
+<p>Donde:</p>
+<ul>
+<li><strong><code>d</code></strong> — un documento (chunk) del corpus.</li>
+<li><strong><code>rankᵢ(d)</code></strong> — posición de <code>d</code> en el ranking del retriever <code>i</code> (BM25, embeddings, etc.). Si <code>d</code> quedó 1ro, <code>rankᵢ(d) = 1</code>.</li>
+<li><strong><code>k</code></strong> — constante de amortiguación (60 es el default histórico). Suaviza el efecto de los rankings muy bajos.</li>
+</ul>
 <p>Sumás recíprocos del <strong>ranking</strong>, no de scores. Si un chunk está en el top-3 de <strong>cualquier</strong> retriever, queda con score competitivo — sin importar la escala del otro. Es lo que usan Elasticsearch, OpenSearch, Vespa.</p>
-<blockquote>
-<p><strong>Regla práctica:</strong> empezá con RRF (es el default de <code>EnsembleRetriever</code> en LangChain). Si después medís y ves que weighted sum con un α tuneado te da mejor recall en tu corpus, ahí lo cambiás.</p>
-</blockquote>
 </div>
 </div>
 </div>
@@ -8202,25 +8239,6 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 <blockquote>
 <p><strong>Modelos típicos:</strong> <code>BAAI/bge-reranker-base</code> (multilingual, ~280 MB), <code>cross-encoder/ms-marco-MiniLM-L-6-v2</code> (inglés, ~80 MB).</p>
 </blockquote>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=bridge-b3">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%9B%A0-Pr%C3%A1ctica-del-Bloque-3-%E2%80%94-Hybrid-Search">🛠 Práctica del Bloque 3 — Hybrid Search<a class="anchor-link" href="#%F0%9F%9B%A0-Pr%C3%A1ctica-del-Bloque-3-%E2%80%94-Hybrid-Search">¶</a></h2><p>📓 <a href="notebooks/rag/02_hybrid.ipynb"><code>clase03/notebooks/rag/02_hybrid.ipynb</code></a></p>
-<p><a href="https://colab.research.google.com/github/jorgeroa/ia-utn-frsf/blob/main/clase03/notebooks/rag/02_hybrid.ipynb" target="_blank"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
-<p><strong>Lo que vas a hacer (~25 min):</strong></p>
-<ul>
-<li>Implementar BM25 standalone sobre los mismos chunks.</li>
-<li>Implementar Hybrid Search con weighted sum (α).</li>
-<li><strong>Correr el mismo benchmark de la notebook 1 con dense / BM25 / hybrid</strong> y comparar fila por fila.</li>
-<li>Variar α (0.0, 0.3, 0.5, 0.7, 1.0) para ver qué valor funciona mejor por tipo de query.</li>
-</ul>
 </div>
 </div>
 </div>
@@ -8260,6 +8278,26 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
 </div>
 </div>
 </div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-hyde-ejemplo">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="HyDE-%E2%80%94-ejemplo-con-multas-de-tr%C3%A1nsito">HyDE — ejemplo con multas de tránsito<a class="anchor-link" href="#HyDE-%E2%80%94-ejemplo-con-multas-de-tr%C3%A1nsito">¶</a></h2><p><strong>Query del usuario:</strong> <em>"¿Cuál es el plazo de prescripción para multas de tránsito en la Ciudad de Santa Fe?"</em></p>
+<p><strong>Paso 1 — el LLM inventa una respuesta</strong> (sin retrieval, sólo con lo que sabe):</p>
+<p><em>"El plazo de prescripción para multas de tránsito en la Ciudad de Santa Fe es de <strong>2 años</strong> contados desde la notificación de la infracción. Dicho plazo puede suspenderse durante la tramitación del proceso administrativo. Las multas no abonadas dentro de ese período prescriben automáticamente conforme al Código de Faltas provincial."</em></p>
+<p><strong>Paso 2 — buscamos con el embedding de ese texto</strong> (no con el de la query original).</p>
+<h3 id="Lo-clave:-no-importa-si-lo-que-invent%C3%B3-es-correcto">Lo clave: no importa si lo que inventó es correcto<a class="anchor-link" href="#Lo-clave:-no-importa-si-lo-que-invent%C3%B3-es-correcto">¶</a></h3><p>Tal vez el Código de Faltas real dice "1 año" y el LLM dijo "2 años". <strong>No importa.</strong> Lo que pesa es la <strong>forma</strong> del texto, no la verdad:</p>
+<ul>
+<li>La query corta vive en "espacio de preguntas" (interrogativa, casual).</li>
+<li>Los docs reales viven en "espacio de documentos legales" (declarativos, formales, con jerga).</li>
+<li>El doc inventado vive <strong>también</strong> en el espacio de documentos → matchea mejor contra el Art. 47 real que la query original.</li>
+</ul>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-parent-child">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -8280,67 +8318,65 @@ Regla práctica: overlap = 10-20% del tamaño del chunk.</p>
        → devolver Párrafo completo (padre)
        → el LLM tiene más contexto para responder
 </code></pre>
-<p><strong>Implementación:</strong> cada chunk hijo guarda un <code>parent_id</code> en metadata.<br/>
+<p><strong>Implementación:</strong> cada chunk hijo guarda un <code>parent_id</code> en metadata.
 Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <p><strong>Trade-off:</strong></p>
 <ul>
 <li>Más contexto para el LLM → mejor respuesta</li>
 <li>Más tokens por chunk → más costo, posible ruido</li>
 </ul>
-<blockquote>
-<p>Esta técnica se implementa con LangChain <code>ParentDocumentRetriever</code>. La vemos en detalle en Clase 4 si hace falta para el TP Integrador.</p>
-</blockquote>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-graph-multihop">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-multihop">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Graph-RAG-y-Multi-Hop-RAG-%E2%80%94-m%C3%A1s-all%C3%A1-del-top-k">Graph RAG y Multi-Hop RAG — más allá del top-k<a class="anchor-link" href="#Graph-RAG-y-Multi-Hop-RAG-%E2%80%94-m%C3%A1s-all%C3%A1-del-top-k">¶</a></h2><h3 id="Multi-Hop-RAG-%E2%80%94-razonamiento-sobre-varios-documentos">Multi-Hop RAG — razonamiento sobre varios documentos<a class="anchor-link" href="#Multi-Hop-RAG-%E2%80%94-razonamiento-sobre-varios-documentos">¶</a></h3><pre><code>  Query: "Compará cómo evolucionó la ley X en Argentina vs Brasil entre 2020-2025"
-
-  Naive RAG:                       Multi-Hop:
-  ──────────                       ─────────
-  1 embed(query)                   Paso 1: retrieval sobre "ley X Argentina"
-  2 top-5 chunks                   Paso 2: retrieval sobre "ley X Brasil"
-  3 (chunks dispersos              Paso 3: retrieval sobre "evolución 2020-2025"
-     no alcanzan)                  Paso 4: síntesis con todos los chunks
+<h2 id="Multi-Hop-RAG-%E2%80%94-razonamiento-sobre-varios-documentos">Multi-Hop RAG — razonamiento sobre varios documentos<a class="anchor-link" href="#Multi-Hop-RAG-%E2%80%94-razonamiento-sobre-varios-documentos">¶</a></h2><h3 id="Ejemplo-sencillo">Ejemplo sencillo<a class="anchor-link" href="#Ejemplo-sencillo">¶</a></h3><p><em>"¿La empresa que fundó Steve Jobs tiene sede en la misma ciudad donde nació?"</em></p>
+<p>Para responder hace falta combinar <strong>dos hechos</strong> que están en documentos distintos:</p>
+<ol>
+<li><strong>Hop 1</strong> → recuperar: <em>"Steve Jobs fundó Apple"</em></li>
+<li><strong>Hop 2</strong> → recuperar: <em>"Apple tiene sede en Cupertino, California"</em></li>
+<li><strong>Hop 3</strong> → recuperar: <em>"Steve Jobs nació en San Francisco, California"</em></li>
+<li><strong>Síntesis</strong> → misma California, distinta ciudad → <strong>no</strong>.</li>
+</ol>
+<pre><code>  Naive RAG:                       Multi-Hop RAG:
+  ──────────                       ─────────────
+  embed(query) → top-5             retrieve → analizar → re-query
+  (los 5 chunks no contienen       cada paso responde a una sub-pregunta
+   los 3 hechos juntos)            que el LLM formula a partir del anterior
 </code></pre>
-<h3 id="Graph-RAG-%E2%80%94-knowledge-graph-como-%C3%ADndice-(Microsoft,-2024)">Graph RAG — knowledge graph como índice (Microsoft, 2024)<a class="anchor-link" href="#Graph-RAG-%E2%80%94-knowledge-graph-como-%C3%ADndice-(Microsoft,-2024)">¶</a></h3><pre><code>  Documentos                Graph                    Query
-  ─────────                 ─────                    ─────
-  ┌──────────┐  extract    [Persona A] ──trabaja──▶ [Empresa X]
-  │ Doc 1    │ ──con LLM──▶                              │
-  ├──────────┤              [Persona A] ──colaboró──▶ [Persona B]
-  │ Doc 2    │                                              │
-  ├──────────┤              [Empresa X] ──proyecto──▶ [Tema IA]
-  │ Doc 3    │
-  └──────────┘   "¿Quién trabajó con A en X en proyectos de IA?"
-                  → traverse: A → X → proyectos → IA → B
+<p><strong>Cuándo usarlo:</strong> preguntas que combinan info de ≥ 2 fuentes, comparaciones entre entidades, evolución temporal.</p>
+<p><strong>Cuándo no:</strong> Q&amp;A de un solo concepto, lookups simples — naive ya alcanza.</p>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-graphrag">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Graph-RAG-%E2%80%94-knowledge-graph-como-%C3%ADndice">Graph RAG — knowledge graph como índice<a class="anchor-link" href="#Graph-RAG-%E2%80%94-knowledge-graph-como-%C3%ADndice">¶</a></h2><h3 id="Ejemplo-sencillo">Ejemplo sencillo<a class="anchor-link" href="#Ejemplo-sencillo">¶</a></h3><blockquote>
+<p>Corpus: 200 papers de investigación médica.
+Query: <em>"¿Qué tratamientos comparten autores con el Dr. García?"</em></p>
+</blockquote>
+<p>En lugar de buscar chunks por similitud, se construye un <strong>grafo de entidades</strong> y se navega por relaciones:</p>
+<pre><code>  Extracción (offline, con LLM):           Query (online):
+  ─────────────────────────                ──────────────
+  [Dr. García] ──autor de──▶ [Paper 1]     1. Buscar nodo [Dr. García]
+  [Paper 1]    ──trata──────▶ [Diabetes]   2. Traverse autor → papers
+  [Dr. López]  ──autor de──▶ [Paper 1]     3. Traverse coautores → otros papers
+  [Dr. López]  ──autor de──▶ [Paper 7]     4. Traverse esos papers → tratamientos
+  [Paper 7]    ──trata──────▶ [Hipertensión]
+                                           Respuesta: Diabetes, Hipertensión
 </code></pre>
-<h3 id="Cu%C3%A1ndo-usarlas">Cuándo usarlas<a class="anchor-link" href="#Cu%C3%A1ndo-usarlas">¶</a></h3><table>
-<thead>
-<tr>
-<th>Técnica</th>
-<th>Caso ideal</th>
-<th>Cuándo NO</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Multi-Hop</strong></td>
-<td>Preguntas que combinan info de ≥ 2 fuentes distintas</td>
-<td>Q&amp;A de un solo concepto, lookups simples</td>
-</tr>
-<tr>
-<td><strong>Graph RAG</strong></td>
-<td>Dominios <strong>entidad-céntricos</strong> (legal, biomedicina, investigación) donde las <strong>relaciones</strong> importan tanto como los textos</td>
-<td>Corpus principalmente narrativo o documental</td>
-</tr>
-</tbody>
-</table>
+<p><strong>Cuándo usarlo:</strong> dominios <strong>entidad-céntricos</strong> (legal, biomedicina, investigación) donde las <strong>relaciones</strong> importan tanto como los textos.</p>
+<p><strong>Cuándo no:</strong> corpus principalmente narrativo o documental.</p>
 <blockquote>
 <p>📖 <em>Edge, D., et al. (2024). From Local to Global: A Graph RAG Approach to Query-Focused Summarization.</em> <a href="https://arxiv.org/abs/2404.16130">https://arxiv.org/abs/2404.16130</a></p>
 </blockquote>
@@ -8383,22 +8419,10 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <td>Cross-encoder sobre multi-hop</td>
 </tr>
 <tr>
-<td><strong>Fusión de fuentes</strong></td>
-<td>No</td>
-<td>Sí (RRF, weighted)</td>
-<td>Múltiples retrievers + voto</td>
-</tr>
-<tr>
 <td><strong>Query enrichment</strong></td>
 <td>No</td>
-<td>Query expansion básica</td>
-<td>HyDE, query rewriting con LLM</td>
-</tr>
-<tr>
-<td><strong>Memoria conversacional</strong></td>
 <td>No</td>
-<td>Parcial</td>
-<td>Completa (multi-turn coherente)</td>
+<td>HyDE, query rewriting con LLM</td>
 </tr>
 <tr>
 <td><strong>Costo / Latencia</strong></td>
@@ -8414,20 +8438,17 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Regla de oro:</strong> empezá <em>siempre</em> por Naive. Subí complejidad sólo cuando una métrica concreta (faithfulness, recall@k, latencia) lo justifique. El bloque 5 te enseña cómo medir.</p>
-</blockquote>
 </div>
 </div>
 </div>
 </div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-troubleshooting">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-troubleshooting-1">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Problemas-comunes-en-RAG-%E2%80%94-gu%C3%ADa-de-troubleshooting">Problemas comunes en RAG — guía de troubleshooting<a class="anchor-link" href="#Problemas-comunes-en-RAG-%E2%80%94-gu%C3%ADa-de-troubleshooting">¶</a></h2><table>
+<h2 id="Problemas-comunes-en-RAG-%E2%80%94-troubleshooting-(1/2)">Problemas comunes en RAG — troubleshooting (1/2)<a class="anchor-link" href="#Problemas-comunes-en-RAG-%E2%80%94-troubleshooting-(1/2)">¶</a></h2><table>
 <thead>
 <tr>
 <th>Síntoma observable</th>
@@ -8456,6 +8477,27 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <td>Reranking sobre demasiados candidatos; embeddings no cacheados</td>
 <td>Reranking sólo top-20; cache de queries frecuentes; embedding quantization</td>
 </tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b4-troubleshooting-2">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="Problemas-comunes-en-RAG-%E2%80%94-troubleshooting-(2/2)">Problemas comunes en RAG — troubleshooting (2/2)<a class="anchor-link" href="#Problemas-comunes-en-RAG-%E2%80%94-troubleshooting-(2/2)">¶</a></h2><table>
+<thead>
+<tr>
+<th>Síntoma observable</th>
+<th>Causa probable</th>
+<th>Mitigación</th>
+</tr>
+</thead>
+<tbody>
 <tr>
 <td><strong>Costo alto</strong></td>
 <td>Sin caching; embedding model caro; sobre-recuperación</td>
@@ -8479,7 +8521,7 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </tbody>
 </table>
 <blockquote>
-<p>Estos son <strong>diagnósticos</strong>, no recetas. Cada caso requiere medir si la mitigación realmente mueve la métrica (B5).</p>
+<p>Estos son <strong>diagnósticos</strong>, no recetas. Cada caso requiere medir si la mitigación realmente mueve la métrica.</p>
 </blockquote>
 </div>
 </div>
@@ -8491,12 +8533,16 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="%F0%9F%9B%A0-Pr%C3%A1cticas-del-Bloque-4-%E2%80%94-RAG-Avanzado-+-Capstone">🛠 Prácticas del Bloque 4 — RAG Avanzado + Capstone<a class="anchor-link" href="#%F0%9F%9B%A0-Pr%C3%A1cticas-del-Bloque-4-%E2%80%94-RAG-Avanzado-+-Capstone">¶</a></h2><h3 id="Notebook-3:-t%C3%A9cnicas-avanzadas">Notebook 3: técnicas avanzadas<a class="anchor-link" href="#Notebook-3:-t%C3%A9cnicas-avanzadas">¶</a></h3><p>📓 <a href="notebooks/rag/03_advanced.ipynb"><code>clase03/notebooks/rag/03_advanced.ipynb</code></a></p>
-<p><a href="https://colab.research.google.com/github/jorgeroa/ia-utn-frsf/blob/main/clase03/notebooks/rag/03_advanced.ipynb" target="_blank"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
-<p>Implementar reranking (cross-encoder), HyDE y parent-child chunks. Correr el <strong>mismo benchmark</strong> con cada técnica + una combinada (~30 min).</p>
-<h3 id="Notebook-4:-capstone-%E2%80%94-la-evoluci%C3%B3n-de-una-query">Notebook 4: capstone — la evolución de una query<a class="anchor-link" href="#Notebook-4:-capstone-%E2%80%94-la-evoluci%C3%B3n-de-una-query">¶</a></h3><p>📓 <a href="notebooks/rag/04_capstone.ipynb"><code>clase03/notebooks/rag/04_capstone.ipynb</code></a></p>
-<p><a href="https://colab.research.google.com/github/jorgeroa/ia-utn-frsf/blob/main/clase03/notebooks/rag/04_capstone.ipynb" target="_blank"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
-<p>Una sola query multi-hop difícil corre por <strong>6 stages</strong> (LLM puro → naive → hybrid → reranking → HyDE → parent-child). Tabla evolutiva + gráfico de scores. Cierre conceptual de la práctica de RAG (~20 min).</p>
+<h2 id="%F0%9F%9B%A0-Pr%C3%A1ctica-%E2%80%94-Naive-vs-Hybrid-sobre-un-corpus-legal-real">🛠 Práctica — Naive vs Hybrid sobre un corpus legal real<a class="anchor-link" href="#%F0%9F%9B%A0-Pr%C3%A1ctica-%E2%80%94-Naive-vs-Hybrid-sobre-un-corpus-legal-real">¶</a></h2><p>📓 <a href="notebooks/rag/practica_legal.ipynb"><code>clase03/notebooks/rag/practica_legal.ipynb</code></a></p>
+<p><a href="https://colab.research.google.com/github/jorgeroa/ia-utn-frsf/blob/main/clase03/notebooks/rag/practica_legal.ipynb" target="_blank"><img alt="Open In Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
+<p><strong>Corpus:</strong> Ley argentina <strong>21.526 de Entidades Financieras</strong> (67 artículos, ~91k chars) — un texto legal real, denso y con jerga técnica.</p>
+<p><strong>Lo que vas a ver:</strong></p>
+<ul>
+<li>Construir el pipeline con <strong>LangChain</strong>: <code>Chroma</code> (dense) + <code>BM25Retriever</code> + <code>EnsembleRetriever</code> (RRF).</li>
+<li><strong>Caso 1</strong> — query con vocabulario natural → <strong>dense alcanza</strong>.</li>
+<li><strong>Caso 2</strong> — query con jerga técnica ("iliquidez") → <strong>hybrid rescata</strong> porque BM25 capta la palabra exacta.</li>
+<li><strong>Sección de exploración</strong> — el cross-encoder reranker está armado para que pruebes sobre tus queries: puede mejorar precisión, puede filtrar señal útil. Medilo en tu caso.</li>
+</ul>
 </div>
 </div>
 </div>
@@ -8512,38 +8558,34 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <tr>
 <th>Bloque</th>
 <th>Concepto clave</th>
-<th>Conexión con el curso</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>B1 — ¿Por qué RAG?</td>
 <td>Knowledge cutoff, alucinaciones, context limits; aplicaciones reales (legal/salud/código/etc.)</td>
-<td>Resuelve lo que Clase 2 dejó pendiente</td>
 </tr>
 <tr>
 <td>B2 — Pipeline naive</td>
-<td>Chunking → embeddings → ChromaDB → retrieval → augmentation; ejemplo Santa Fe</td>
-<td>Base del TP Integrador</td>
+<td>Chunking → embeddings → vector store (ChromaDB) → retrieval → augmentation; ejemplo Santa Fe</td>
 </tr>
 <tr>
-<td>B3 — Hybrid search</td>
-<td>BM25 (léxico) + semántico (vectores) combinados</td>
-<td>Extiende BoW/TF-IDF de Clase 1</td>
+<td>B3 — Hybrid + Reranking</td>
+<td>BM25 (léxico) + dense (vectores) combinados con RRF; cross-encoder como segunda pasada</td>
 </tr>
 <tr>
 <td>B4 — RAG avanzado</td>
-<td>Reranking, HyDE, parent-child, Graph/Multi-Hop, troubleshooting</td>
-<td>Técnicas para mejorar calidad</td>
+<td>HyDE, parent-child, Multi-Hop, Graph RAG, troubleshooting</td>
 </tr>
 </tbody>
 </table>
 <p><strong>Stack que usamos hoy:</strong></p>
-<pre><code>sentence-transformers · chromadb · rank_bm25 · groq · cross-encoder
+<pre><code>sentence-transformers · chromadb · rank_bm25 · langchain · cross-encoder · groq
 </code></pre>
-<p><strong>Lo que sigue siendo válido para Clase 3b y 4:</strong></p>
+<p><strong>Notebooks de práctica:</strong></p>
 <ul>
-<li><code>llamar_llm()</code> + <code>rag_query()</code> + <code>hybrid_search()</code> — los usamos en la práctica de B5 (Arize) y en el TP integrador de Clase 4.</li>
+<li><code>practica_completa.ipynb</code> — RAG naive de punta a punta sobre el programa de la cátedra.</li>
+<li><code>practica_legal.ipynb</code> — naive vs hybrid con LangChain sobre la Ley 21.526.</li>
 </ul>
 </div>
 </div>
@@ -8562,19 +8604,18 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 <h3 id="Papers-fundamentales">Papers fundamentales<a class="anchor-link" href="#Papers-fundamentales">¶</a></h3><ul>
 <li>Lewis, P. et al. (2020). <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.</em> NeurIPS. <a href="https://arxiv.org/abs/2005.11401">https://arxiv.org/abs/2005.11401</a></li>
 <li>Robertson, S. &amp; Zaragoza, H. (2009). <em>The Probabilistic Relevance Framework: BM25 and Beyond.</em></li>
+<li>Cormack, G. V. et al. (2009). <em>Reciprocal Rank Fusion outperforms Condorcet and individual rank learning methods.</em> SIGIR. <a href="https://dl.acm.org/doi/10.1145/1571941.1572114">https://dl.acm.org/doi/10.1145/1571941.1572114</a></li>
 <li>Gao, L. et al. (2023). <em>HyDE — Precise Zero-Shot Dense Retrieval without Relevance Labels.</em> ACL. <a href="https://arxiv.org/abs/2212.10496">https://arxiv.org/abs/2212.10496</a></li>
 <li>Liu, N. F. et al. (2023). <em>Lost in the Middle — How Language Models Use Long Contexts.</em> TACL. <a href="https://arxiv.org/abs/2307.03172">https://arxiv.org/abs/2307.03172</a></li>
 <li>Edge, D. et al. (2024). <em>From Local to Global: A Graph RAG Approach to Query-Focused Summarization.</em> <a href="https://arxiv.org/abs/2404.16130">https://arxiv.org/abs/2404.16130</a></li>
 </ul>
 <h3 id="Documentaci%C3%B3n-/-herramientas">Documentación / herramientas<a class="anchor-link" href="#Documentaci%C3%B3n-/-herramientas">¶</a></h3><ul>
+<li><strong>LangChain</strong> — <a href="https://python.langchain.com/">https://python.langchain.com/</a></li>
 <li><strong>ChromaDB</strong> — <a href="https://docs.trychroma.com/">https://docs.trychroma.com/</a></li>
 <li><strong>Sentence-Transformers</strong> — <a href="https://www.sbert.net/">https://www.sbert.net/</a></li>
 <li><strong>rank_bm25</strong> — <a href="https://github.com/dorianbrown/rank_bm25">https://github.com/dorianbrown/rank_bm25</a></li>
-<li><strong>Sentence-Transformers cross-encoders</strong> — <a href="https://www.sbert.net/examples/applications/cross-encoder/README.html">https://www.sbert.net/examples/applications/cross-encoder/README.html</a></li>
+<li><strong>Cross-encoders (BGE reranker)</strong> — <a href="https://huggingface.co/BAAI/bge-reranker-base">https://huggingface.co/BAAI/bge-reranker-base</a></li>
 </ul>
-<blockquote>
-<p>La bibliografía completa de <strong>eval, monitoring y benchmarks</strong> (RAGAS, MT-Bench, SelfCheckGPT, PAIR, HELM, Arize, OpenTelemetry, etc.) vive en <strong>Clase 3b</strong>.</p>
-</blockquote>
 </div>
 </div>
 </div>
@@ -8585,18 +8626,17 @@ Al recuperar, se busca por hijo pero se devuelve el padre.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Clase-3b-%E2%80%94-%C2%BFqu%C3%A9-viene?">Clase 3b — ¿qué viene?<a class="anchor-link" href="#Clase-3b-%E2%80%94-%C2%BFqu%C3%A9-viene?">¶</a></h2><p>Hoy construimos el RAG. En la <strong>próxima sesión (Clase 3b)</strong> vemos cómo <strong>medir y operar</strong> sistemas LLM en producción — es la otra mitad del problema, y se aplica tanto a RAG como a cualquier sistema con LLMs.</p>
+<h2 id="%C2%BFQu%C3%A9-viene?">¿Qué viene?<a class="anchor-link" href="#%C2%BFQu%C3%A9-viene?">¶</a></h2><p>Hoy construimos el RAG. Lo que sigue completa el ciclo:</p>
 <hr/>
+<h3 id="Evaluaci%C3%B3n-y-monitoreo-de-sistemas-LLM">Evaluación y monitoreo de sistemas LLM<a class="anchor-link" href="#Evaluaci%C3%B3n-y-monitoreo-de-sistemas-LLM">¶</a></h3><p>Cómo <strong>medir y operar</strong> sistemas LLM en producción — se aplica tanto a RAG como a cualquier sistema con LLMs.</p>
 <ul>
 <li><strong>Fundamentos</strong> — por qué eval de LLMs es distinto, reference-based vs free, detección de alucinaciones, tracing.</li>
 <li><strong>Pre-deploy (eval offline)</strong> — golden datasets, LLM-as-judge, RAGAS deep dive, safety + red-teaming, armar tu propio benchmark.</li>
 <li><strong>Deploy</strong> — A/B, shadow, canary, prompt versioning, model registry, auto-rollback.</li>
 <li><strong>Producción</strong> — logging, cost/latency, drift detection, feedback loops.</li>
-<li><strong>Práctica end-to-end con Arize AX</strong> — un chatbot Q&amp;A instrumentado de punta a punta sobre los temas de las clases 1-3.</li>
+<li><strong>Práctica end-to-end con Arize AX</strong> — un chatbot Q&amp;A instrumentado sobre los temas de las clases 1-3.</li>
 </ul>
-<blockquote>
-<p>Después de Clase 3b: <strong>Clase 4 = Agentes</strong>.</p>
-</blockquote>
+<h3 id="Agentes">Agentes<a class="anchor-link" href="#Agentes">¶</a></h3><p>Después: <strong>agentes</strong> — LLMs que deciden qué herramienta usar, planifican multi-step, y orquestan acciones (incluido el retrieval) de forma autónoma.</p>
 </div>
 </div>
 </div>
