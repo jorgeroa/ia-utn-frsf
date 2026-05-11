@@ -26,12 +26,23 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
 
 ### Clase 3 — RAG (Retrieval Augmented Generation)
 
-- `clase03/clase3_slides.ipynb` — slides de la clase (reveal.js).
+- `clase03/clase3_slides.ipynb` — slides conceptuales (reveal.js).
 - `clase03/figures/` — figuras SVG.
+- `clase03/notebooks/rag/` — 4 notebooks de práctica para Colab que
+  comparten **un mismo benchmark de 7 queries** (fácil / ambigua /
+  multi-hop / edge case) para comparar técnicas apples-to-apples:
+  - `01_naive.ipynb` — pipeline naive completo (chunking, embeddings,
+    ChromaDB, augmentation) y baseline contra el benchmark.
+  - `02_hybrid.ipynb` — BM25 + Hybrid (weighted sum con α), corre el
+    mismo benchmark con los 3 métodos.
+  - `03_advanced.ipynb` — Reranking (cross-encoder), HyDE y
+    Parent-child chunks, también sobre el mismo benchmark.
+  - `04_capstone.ipynb` — toma 1 query multi-hop difícil y muestra la
+    evolución stage-by-stage (LLM puro → naive → hybrid → reranking →
+    HyDE → parent-child) con tabla y gráfico.
 
-Pipeline RAG paso a paso (chunking, embeddings, ChromaDB, augmentation),
-búsqueda híbrida (BM25 + semántica), técnicas avanzadas (Reranking, HyDE,
-parent-child, Graph/Multi-Hop), troubleshooting y aplicaciones reales.
+Pipeline RAG paso a paso, búsqueda híbrida, técnicas avanzadas (incluyendo
+Graph/Multi-Hop), troubleshooting y aplicaciones reales.
 
 ### Clase 3b — Evaluación, monitoreo y benchmarks de sistemas LLM
 
@@ -123,13 +134,18 @@ El directorio `venv/` está en `.gitignore`. Para salir del entorno:
 │   ├── notebooks/
 │   └── scripts/
 ├── clase03/
-│   ├── clase3_slides.ipynb           # Clase 3: RAG
+│   ├── clase3_slides.ipynb              # Clase 3: RAG
 │   ├── clase3_slides.slides.html
-│   ├── clase3b_slides.ipynb          # Clase 3b: Eval / monitoring / benchmarks
+│   ├── clase3b_slides.ipynb             # Clase 3b: Eval / monitoring / benchmarks
 │   ├── clase3b_slides.slides.html
 │   ├── figures/
 │   └── notebooks/
-│       └── 01_arize_eval_handson.ipynb  # práctica de clase 3b
+│       ├── 01_arize_eval_handson.ipynb  # práctica de clase 3b
+│       └── rag/                          # prácticas de clase 3
+│           ├── 01_naive.ipynb
+│           ├── 02_hybrid.ipynb
+│           ├── 03_advanced.ipynb
+│           └── 04_capstone.ipynb
 ├── CITATION.cff
 ├── LICENSE
 └── README.md
