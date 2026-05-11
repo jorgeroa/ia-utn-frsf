@@ -29,25 +29,25 @@ Universidad Tecnológica Nacional, Facultad Regional Santa Fe.
 - `clase03/clase3_slides.ipynb` — slides conceptuales (reveal.js).
 - `clase03/figures/` — figuras SVG.
 - `clase03/notebooks/rag/` — notebooks de práctica para Colab:
-  - `practica_completa.ipynb` — práctica principal, narrativa
-    incremental. Parte 1-3: RAG naive implementado a mano sobre el
-    programa de la cátedra (corpus chico, 5 docs). Parte 4: subiendo a
-    framework con LangChain (`EnsembleRetriever` con RRF + cross-encoder
-    reranker). Cierra con 3 casos cualitativos comparando naive vs
-    hybrid vs hybrid+reranker.
-  - `practica_legal.ipynb` — caso de uso sobre un corpus real y extenso:
-    la Ley argentina 21.526 de Entidades Financieras (67 artículos,
-    ~91k chars). Muestra dónde el reranker **sí** agrega valor (rescata
-    artículos que el hybrid solo dejaba afuera), dónde **filtra de más
-    y empeora**, y dónde **ambos fallan** porque el vocabulario del
-    usuario no se cruza con el del corpus. Benchmark de 15 queries +
-    análisis cualitativo de 3 casos.
+  - `practica_completa.ipynb` — RAG naive de punta a punta sobre el
+    programa real de la Cátedra IA UTN-FRSF 2026 (5 documentos).
+    Cubre corpus → chunking → embeddings → ChromaDB → retrieval →
+    augmentation → generation. Cierra probando el pipeline con tres
+    queries (lookup directo, multi-fact, edge case) para ver dónde
+    naive alcanza y dónde se queda corto.
+  - `practica_legal.ipynb` — naive vs hybrid usando LangChain sobre un
+    corpus real y extenso: la Ley argentina 21.526 de Entidades
+    Financieras (67 artículos, ~91k chars). Dos casos: dense alcanza
+    (vocabulario natural) y hybrid rescata (jerga técnica). Sección de
+    exploración para que los alumnos investiguen reranker / pesos /
+    embeddings.
   - `ley21526.pdf` — el corpus de `practica_legal.ipynb` bundleado en
     el repo para que la notebook funcione offline / sin depender del
     servidor de origen.
 
-Pipeline RAG paso a paso, búsqueda híbrida con RRF, reranking con cross-encoder,
-y troubleshooting de retrieval con casos concretos.
+Pipeline RAG paso a paso (naive desde cero), búsqueda híbrida con RRF
+en LangChain, y exploración guiada del impacto de reranking sobre un
+corpus jurídico real.
 
 ### Clase 3b — Evaluación, monitoreo y benchmarks de sistemas LLM
 
