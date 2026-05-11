@@ -8139,7 +8139,7 @@ Corpus en inglés → el <a href="https://huggingface.co/spaces/mteb/leaderboard
 <pre><code>  BM25(query, doc) = Σ  IDF(término) × TF_saturada(término, doc) × norm_largo
                     término∈query
 </code></pre>
-<p>Mejoras sobre TF-IDF:</p>
+<p>Mejoras sobre TF-IDF <em>(Term Frequency × Inverse Document Frequency)</em>:</p>
 <ul>
 <li><strong>Saturación de TF:</strong> la 10ma aparición de una palabra no suma tanto como la 1ra.</li>
 <li><strong>Normalización por largo:</strong> docs cortos no se penalizan injustamente.</li>
@@ -8166,9 +8166,6 @@ Corpus en inglés → el <a href="https://huggingface.co/spaces/mteb/leaderboard
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>No es determinístico.</strong> A veces los embeddings ya traen el chunk técnico, a veces hybrid rescata. Por eso conviene <strong>medir en tu corpus</strong> antes de asumir que hybrid siempre mejora.</p>
-</blockquote>
 </div>
 </div>
 </div>
