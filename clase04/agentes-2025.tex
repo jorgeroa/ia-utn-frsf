@@ -1,0 +1,400 @@
+\documentclass[aspectratio=169,xcolor=dvipsnames, t]{beamer}
+\usepackage{fontspec}
+\usepackage{beamerthemeSimplePlusAIC}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{polyglossia}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{svg}
+\usepackage{tikz}
+\usepackage{makecell}
+\usepackage{wrapfig}
+
+\title[Agentes]{Sistemas Basados en Agentes}
+\subtitle{Arquitectura y Patrones}
+\author[Jorge]{Inteligencia Artificial: Dr. Jorge Roa | Dra. Milagros Gutiérrez}
+\institute[CIDISI]{CIDISI - UTN - FRSF}
+\date{Mayo 2025}
+
+\begin{document}
+\maketitlepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Agenda}
+\tableofcontents
+\end{frame}
+
+\section{Introducción y Motivación}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{¿Qué es un agente LLM?}
+\begin{itemize}
+    \item Es un sistema autónomo basado en un modelo de lenguaje.
+    \item Va más allá de generar texto: puede \textbf{razonar, planear, actuar y adaptarse}.
+    \item Integra múltiples componentes: LLM, herramientas, memoria, planificación, etc.
+    \item Ejecuta tareas complejas en ciclos iterativos hasta cumplir un objetivo.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{¿Por qué agentes basados en LLM?}
+\begin{itemize}
+    \item Los LLMs han revolucionado la IA, pero los agentes LLM llevan la autonomía al siguiente nivel.
+    \item Permiten resolver tareas complejas, multi-paso y adaptativas, integrando memoria, razonamiento y herramientas.
+    \item Transforman industrias: salud, finanzas, logística, educación, software, etc.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{De LLMs básicos a agentes autónomos}
+\begin{itemize}
+    \item LLM básico: responde a un prompt, sin memoria ni acción.
+    \item Agente LLM: descompone tareas, usa herramientas, mantiene contexto, se auto-optimiza.
+    \item Ejemplo: De un chatbot a un asistente que agenda, consulta bases y ejecuta acciones.
+\end{itemize}
+\end{frame}
+
+\section{Visión General de la Arquitectura de Agentes LLM}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Arquitectura general de un agente LLM}
+\begin{itemize}
+    \item Los agentes LLM son sistemas modulares.
+    \item Integran varios componentes centrales para lograr autonomía y adaptabilidad.
+    \item Cada componente cumple un rol específico en el ciclo de percepción, razonamiento y acción.
+\end{itemize}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.62\textwidth]{figures/coreAI.jpg}
+\end{figure}
+
+\end{frame}
+
+
+% \section{Componentes principales de un agente}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Componentes principales de un agente}
+\begin{enumerate}
+    \item \textbf{LLM}: núcleo cognitivo que interpreta, razona y genera.
+    \item \textbf{Memoria}: retiene contexto (corto y largo plazo).
+    \item \textbf{Retriever}: accede a fuentes externas de conocimiento.
+    \item \textbf{Herramientas}: ejecutan acciones en el mundo real (API, código, búsqueda).
+    \item \textbf{Planificador}: define el orden de pasos.
+    \item \textbf{Loop de reflexión}: mejora resultados iterativamente.
+    \item \textbf{Seguridad y control}: limita acciones peligrosas o erróneas.
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{1. LLM como cerebro del agente}
+\begin{itemize}
+    \item El LLM (ej: GPT-4, Claude, LLaMA) interpreta el input del usuario.
+    \item Formula pensamientos intermedios y decide qué hacer a continuación.
+    \item Puede generar instrucciones para herramientas u otros módulos.
+    \item Todo el sistema gira en torno a su capacidad de razonamiento.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{2. Memoria: corto y largo plazo}
+\begin{itemize}
+    \item \textbf{Corto plazo}: guarda información del ciclo actual o sesión.
+    \item \textbf{Largo plazo}: almacena preferencias, historial, aprendizajes.
+    \item Mejora la personalización y continuidad.
+    \item Puede almacenarse como texto, embeddings, logs estructurados.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{3. Retriever y base de conocimiento}
+\begin{itemize}
+    \item Extrae datos relevantes desde bases vectoriales, bases SQL, la web o documentos.
+    \item Apoya la generación con \textbf{información externa actualizada}.
+    \item Es fundamental para agentes que usan RAG (retrieval augmented generation).
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{4. Herramientas y acciones}
+\begin{columns}[c] % top-aligned columns
+    \begin{column}{0.6\textwidth}
+        \begin{itemize}
+            \item Permiten que el agente interactúe con el entorno.
+            \item Tipos: APIs REST, ejecución de código, comandos, navegadores, bases de datos.
+            \item Decidir cuándo y cómo usarlas es una parte crítica del razonamiento del agente.
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/tool_pattern.png}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{5. Planificador}
+\begin{columns}[c] % top-aligned columns
+    \begin{column}{0.6\textwidth}
+        \begin{itemize}
+            \item Descompone tareas complejas en subtareas.
+            \item Puede usar planificación jerárquica, "chain-of-thought", o árboles de decisiones.
+            \item Determina el orden, dependencias, y cuándo paralelizar tareas.
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/planning_pattern.png}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{6. Loop de reflexión y feedback}
+\begin{columns}[c] % align text and image at the top
+    \begin{column}{0.6\textwidth}
+        \begin{itemize}
+            \item El agente analiza resultados y decide si continuar, corregir o replantear.
+            \item Ciclo típico: \textbf{Thought → Action → Observation}.
+            \item Permite corrección de errores, adaptación dinámica y mejora continua.
+        \end{itemize}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/reflection_pattern.png}
+    \end{column}
+\end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{7. Módulo de seguridad y control}
+\begin{itemize}
+    \item Verifica que las acciones del agente sean seguras, autorizadas y adecuadas.
+    \item Implementa filtros, validaciones, límites de permisos o revisiones humanas.
+    \item Esencial en entornos sensibles: salud, finanzas, software crítico.
+\end{itemize}
+\end{frame}
+
+
+
+\section{Ciclo de Vida y Workflow de un Agente LLM}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Ciclo de vida de un agente LLM}
+\begin{enumerate}
+    \item Inicialización: prompt del sistema y análisis de la consulta.
+    \item Planificación: generación de plan multi-paso.
+    \item Acción: ejecución de herramientas/APIs.
+    \item Observación: análisis de resultados y actualización de contexto.
+    \item Re-planificación: ajuste de estrategia según feedback.
+\end{enumerate}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Ciclo iterativo Thought-Action-Observation}
+\begin{itemize}
+    \item Thought: razonamiento y decisión.
+    \item Action: ejecución de acción/herramienta.
+    \item Observation: análisis de resultados y actualización de memoria.
+    \item El ciclo se repite hasta cumplir el objetivo.
+\end{itemize}
+\end{frame}
+
+\section{Patrones de Agentes LLM}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrones de agentes: visión general}
+\begin{itemize}
+    \item Los patrones definen cómo se estructuran y coordinan los agentes.
+    \item Permiten modularidad, especialización, escalabilidad y robustez.
+    \item Se pueden combinar para sistemas complejos.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: Prompt Chaining}
+\begin{itemize}
+    \item Encadena prompts para descomponer tareas complejas.
+    \item Cada paso valida y refina el resultado anterior.
+    \item Ejemplo: generación, traducción y revisión de un documento.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: Router Architecture}
+\begin{itemize}
+    \item El agente decide a qué herramienta, skill o sub-agente enviar cada input.
+    \item Usa salidas estructuradas para garantizar interpretabilidad.
+    \item Ejemplo: elegir entre APIs de clima, finanzas o calendario.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: Orchestrator Architecture}
+\begin{itemize}
+    \item Coordina múltiples herramientas o skills en secuencia planificada.
+    \item Maneja dependencias y resultados intermedios.
+    \item Ejemplo: pipeline de análisis de datos con varios pasos.
+\end{itemize}
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/workflow.png}
+\end{figure}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: Parallel Execution}
+\begin{itemize}
+    \item Ejecuta subtareas independientes en paralelo.
+    \item Aumenta velocidad y throughput.
+    \item Ejemplo: procesamiento batch de consultas o soporte multi-canal.
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: Multi-Agent Pattern}
+
+\begin{columns}[c] % [c] para centrar verticalmente
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item Varios agentes especializados colaboran para un objetivo común.
+            \item Puede ser centralizado (manager) o descentralizado.
+            \item Ejemplo: Project Manager, Coder, Tester y Critic trabajando juntos.
+        \end{itemize}
+    \end{column}
+
+    \begin{column}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{figures/multiagent_pattern.png}
+    \end{column}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Patrón: Structured Output \& Tool Calling}
+
+\begin{columns}[c]  % [c] centra verticalmente el contenido
+    \begin{column}{0.5\textwidth}
+        \begin{itemize}
+            \item El agente produce salidas en formatos predefinidos.
+            \item Permite invocación confiable de herramientas y APIs.
+            \item Ejemplo: output JSON para llamar a una función externa.
+        \end{itemize}
+    \end{column}
+
+    \begin{column}{0.4\textwidth}
+        \includegraphics[width=\textwidth]{figures/tool_pattern.png}
+    \end{column}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: User-in-the-Loop}
+\begin{itemize}
+    \item Integra feedback humano durante o después de la ejecución.
+    \item Balancea autonomía y control.
+    \item Ejemplo: revisión humana de decisiones críticas.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Patrón: Memory-Augmented Agents}
+\begin{itemize}
+    \item Mantienen memoria persistente entre sesiones.
+    \item Mejoran coherencia y personalización.
+    \item Ejemplo: bot de soporte que recuerda interacciones previas.
+\end{itemize}
+\end{frame}
+
+\section{Memoria y Personalización}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Memoria a corto y largo plazo}
+\begin{itemize}
+    \item \textbf{Corto plazo}: contexto inmediato, relevante para la sesión actual.
+    \item \textbf{Largo plazo}: preferencias, historial, conocimiento duradero.
+    \item Tipos adicionales: episódica, semántica, procedimental, de entidades.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Persistencia de memoria y personalización}
+\begin{itemize}
+    \item Permite continuidad de contexto y relaciones genuinas.
+    \item Recomendaciones personalizadas y reducción de carga cognitiva.
+    \item Soporte para workflows multi-sesión y reflexión.
+    \item Evita inconsistencias y mejora la credibilidad.
+\end{itemize}
+\end{frame}
+
+\section{Aplicaciones y Futuro}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Aplicaciones reales de agentes LLM}
+\begin{itemize}
+    \item Salud: Dr. Chatbot, síntesis de historias clínicas.
+    \item Finanzas: análisis de mercado, monitoreo de sentimiento.
+    \item Manufactura: troubleshooting, generación de código.
+    \item Logística: optimización de rutas, coordinación en tiempo real.
+    \item Retail: soporte al cliente, marketing personalizado.
+    \item Capacitación: aprendizaje adaptativo.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Desafíos y futuro de los agentes LLM}
+\begin{itemize}
+    \item Gestión de contexto y memoria a gran escala.
+    \item Seguridad, ética y control humano.
+    \item Evaluación robusta y orquestación multi-agente.
+    \item Integración multimodal y avance hacia AGI.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Conclusiones}
+\begin{itemize}
+    \item Los agentes LLM son el futuro de la automatización inteligente.
+    \item Integran razonamiento, memoria, herramientas y colaboración multi-agente.
+    \item Permiten resolver tareas complejas, personalizar experiencias y escalar soluciones en el mundo real.
+\end{itemize}
+\end{frame}
+
+\end{document}
