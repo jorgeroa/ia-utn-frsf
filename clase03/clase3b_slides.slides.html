@@ -7511,49 +7511,54 @@ main {
 <tr>
 <th>Bloque</th>
 <th>Tema</th>
-<th>Tiempo aprox.</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><strong>B1</strong></td>
 <td>Fundamentos — por qué evaluar LLMs es distinto, métricas, tracing</td>
-<td>~15 min</td>
 </tr>
 <tr>
 <td><strong>B2</strong></td>
 <td>Pre-deploy (eval offline) — datasets, LLM-as-judge, RAGAS, safety, benchmarks</td>
-<td>~40 min</td>
-</tr>
-<tr>
-<td>☕</td>
-<td><em>break</em></td>
-<td>10 min</td>
 </tr>
 <tr>
 <td><strong>B3</strong></td>
 <td>Deploy / release — A/B, shadow, canary, prompt versioning, LLMOps</td>
-<td>~15 min</td>
 </tr>
 <tr>
 <td><strong>B4</strong></td>
 <td>Producción / monitoring — logging, cost/latency, drift, feedback loops</td>
-<td>~15 min</td>
 </tr>
 <tr>
 <td><strong>B5</strong></td>
 <td>Cierre — el loop completo, cuándo invertir en cada cosa</td>
-<td>~5 min</td>
 </tr>
 <tr>
 <td>🛠</td>
 <td><strong>Práctica end-to-end con Arize AX</strong></td>
-<td>~35 min</td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p>El bloque cierra con una <strong>práctica hands-on</strong>: instrumentamos un chatbot Q&amp;A, le corremos evals offline, lo trazamos en Arize, armamos dashboards y simulamos drift.</p>
+</blockquote>
+</div>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-close-1">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="El-loop-completo-%E2%80%94-prompt-%E2%86%92-producto-%E2%86%92-mejora">El loop completo — prompt → producto → mejora<a class="anchor-link" href="#El-loop-completo-%E2%80%94-prompt-%E2%86%92-producto-%E2%86%92-mejora">¶</a></h2><p><img alt="Ciclo de 6 nodos: diseño → eval offline → producción → eval online → análisis → feedback → vuelve al diseño. En el centro: PROMPT LIFECYCLE" class="slide-figure" src="figures/feedback_loop.svg" style="width: 80%;"/></p>
+<blockquote>
+<p>Igual que el código, <strong>el prompt nunca está "terminado"</strong>. Evoluciona con feedback de la realidad.</p>
+</blockquote>
+<blockquote>
+<p>La diferencia con ML clásico: el ciclo es <strong>continuo y mensual</strong>, no "modelo entrenado una vez al año". Cada release puede degradar (o mejorar) silenciosamente.</p>
 </blockquote>
 </div>
 </div>
@@ -7789,7 +7794,7 @@ main {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="El-loop-offline-%E2%80%94-dataset-%E2%86%92-eval-%E2%86%92-score">El loop offline — <code>dataset → eval → score</code><a class="anchor-link" href="#El-loop-offline-%E2%80%94-dataset-%E2%86%92-eval-%E2%86%92-score">¶</a></h2><p><img alt="Eval offline (pre-deploy con dataset estático en CI) vs eval online (en producción con tráfico real)" class="slide-figure" src="figures/evals_offline_online.svg" style="width: 86%;"/></p>
+<h2 id="El-loop-offline-%E2%80%94-dataset-%E2%86%92-eval-%E2%86%92-score">El loop offline — <code>dataset → eval → score</code><a class="anchor-link" href="#El-loop-offline-%E2%80%94-dataset-%E2%86%92-eval-%E2%86%92-score">¶</a></h2><p><strong>Eval offline = antes del deploy, sobre un dataset estático.</strong> Es como tu test suite de Python, pero para prompts.</p>
 <pre><code>  Eval offline (pre-deploy)
   ─────────────────────────
   golden_dataset.jsonl  ──┐
@@ -7800,13 +7805,11 @@ main {
 
   → bloquea el merge si el score baja umbral X
 </code></pre>
-<p><strong>Outputs típicos:</strong></p>
 <ul>
-<li>Tabla por ejemplo (input, output, score, reasoning)</li>
-<li>Métrica agregada (avg, p50/p95)</li>
-<li>Diff vs versión anterior</li>
-<li><strong>Verde/Rojo</strong> para CI</li>
+<li><strong>¿Qué se mide?</strong> accuracy en el test set, comparación v1 vs v2 (regression), tasa de output válido (JSON parseable), costo/latencia esperados.</li>
+<li><strong>¿Cuándo correrlo?</strong> en CI en cada PR que toca prompts o modelo; antes de promover a prod; cuando cambia el modelo subyacente.</li>
 </ul>
+<p><strong>Outputs típicos:</strong> tabla por ejemplo (input, output, score, reasoning) · métrica agregada (avg, p50/p95) · diff vs versión anterior · <strong>🟢/🔴</strong> para CI</p>
 </div>
 </div>
 </div>
@@ -8802,35 +8805,6 @@ USER:
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Bloque-5">Bloque 5<a class="anchor-link" href="#Bloque-5">¶</a></h1><h2 id="Cierre-%E2%80%94-el-loop-continuo">Cierre — el loop continuo<a class="anchor-link" href="#Cierre-%E2%80%94-el-loop-continuo">¶</a></h2><hr/>
 <p><em>Cómo se enchufan offline, online, monitoring y feedback en un ciclo de mejora.</em></p>
-</div>
-</div>
-</div>
-</div></section></section><section><section>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b5-close-1">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="El-loop-completo-%E2%80%94-prompt-%E2%86%92-producto-%E2%86%92-mejora">El loop completo — prompt → producto → mejora<a class="anchor-link" href="#El-loop-completo-%E2%80%94-prompt-%E2%86%92-producto-%E2%86%92-mejora">¶</a></h2><p><img alt="Ciclo de 6 nodos: diseño → eval offline → producción → eval online → análisis → feedback → vuelve al diseño. En el centro: PROMPT LIFECYCLE" class="slide-figure" src="figures/feedback_loop.svg" style="width: 86%;"/></p>
-<pre><code>   ┌──────────────────────────────────────────────────────────┐
-   │                                                            │
-   │   diseño  →  eval offline  →  staging  →  canary deploy   │
-   │      ▲          (golden)        (eval gate)        │       │
-   │      │                                              ▼       │
-   │   feedback ◀── eval online ◀── traces ◀── 100% prod        │
-   │   (humano +    (LLM-judge      (Arize/Phoenix              │
-   │    señales      sobre tráfico    + drift detection)         │
-   │    impl.)       muestreado)                                  │
-   │                                                            │
-   └──────────────────────────────────────────────────────────┘
-</code></pre>
-<blockquote>
-<p>Igual que el código, <strong>el prompt nunca está "terminado"</strong>. Evoluciona con feedback de la realidad.</p>
-</blockquote>
-<blockquote>
-<p>La diferencia con ML clásico: el ciclo es <strong>continuo y mensual</strong>, no "modelo entrenado una vez al año". Cada release puede degradar (o mejorar) silenciosamente.</p>
-</blockquote>
 </div>
 </div>
 </div>
