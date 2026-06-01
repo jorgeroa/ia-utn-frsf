@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 500" font-family="Inter, system-ui, -apple-system, sans-serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 74 960 432" font-family="Inter, system-ui, -apple-system, sans-serif">
   <defs>
     <style>
       .stroke { stroke: #222222; stroke-width: 1.4; fill: none; }
@@ -14,8 +14,6 @@
     </style>
   </defs>
 
-  <text x="480" y="36" text-anchor="middle" class="text-strong" font-size="22">Drift: lo que cambia con el tiempo</text>
-  <text x="480" y="58" text-anchor="middle" class="text-xs">Tu sistema fue bueno el día del deploy. Tres meses después puede no serlo. Por eso monitoreás.</text>
 
   <!-- 4 sources of drift -->
   <g transform="translate(40,90)">
