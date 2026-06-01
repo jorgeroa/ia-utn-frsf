@@ -72,7 +72,7 @@
   <path d="M300 100 L 355 116" class="accent" marker-end="url(#arrow-al)"/>
 
   <!-- Respuesta exiting from Razonar -->
-  <text x="930" y="240" text-anchor="end" class="text-xs" fill="#1D9E75">✅ respuesta (cuando termina)</text>
-  <path d="M920 248 L 900 268" stroke="#1D9E75" stroke-width="1.6" fill="none" marker-end="url(#arrow-al-g)"/>
+  <text x="930" y="156" text-anchor="end" class="text-xs" fill="#1D9E75">✅ respuesta (cuando termina)</text>
+  <path d="M885 250 L 885 172" stroke="#1D9E75" stroke-width="2" fill="none" marker-end="url(#arrow-al-g)"/>
 
 </svg>
